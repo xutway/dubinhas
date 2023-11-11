@@ -1,18 +1,17 @@
 import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 
+import ActivitesList from "../../components/ActivitesList";
 import TopContainer from "../../components/TopComponent";
+import { activites } from "../../mocked/studentes";
 
 const { height: screenHeith } = Dimensions.get("window");
 export default function TabOneScreen() {
   return (
     <View style={styles.container}>
       <TopContainer />
-      <View
-        style={styles.separator}
-        // lightColor="#eee"
-        // darkColor="rgba(255,255,255,0.1)"
-      />
+      <View style={styles.separator} />
+      <ActivitesList title="Turno da Tarde" data={activites} />
     </View>
   );
 }
@@ -20,7 +19,6 @@ export default function TabOneScreen() {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-
     height: screenHeith,
   },
   title: {
