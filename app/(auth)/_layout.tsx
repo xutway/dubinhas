@@ -26,14 +26,14 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="userSelection"
         options={{
           tabBarStyle: { display: "none" },
           headerShown: false,
 
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
           headerRight: () => (
-            <Link href="/two" asChild>
+            <Link href="/(auth)/userSelection" asChild>
               <Pressable>
                 {({ pressed }) => (
                   <FontAwesome
@@ -48,14 +48,16 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tabs.Screen
-        name="two"
+      {/* <Tabs.Screen
+       
+        name="selector2"
         options={{
-          tabBarStyle: { display: "none" },
-          title: "Tab Two",
+   
+          tabBarStyle: { display: 'none' },
+          title: 'Tab Two',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
-      />
+      /> */}
     </Tabs>
   );
 }
