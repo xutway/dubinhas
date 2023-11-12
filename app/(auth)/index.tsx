@@ -1,7 +1,6 @@
+import React, { useEffect } from "react";
 import { Dimensions, StyleSheet } from "react-native";
 import Carousel from "react-native-snap-carousel";
-
-import { Link } from "expo-router";
 
 import HeaderTitle from "../../components/HeaderTitle";
 import StudentSelectorAvatar from "../../components/StudentSelector/StudentSelector";
@@ -12,6 +11,11 @@ import { Box } from "@gluestack-ui/themed";
 
 const { width: screenWidth, height: screenHeith } = Dimensions.get("window");
 export default function TabOneScreen() {
+  useEffect(() => {
+    Dimensions.addEventListener("change", () => {
+      console.log("resize");
+    });
+  }, []);
   return (
     <View style={styles.container}>
       <View
@@ -24,20 +28,20 @@ export default function TabOneScreen() {
         title="Olá Coleguinha!"
       />
       <Box style={styles.viewTop}>
-        <Link href="/(tabs)/">
-          <Carousel
-            sliderWidth={screenWidth}
-            sliderHeight={screenWidth + 10}
-            itemWidth={screenWidth - 60}
-            inactiveSlideShift={0}
-            useScrollView
-            data={users}
-            renderItem={StudentSelectorAvatar}
-            layoutCardOffset={10}
-            layout="default"
-            centerContent
-          />
-        </Link>
+        {/* <Link href="/(tabs)/"> */}
+        <Carousel
+          sliderWidth={screenWidth}
+          sliderHeight={screenWidth > 500 ? 400 : screenWidth - 60}
+          itemWidth={screenWidth > 500 ? 400 : screenWidth - 150}
+          inactiveSlideShift={0}
+          useScrollView
+          data={users}
+          renderItem={StudentSelectorAvatar}
+          layoutCardOffset={10}
+          layout="default"
+          centerContent
+        />
+        {/* </Link> */}
         {/* <StudentSelectorAvatar item={users[0]} index={0} /> */}
       </Box>
     </View>

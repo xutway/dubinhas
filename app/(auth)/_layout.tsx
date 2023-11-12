@@ -23,17 +23,19 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+        headerShown: false,
+        tabBarStyle: { display: "none" },
       }}
     >
       <Tabs.Screen
-        name="userSelection"
+        name="index"
         options={{
           tabBarStyle: { display: "none" },
           headerShown: false,
 
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
           headerRight: () => (
-            <Link href="/(auth)/userSelection" asChild>
+            <Link href="/index" asChild>
               <Pressable>
                 {({ pressed }) => (
                   <FontAwesome
@@ -48,16 +50,6 @@ export default function TabLayout() {
           ),
         }}
       />
-      {/* <Tabs.Screen
-       
-        name="selector2"
-        options={{
-   
-          tabBarStyle: { display: 'none' },
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      /> */}
     </Tabs>
   );
 }

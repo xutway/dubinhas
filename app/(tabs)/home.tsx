@@ -1,17 +1,26 @@
 import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 
+import { useLocalSearchParams } from "expo-router";
+
 import ActivitesList from "../../components/ActivitesList";
 import TopContainer from "../../components/TopComponent";
 import { activites } from "../../mocked/studentes";
 
 const { height: screenHeith } = Dimensions.get("window");
 export default function TabOneScreen() {
+  const { slug } = useLocalSearchParams();
+
   return (
     <View style={styles.container}>
-      <TopContainer />
+      <TopContainer userID={parseInt(slug)} />
       <View style={styles.separator} />
-      <ActivitesList title="Turno da Tarde" data={activites} />
+
+      <ActivitesList
+        title="Turno da Tarde"
+        // @ts-ignore
+        data={activites}
+      />
     </View>
   );
 }

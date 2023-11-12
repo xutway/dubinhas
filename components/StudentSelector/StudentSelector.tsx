@@ -1,6 +1,8 @@
 import React from "react";
 import { Dimensions } from "react-native";
 
+import { Link } from "expo-router";
+
 import { AvatarType } from "./types";
 
 import {
@@ -22,38 +24,45 @@ const StudentSelectorAvatar = ({
   const { width: screenWidth } = Dimensions.get("window");
 
   return (
-    <Box
-      key={index}
-      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+    <Link
+      href={{
+        pathname: "/home",
+        params: { slug: index },
+      }}
     >
-      <Avatar
-        marginBottom={30}
-        height={screenWidth - 150}
-        width={screenWidth - 150}
-        size="md"
-        bgColor="$amber600"
-        borderRadius="$full"
+      <Box
+        key={index}
+        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
       >
-        <AvatarFallbackText>{name}</AvatarFallbackText>
-        <AvatarImage
-          source={{
-            height: screenWidth - 20,
-            width: screenWidth - 20,
-            uri: img,
+        <Avatar
+          marginBottom={30}
+          height={screenWidth > 500 ? 400 : screenWidth - 150}
+          width={screenWidth > 500 ? 400 : screenWidth - 150}
+          size="md"
+          bgColor="$amber600"
+          borderRadius="$full"
+        >
+          <AvatarFallbackText>{name}</AvatarFallbackText>
+          <AvatarImage
+            source={{
+              height: screenWidth > 500 ? 500 : screenWidth - 150,
+              width: screenWidth > 500 ? 500 : screenWidth - 150,
+              uri: img,
+            }}
+          />
+        </Avatar>
+        <Text
+          style={{
+            fontSize: 27,
+            height: 50,
+            lineHeight: 50,
+            fontWeight: "600",
           }}
-        />
-      </Avatar>
-      <Text
-        style={{
-          fontSize: 27,
-          height: 50,
-          lineHeight: 50,
-          fontWeight: "600",
-        }}
-      >
-        {name}
-      </Text>
-    </Box>
+        >
+          {name}
+        </Text>
+      </Box>
+    </Link>
   );
 };
 

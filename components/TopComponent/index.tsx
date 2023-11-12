@@ -7,9 +7,10 @@ import { View } from "../Themed";
 import { Avatar, AvatarImage, Box } from "@gluestack-ui/themed";
 
 const { width: screenWidth } = Dimensions.get("window");
-const TopContainer = () => {
-  const img = users[0].img;
-  const name = users[0].name;
+
+const TopContainer = ({ userID }: { userID: number }) => {
+  const img = users[userID].img;
+  const name = users[userID].name;
 
   return (
     <View style={styles.container}>
@@ -22,7 +23,6 @@ const TopContainer = () => {
               height: screenWidth / 3,
               marginBottom: -40,
               borderColor: "#C3EBFF",
-              backgroundColor: "red",
               marginLeft: "auto",
               marginRight: "auto",
               borderWidth: 10,
