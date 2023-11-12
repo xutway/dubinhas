@@ -19,30 +19,24 @@ export const users = [
 export const activites = [
   {
     id: 1,
-    name: "Escovar-se",
-    description: "Escovar os dentes ",
-    img: "https://i.imgur.com/1zHJBw5.png",
-    video: "https://i.imgur.com/5O6idAL.mp4",
+    name: "Comparação",
+    description: "Comparação",
+    img: "https://i.imgur.com/Ze21TCR.jpg",
+    video: "https://i.imgur.com/RPDJKWQ.mp4",
   },
   {
     id: 2,
-    name: "Tomar café",
-    description: "Tomar café da tarde",
-    img: "https://i.imgur.com/F6hxzdD.jpg",
-    video: "https://i.imgur.com/5O6idAL.mp4",
+    name: "Quebra cabeça",
+    description: "Quebra cabeça",
+    img: "https://i.imgur.com/YkdDmgz.jpg",
+    video: "https://i.imgur.com/EA7ajxy.mp4",
   },
   {
     id: 3,
-    name: "Jogar Bola",
-    description: "Jogar Bola",
-    img: "https://i.imgur.com/v25v8pe.png",
-    video: "https://i.imgur.com/5O6idAL.mp4",
-  },
-  {
-    id: 4,
-    name: "Teste",
-    description: "Teste",
-    img: "https://i.imgur.com/v25v8pe.png",
-    video: "https://i.imgur.com/5O6idAL.mp4",
-  },
+    name: "Escrever",
+    description: "Escrever",
+    img: "https://i.imgur.com/sYYa21z.jpg",
+    video: "https://i.imgur.com/mjc3IPW.mp4",
+  }
+
 ];

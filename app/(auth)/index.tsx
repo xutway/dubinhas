@@ -28,7 +28,6 @@ export default function TabOneScreen() {
         title="Olá Coleguinha!"
       />
       <Box style={styles.viewTop}>
-        {/* <Link href="/(tabs)/"> */}
         <Carousel
           sliderWidth={screenWidth}
           sliderHeight={screenWidth > 500 ? 400 : screenWidth - 60}
@@ -41,8 +40,6 @@ export default function TabOneScreen() {
           layout="default"
           centerContent
         />
-        {/* </Link> */}
-        {/* <StudentSelectorAvatar item={users[0]} index={0} /> */}
       </Box>
     </View>
   );

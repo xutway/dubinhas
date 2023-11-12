@@ -9,13 +9,13 @@ import { activites } from "../../mocked/studentes";
 
 const { height: screenHeith } = Dimensions.get("window");
 export default function TabOneScreen() {
+
   const { slug } = useLocalSearchParams();
 
   return (
     <View style={styles.container}>
-      <TopContainer userID={parseInt(slug)} />
+      <TopContainer userID={parseInt(slug.toString())} />
       <View style={styles.separator} />
-
       <ActivitesList
         title="Turno da Tarde"
         // @ts-ignore

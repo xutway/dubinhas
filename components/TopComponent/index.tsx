@@ -16,7 +16,7 @@ const TopContainer = ({ userID }: { userID: number }) => {
     <View style={styles.container}>
       <Box style={styles.card}>
         <Box sx={styles.box}>
-          <Text style={styles.text}>{name}</Text>
+         <Box style={styles.textBoxStart}><Text style={styles.text}>{name}</Text></Box>
           <Avatar
             style={{
               width: screenWidth / 3,
@@ -39,7 +39,7 @@ const TopContainer = ({ userID }: { userID: number }) => {
               }}
             />
           </Avatar>
-          <Text style={styles.text}>41 12341-1515</Text>
+          <Box style={styles.textBoxEnd}><Text style={styles.text}>41 12341-1515</Text></Box>
         </Box>
       </Box>
     </View>
@@ -72,8 +72,21 @@ const styles = StyleSheet.create({
     minHeight: 130,
   },
   text: {
-    width: screenWidth / 3,
+
     fontSize: 12,
     fontWeight: "bold",
   },
+  textBoxStart:{
+        width: screenWidth / 3,
+        justifyContent: "center",
+        display: "flex",
+        alignItems: "flex-start",
+  },
+  textBoxEnd:{
+    width: screenWidth / 3,
+    justifyContent: "center",
+    display: "flex",
+    alignItems: "flex-end",
+}
+
 });

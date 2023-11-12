@@ -41,6 +41,11 @@ const StudentSelectorAvatar = ({
           size="md"
           bgColor="$amber600"
           borderRadius="$full"
+          style={{
+            borderWidth: 4,
+            borderColor: "#DBDBDB",
+          
+          }}
         >
           <AvatarFallbackText>{name}</AvatarFallbackText>
           <AvatarImage
@@ -57,6 +62,7 @@ const StudentSelectorAvatar = ({
             height: 50,
             lineHeight: 50,
             fontWeight: "600",
+            color: "#000",
           }}
         >
           {name}

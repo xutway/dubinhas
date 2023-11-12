@@ -20,6 +20,7 @@ import {
 const { width: screenWidth } = Dimensions.get("window");
 const Activites = () => {
   const { slug } = useLocalSearchParams();
+
   const newSlug = parseInt(slug.toString());
 
   return (
@@ -31,15 +32,16 @@ const Activites = () => {
           source={{ uri: activites[newSlug]?.img }}
           alt={activites[newSlug]?.name}
           placeholder="../assets/images/splashtest.png"
+          contentFit="fill"
         />
         <Video
-          posterStyle={styles.video}
+          posterStyle={styles.videoPoster}
           videoStyle={styles.video}
           source={{ uri: activites[newSlug]?.video }}
           rate={1.0}
           volume={1.0}
           isMuted={false}
-          resizeMode={ResizeMode.COVER}
+          resizeMode={ResizeMode.CONTAIN}
           shouldPlay
           isLooping
           usePoster
@@ -65,6 +67,7 @@ const Activites = () => {
               fontWeight: "200",
               width: "100%",
             }}
+            placeholderTextColor="#000"
             placeholder={activites[newSlug]?.name}
           />
         </Input>
@@ -78,11 +81,13 @@ const Activites = () => {
             borderRadius: 20,
             marginVertical: 20,
             width: "100%",
+        
           }}
           w="$64"
         >
           <TextareaInput
             style={{ fontSize: 14, color: "#000", fontWeight: "200" }}
+            placeholderTextColor="#000"
             placeholder={activites[newSlug]?.description}
           />
         </Textarea>
@@ -124,6 +129,10 @@ const styles = StyleSheet.create({
     borderWidth: 5,
     borderColor: "#DBDBDB",
   },
+  videoPoster: {
+    width: "100%",
+    height: 200,
+  },
   separator: {
     marginVertical: 30,
     height: 1,
@@ -140,15 +149,16 @@ const styles = StyleSheet.create({
     maxWidth: 400,
     fontWeight: "500",
     borderRadius: 50,
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: "#000",
     backgroundColor: "#FF948D",
     position: "sticky",
     bottom: -40,
+    display: "flex",
+    justifyContent: "flex-start",
   },
   buttonTextStyle: {
     color: "#000",
-
     fontSize: 14,
   },
 });
