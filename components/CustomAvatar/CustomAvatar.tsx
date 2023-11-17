@@ -4,7 +4,7 @@ import { CustomAvatarProps } from "./types";
 
 import { Avatar, AvatarImage, Box } from "@gluestack-ui/themed";
 
-const CustomAvatatr = ({ img }: CustomAvatarProps) => {
+const CustomAvatar = ({ img }: CustomAvatarProps) => {
   return (
     <Box sx={styles.box}>
       <Avatar
@@ -28,7 +28,7 @@ const CustomAvatatr = ({ img }: CustomAvatarProps) => {
   );
 };
 
-export default CustomAvatatr;
+export default CustomAvatar;
 
 const styles = StyleSheet.create({
   box: {
