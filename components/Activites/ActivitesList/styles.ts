@@ -24,14 +24,17 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     gap: 5,
   },
+  
   textTitle: {
     fontSize: 16,
     fontWeight: "bold",
   },
+
   textSubtitle: {
     fontSize: 8,
     fontWeight: "600",
   },
+
   mainTitle: {
     color: "#000",
     textAlign: "center",
@@ -39,11 +42,13 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 10,
   },
+
   buttonContainer: {
     width: "100%",
     display: "flex",
     alignItems: "center",
   },
+
   button: {
     width: scr / 1.4,
     height: 50,
@@ -55,9 +60,9 @@ export const styles = StyleSheet.create({
     position: "sticky",
     bottom: "-100%",
   },
+
   buttonTextStyle: {
     color: "#000",
-
     fontSize: 24,
   },
 });

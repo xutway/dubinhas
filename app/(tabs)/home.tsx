@@ -1,26 +1,28 @@
-import React from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
+import React, { useState } from "react";
+import { Dimensions, StyleSheet, Text, View } from "react-native";
 
 import { useLocalSearchParams } from "expo-router";
 
-import ActivitesList from "../../components/ActivitesList";
-import TopContainer from "../../components/TopComponent";
+import ActivitesList from "../../components/Activites/ActivitesList";
+import Header from "../../components/home/Header";
 import { activites } from "../../mocked/studentes";
 
 const { height: screenHeith } = Dimensions.get("window");
 export default function TabOneScreen() {
 
   const { slug } = useLocalSearchParams();
-
+ const [ activites, setActivites ] = useState("teste")
   return (
     <View style={styles.container}>
-      <TopContainer userID={parseInt(slug.toString())} />
+      <Header userID={parseInt(slug.toString())} />
       <View style={styles.separator} />
       <ActivitesList
         title="Turno da Tarde"
         // @ts-ignore
         data={activites}
-      />
+     />
+    <Text>  {activites}</Text>
+ 
     </View>
   );
 }
