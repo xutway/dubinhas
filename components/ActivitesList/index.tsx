@@ -14,7 +14,7 @@ type itemProps = {
   description: string;
   date: string;
 };
-//testando aqui ohohohohohoh
+
 const ActivitesList = ({ data, title }: { data: itemProps; title: string }) => {
   return (
     <>
