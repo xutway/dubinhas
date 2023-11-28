@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import { Dimensions, ImageBackground, StyleSheet, Text, View } from "react-native";
 
 import { useLocalSearchParams } from "expo-router";
 
@@ -11,8 +11,8 @@ const { height: screenHeith } = Dimensions.get("window");
 export default function TabOneScreen() {
 
   const { slug } = useLocalSearchParams();
- const [ activites, setActivites ] = useState("teste")
   return (
+    <ImageBackground source={require("../../assets/images/BackgroundActivites.png")} style={{width: '100%', height: '100%',backgroundPosition:"cover"}}>
     <View style={styles.container}>
       <Header userID={parseInt(slug.toString())} />
       <View style={styles.separator} />
@@ -21,9 +21,9 @@ export default function TabOneScreen() {
         // @ts-ignore
         data={activites}
      />
-    <Text>  {activites}</Text>
  
     </View>
+    </ImageBackground>
   );
 }
 
