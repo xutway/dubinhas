@@ -22,21 +22,21 @@ export const activites = [
     name: "Comparação",
     description: "Comparação",
     img: "https://i.imgur.com/Ze21TCR.jpg",
-    video: "https://i.imgur.com/RPDJKWQ.mp4",
+    video: "https://i.imgur.com/irYQctW.mp4",
   },
   {
     id: 2,
     name: "Quebra cabeça",
     description: "Quebra cabeça",
     img: "https://i.imgur.com/YkdDmgz.jpg",
-    video: "https://i.imgur.com/EA7ajxy.mp4",
+    video: "https://i.imgur.com/bT4pzqg.mp4",
   },
   {
     id: 3,
     name: "Escrever",
     description: "Escrever",
     img: "https://i.imgur.com/sYYa21z.jpg",
-    video: "https://i.imgur.com/mjc3IPW.mp4",
+    video: "https://i.imgur.com/7IWik9M.mp4",
   }
 
 ];

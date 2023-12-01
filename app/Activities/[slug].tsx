@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import { Dimensions, ImageBackground, StyleSheet, Text, View } from "react-native";
 
 import { ResizeMode, Video } from "expo-av";
 import { Image } from "expo-image";
@@ -24,6 +24,7 @@ const Activites = () => {
   const newSlug = parseInt(slug.toString());
 
   return (
+    <ImageBackground source={require("../../assets/images/BackgroundSinlgleActivites.png")} style={{width: '100%', height: '100%',backgroundPosition:"cover"}}>
     <View style={styles.container}>
       <View style={styles.separator} />
       <View style={styles.body}>
@@ -31,7 +32,7 @@ const Activites = () => {
           style={styles.image}
           source={{ uri: activites[newSlug]?.img }}
           alt={activites[newSlug]?.name}
-          placeholder="../assets/images/splashtest.png"
+          placeholder="../assets/images/Loading.gif"
           contentFit="fill"
         />
         <Video
@@ -45,7 +46,7 @@ const Activites = () => {
           shouldPlay
           isLooping
           usePoster
-          posterSource={require("../../assets/images/splashtest.png")}
+          posterSource={require("../../assets/images/Loading.svg")}
           useNativeControls={false}
           style={styles.video}
         />
@@ -99,6 +100,7 @@ const Activites = () => {
         </Button>
       </Box>
     </View>
+    </ImageBackground>
   );
 };
 export default Activites;
