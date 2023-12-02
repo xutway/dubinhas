@@ -29,18 +29,9 @@ export default function TabOneScreen() {
         title="Olá Coleguinha!"
       />
       <Box style={styles.viewTop}>
-        <Carousel
-          sliderWidth={screenWidth}
-          sliderHeight={screenWidth > 500 ? 400 : screenWidth - 60}
-          itemWidth={screenWidth > 500 ? 400 : screenWidth - 150}
-          inactiveSlideShift={0}
-          useScrollView
-          data={users}
-          renderItem={StudentSelectorAvatar}
-          layoutCardOffset={10}
-          layout="default"
-          centerContent
-        />
+        {users.map((user, index) => (
+          <StudentSelectorAvatar item={user} index={index} key={index} />
+        ))}
       </Box>
     </View>
     </ImageBackground>
