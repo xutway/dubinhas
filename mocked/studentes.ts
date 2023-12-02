@@ -19,24 +19,24 @@ export const users = [
 export const activites = [
   {
     id: 1,
-    name: "Comparação",
-    description: "Comparação",
+    name: "Comparar",
+    description: "Comparação de bolas, qual a menor e qual a maior?",
     img: "https://i.imgur.com/7v8HAFf.png",
-    video: "https://i.imgur.com/irYQctW.mp4",
+    video: "https://i.imgur.com/PK6Wltu.mp4",
   },
   {
     id: 2,
     name: "Quebra cabeça",
-    description: "Quebra cabeça",
-    img: "https://i.imgur.com/YkdDmgz.jpg",
-    video: "https://i.imgur.com/bT4pzqg.mp4",
+    description: "Vamos montar o quebra-cabeças?",
+    img: "https://i.imgur.com/JbKTjWJ.jpg",
+    video: "https://i.imgur.com/krSg0V4.mp4",
   },
   {
-    id: 3,
+    id: 3,    
     name: "Escrever",
-    description: "Escrever",
+    description: "Vamos escrever um poema",
     img: "https://i.imgur.com/YIO9ooy.png",
-    video: "https://i.imgur.com/7IWik9M.mp4",
+    video: "https://i.imgur.com/EzLAMCE.mp4",
   },
   {
     id: 4,

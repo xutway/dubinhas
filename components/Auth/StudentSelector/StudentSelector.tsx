@@ -1,7 +1,7 @@
 import React from "react";
 import { Dimensions } from "react-native";
 
-import { Link } from "expo-router";
+import { Link, useLocalSearchParams } from "expo-router";
 
 import { AvatarType } from "./types";
 

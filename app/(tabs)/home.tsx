@@ -11,6 +11,7 @@ const { height: screenHeith } = Dimensions.get("window");
 export default function TabOneScreen() {
 
   const { slug } = useLocalSearchParams();
+  console.log(slug)
   return (
     <View style={styles.container}>
       <Header userID={parseInt(slug?.toString())} />

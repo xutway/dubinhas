@@ -15,30 +15,46 @@ const { width: screenWidth, height: screenHeith } = Dimensions.get("window");
 
 
 export default function TabMenuScreen() {
-  const routes = [
-    { id: 1, name: "Fala Para Escrita", img: "https://i.imgur.com/vanuz0r.png", subtitle: "Atividade educativa onde você pode ver suas tarefas diarias!" },
-    { id: 2, name: "Menu", path: "home", img: "https://i.imgur.com/IqCxUUG.png", subtitle: "Tudo que for dito ao redor será escrito automaticamente para você" },
-  
-  ];
+
   const { slug } = useLocalSearchParams();
+  console.log("aaaaaaaa",slug)
+  const routes = [
+    {
+      id: 1,
+      name: "Fala Para Escrita",
+      img: "https://i.imgur.com/vanuz0r.png",
+      subtitle: "Atividade educativa onde você pode ver suas tarefas diarias!",
+      routeParam:slug.toString()
+    },
+    {
+      id: 2,
+      name: "Menu",
+      path: "home",
+      img: "https://i.imgur.com/IqCxUUG.png",
+      subtitle: "Tudo que for dito ao redor será escrito automaticamente para você",
+      routeParam:slug.toString()
+    },
+
+  ];
+  console.log(routes)
 
   return (
     <View style={styles.container}>
       <Header userID={parseInt(slug.toString())} />
       <View style={styles.separator} />
       <Box style={styles.viewTop}>
-      <Carousel
-        sliderWidth={screenWidth}
-        sliderHeight={screenWidth > 500 ? 400 : screenWidth - 60}
-        itemWidth={screenWidth > 500 ? 400 : screenWidth - 150}
-        inactiveSlideShift={0}
-        useScrollView
-        data={routes}
-        renderItem={ActivitesSelector}
-        layoutCardOffset={11}
-        layout="default"
-        centerContent
-      />
+        <Carousel
+          sliderWidth={screenWidth}
+          sliderHeight={screenWidth > 500 ? 400 : screenWidth - 60}
+          itemWidth={screenWidth > 500 ? 400 : screenWidth - 150}
+          inactiveSlideShift={0}
+          useScrollView
+          data={routes}
+          renderItem={ActivitesSelector}
+          layoutCardOffset={11}
+          layout="default"
+          centerContent
+        />
       </Box>
 
     </View>

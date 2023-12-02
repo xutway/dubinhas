@@ -15,21 +15,26 @@ import HeaderTitle from "../../HeaderTitle";
 const { width: screenWidth } = Dimensions.get("window");
 const ActivitesSelector = ({
   item,
-  index
+  index,
+  routeParam,
 
 }: {
   item: AvatarType;
   index: number;
+  routeParam?: string;
  
 }) => {
+const param = item?.routeParam as string;
+console.log("🚀 ~ file: ActivitesSelector.tsx:28 ~ param:", param)
+
   const { img, name, } = item;
 
-  let slug = 1;
+
   return (
     <Link
       href={{
         pathname:`/${item?.path}`,
-        params: { slug: slug },
+        params: { slug: item?.routeParam },
       }}
     >
       <Box

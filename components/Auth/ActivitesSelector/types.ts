@@ -4,4 +4,5 @@ export type AvatarType = {
   img: string;
   subtitle?: string;
   path?: string;
+  routeParam?: any;
 };
