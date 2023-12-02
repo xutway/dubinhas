@@ -13,13 +13,13 @@ type itemProps = {
   img: string;
   description: string;
   date: string;
+  turno: string;
 };
 
-const ActivitesList = ({ data, title }: { data: itemProps; title: string }) => {
+const ActivitesList = ({ data }: { data: itemProps }) => {
   return (
     <>
       <View>
-        <Text style={styles.mainTitle}>{title}</Text>
         <FlatList
           // @ts-ignore
           data={data}
@@ -28,11 +28,12 @@ const ActivitesList = ({ data, title }: { data: itemProps; title: string }) => {
           renderItem={({ item, index }: { item: itemProps; index: number }) => {
             return (
               <Link
-                href={{
-                  pathname: "/Activities/[slug]",
-                  params: { slug: index },
-                }}
+              href={{
+                pathname: "/Activities/[slug]",
+                params: { slug: index },
+              }}
               >
+              <Text>{item?.turno}</Text>
                 <ImageBackground
                   source={{ uri: item?.img }}
                   style={styles.container}

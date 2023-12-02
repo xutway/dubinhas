@@ -9,19 +9,17 @@ import { activites } from "../../mocked/studentes";
 
 const { height: screenHeith } = Dimensions.get("window");
 export default function TabOneScreen() {
-
+  const turno = activites.filter((item) => item.turno === "Manha" || item.turno === "Tarde" || item.turno === "Noite")
   const { slug } = useLocalSearchParams();
   return (
     <ImageBackground source={require("../../assets/images/BackgroundActivites.png")} style={{width: '100%', height: '100%',backgroundPosition:"cover"}}>
     <View style={styles.container}>
       <Header userID={parseInt(slug.toString())} />
       <View style={styles.separator} />
-      <ActivitesList
-        title="Turno da Tarde"
+     <ActivitesList
         // @ts-ignore
         data={activites}
      />
- 
     </View>
     </ImageBackground>
   );
