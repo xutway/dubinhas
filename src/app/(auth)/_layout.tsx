@@ -2,7 +2,7 @@ import { Pressable, useColorScheme } from "react-native";
 
 import { Link, Tabs } from "expo-router";
 
-import Colors from "../../constants/Colors";
+import Colors from "../constants/Colors";
 
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 

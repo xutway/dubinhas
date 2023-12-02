@@ -6,7 +6,7 @@ import { Image } from "expo-image";
 import { router, useLocalSearchParams } from "expo-router";
 import { ArrowLeft } from "lucide-react-native";
 
-import { activites } from "../../mocked/studentes";
+import { activites } from "../mocked/studentes";
 
 import {
   Box,

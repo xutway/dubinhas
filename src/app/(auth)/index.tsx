@@ -2,10 +2,10 @@ import React, { useEffect } from "react";
 import { Dimensions, StyleSheet } from "react-native";
 import Carousel from "react-native-snap-carousel";
 
-import HeaderTitle from "../../components/HeaderTitle";
-import StudentSelectorAvatar from "../../components/Auth/StudentSelector/StudentSelector";
-import { View } from "../../components/Themed";
-import { users } from "../../mocked/studentes";
+import HeaderTitle from "../components/HeaderTitle";
+import StudentSelectorAvatar from "../components/Auth/StudentSelector/StudentSelector";
+import { View } from "../components/Themed";
+import { users } from "../mocked/studentes";
 
 import { Box } from "@gluestack-ui/themed";
 import { ImageBackground, } from 'react-native';
