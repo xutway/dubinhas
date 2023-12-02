@@ -1,18 +1,18 @@
 export const users = [
   {
     id: 1,
-    name: "Davi Rocha",
-    img: "https://i.imgur.com/5aGYhyg.jpg",
+    name: "João Pedro",
+    img: "https://i.imgur.com/2jsQG4V.jpg",
   },
   {
     id: 2,
-    name: "Davi dos Santos",
-    img: "https://i.imgur.com/6LicaXH.jpg",
+    name: "Maria Eduarda",
+    img: "https://i.imgur.com/Adie40w.jpg",
   },
   {
     id: 3,
-    name: "Emily Vitória",
-    img: "https://i.imgur.com/AUJf33S.jpg",
+    name: "Marcos Vinicius",
+    img: "https://i.imgur.com/pxBybMq.jpg",
   },
 ];
 

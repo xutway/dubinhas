@@ -24,7 +24,7 @@ const Header
               width: screenWidth / 3,
               height: screenWidth / 3,
               marginBottom: -40,
-              borderColor: "#C3EBFF",
+              borderColor: "#ACC931",
               marginLeft: "auto",
               marginRight: "auto",
               borderWidth: 10,

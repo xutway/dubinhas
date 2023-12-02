@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "dubinhas",
-    "slug": "dubinhas",
+    "name": "edukids",
+    "slug": "edukids",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -23,7 +23,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.xutway.dubinhas"
+      "package": "com.xutway.edukids"
     },
     "web": {
       "bundler": "metro",

@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
   
     card: {
       width: "100%",
-      backgroundColor: "#C3EBFF",
+      backgroundColor: "#ACC931",
       marginLeft: "auto",
       marginRight: "auto",
       alignContent: "center",

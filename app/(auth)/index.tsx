@@ -17,7 +17,7 @@ export default function TabOneScreen() {
     });
   }, []);
   return (
-  <ImageBackground source={require("../../assets/images/Background2.png")} style={{width: '100%', height: '100%',backgroundPosition:"cover"}}>
+  <ImageBackground source={require("../../assets/images/userselection.png")} style={{width: '100%', height: '100%',backgroundPosition:"cover"}}>
     <View style={styles.container}>
       <View
         style={styles.separator}

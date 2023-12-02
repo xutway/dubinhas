@@ -1,15 +1,15 @@
-# Xutway Dubinhas
+# Xutway edukids
 
 ## Descrição
 ```
-    Dubinhas é um aplicativo voltado em auxiliar professores e alunos com debilitações auditivas auditivas a se comunicarem e interagirem com suas tarefas do dia a dia.
+    edukids é um aplicativo voltado em auxiliar professores e alunos com debilitações auditivas auditivas a se comunicarem e interagirem com suas tarefas do dia a dia.
     Especialmente crianças surdo-autistas, que tem dificuldade de se comunicar com seus professores e familiares.
 ```
 
 ### Logo
 
 <p align="center">
-  <img src="https://i.imgur.com/vP86Cy3.png" alt="dubinhas">
+  <img src="https://i.imgur.com/vP86Cy3.png" alt="edukids">
 </p>
 
 
@@ -22,12 +22,12 @@
 
 ```bash
     # Clone este repositório
-    $ git clone git@github.com:xutway/dubinhas.git
+    $ git clone git@github.com:xutway/edukids.git
 ```
 ### Entre na pasta do projeto
 
 ```bash
-    $ cd dubinhas
+    $ cd edukids
 ```
 
 ### Instale as dependências
