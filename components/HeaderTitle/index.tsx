@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   subtitle: {
+    maxWidth: 300,
     color: "#000",
     textAlign: "center",
     fontSize: 16,

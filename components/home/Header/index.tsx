@@ -11,8 +11,8 @@ const { width: screenWidth } = Dimensions.get("window");
 
 const Header
  = ({ userID }: { userID: number }) => {
-  const img = users[userID].img;
-  const name = users[userID].name;
+  const img = users[userID]?.img;
+  const name = users[userID]?.name;
 
   return (
     <View>

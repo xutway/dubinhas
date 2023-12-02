@@ -21,7 +21,7 @@ export const activites = [
     id: 1,
     name: "Comparação",
     description: "Comparação",
-    img: "https://i.imgur.com/Ze21TCR.jpg",
+    img: "https://i.imgur.com/7v8HAFf.png",
     video: "https://i.imgur.com/irYQctW.mp4",
   },
   {
@@ -35,7 +35,7 @@ export const activites = [
     id: 3,
     name: "Escrever",
     description: "Escrever",
-    img: "https://i.imgur.com/sYYa21z.jpg",
+    img: "https://i.imgur.com/YIO9ooy.png",
     video: "https://i.imgur.com/7IWik9M.mp4",
   },
   {
@@ -46,3 +46,5 @@ export const activites = [
     video: "shttps://i.imgur.com/7IWik9M.mp4",
   }
 ];
+
+

@@ -13,8 +13,8 @@ export default function TabOneScreen() {
   const { slug } = useLocalSearchParams();
   return (
     <View style={styles.container}>
-      <Header userID={parseInt(slug.toString())} />
-      <View style={styles.separator} />
+      <Header userID={parseInt(slug?.toString())} />
+      <View style={styles?.separator} />
       <ActivitesList
         title="Turno da Tarde"
         // @ts-ignore

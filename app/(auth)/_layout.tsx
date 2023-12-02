@@ -38,7 +38,7 @@ export default function TabLayout() {
 
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
           headerRight: () => (
-            <Link href="/index" asChild>
+            <Link href="/selector" asChild>
               <Pressable>
                 {({ pressed }) => (
                   <FontAwesome

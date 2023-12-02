@@ -1,6 +1,5 @@
 import React from "react";
 import { Dimensions } from "react-native";
-
 import { Link } from "expo-router";
 
 import { AvatarType } from "./types";
@@ -12,22 +11,25 @@ import {
   Box,
   Text,
 } from "@gluestack-ui/themed";
-
-const StudentSelectorAvatar = ({
+import HeaderTitle from "../../HeaderTitle";
+const { width: screenWidth } = Dimensions.get("window");
+const ActivitesSelector = ({
   item,
-  index,
+  index
+
 }: {
   item: AvatarType;
   index: number;
+ 
 }) => {
-  const { img, name } = item;
-  const { width: screenWidth } = Dimensions.get("window");
+  const { img, name, } = item;
 
+  let slug = 1;
   return (
     <Link
       href={{
-        pathname: "/selector",
-        params: { slug: index },
+        pathname:`/${item?.path}`,
+        params: { slug: slug },
       }}
     >
       <Box
@@ -44,32 +46,23 @@ const StudentSelectorAvatar = ({
           style={{
             borderWidth: 4,
             borderColor: "#DBDBDB",
-          
           }}
         >
           <AvatarFallbackText>{name}</AvatarFallbackText>
           <AvatarImage
+          backgroundColor="transparent"
             source={{
               height: screenWidth > 500 ? 500 : screenWidth - 150,
               width: screenWidth > 500 ? 500 : screenWidth - 150,
               uri: img,
+              
             }}
           />
         </Avatar>
-        <Text
-          style={{
-            fontSize: 27,
-            height: 50,
-            lineHeight: 50,
-            fontWeight: "600",
-            color: "#000",
-          }}
-        >
-          {name}
-        </Text>
+        <HeaderTitle title={name} subtitle={item?.subtitle} />
       </Box>
     </Link>
   );
 };
 
-export default StudentSelectorAvatar;
+export default ActivitesSelector;

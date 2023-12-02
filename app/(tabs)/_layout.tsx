@@ -33,7 +33,7 @@ export default function TabLayout() {
 
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
           headerRight: () => (
-            <Link href="/two" asChild>
+            <Link href="/home" asChild>
               <Pressable>
                 {({ pressed }) => (
                   <FontAwesome
@@ -46,6 +46,16 @@ export default function TabLayout() {
               </Pressable>
             </Link>
           ),
+        }}
+      />
+        <Tabs.Screen
+        name="selector"
+        options={{
+          tabBarStyle: { display: "none" },
+          headerShown: false,
+
+          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+         
         }}
       />
     </Tabs>
