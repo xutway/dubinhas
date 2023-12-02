@@ -16,13 +16,18 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.xutway.dubinhas",
+      "infoPlist": {
+        "NSSpeechRecognitionUsageDescription": "Precisamos acessar o microfone para que você possa converter voz para texto."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "permissions": ["android.permission.RECORD_AUDIO"],
       "package": "com.xutway.dubinhas"
     },
     "web": {
@@ -31,7 +36,8 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "@react-native-voice/voice"
     ],
     "experiments": {
       "typedRoutes": true
