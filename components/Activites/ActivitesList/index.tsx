@@ -19,12 +19,13 @@ type itemProps = {
 const ActivitesList = ({ data }: { data: itemProps }) => {
   return (
     <>
-      <View>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
         <FlatList
           // @ts-ignore
           data={data}
           ItemSeparatorComponent={() => <View style={{ width: 20 }} />}
           horizontal
+          contentContainerStyle={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}
           renderItem={({ item, index }: { item: itemProps; index: number }) => {
             return (
               <Link
