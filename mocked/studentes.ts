@@ -37,6 +37,12 @@ export const activites = [
     description: "Escrever",
     img: "https://i.imgur.com/sYYa21z.jpg",
     video: "https://i.imgur.com/7IWik9M.mp4",
+  },
+  {
+    id: 4,
+    name: "Jogar Bola",
+    description: "Ação de jogar bola",
+    img: "https://i.imgur.com/TBxOWbk.png",
+    video: "shttps://i.imgur.com/7IWik9M.mp4",
   }
-
 ];
