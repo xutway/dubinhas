@@ -1,9 +1,0 @@
-query{
-  activitiesCollection {
-    edges {
-      node {
-        id
-      }
-    }
-  }
-}

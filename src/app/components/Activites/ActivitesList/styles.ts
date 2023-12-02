@@ -24,7 +24,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     gap: 5,
   },
-  
+
   textTitle: {
     fontSize: 16,
     fontWeight: "bold",

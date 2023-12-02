@@ -1,5 +1,11 @@
 import * as React from "react";
-import { Dimensions, ImageBackground, StyleSheet, Text, View } from "react-native";
+import {
+  Dimensions,
+  ImageBackground,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
 import { ResizeMode, Video } from "expo-av";
 import { Image } from "expo-image";
@@ -24,82 +30,84 @@ const Activites = () => {
   const newSlug = parseInt(slug.toString());
 
   return (
-    <ImageBackground source={require("../../assets/images/BackgroundSinlgleActivites.png")} style={{width: '100%', height: '100%',backgroundPosition:"cover"}}>
-    <View style={styles.container}>
-      <View style={styles.separator} />
-      <View style={styles.body}>
-        <Image
-          style={styles.image}
-          source={{ uri: activites[newSlug]?.img }}
-          alt={activites[newSlug]?.name}
-          placeholder="../assets/images/Loading.gif"
-          contentFit="fill"
-        />
-        <Video
-          posterStyle={styles.videoPoster}
-          videoStyle={styles.video}
-          source={{ uri: activites[newSlug]?.video }}
-          rate={1.0}
-          volume={1.0}
-          isMuted={false}
-          resizeMode={ResizeMode.CONTAIN}
-          shouldPlay
-          isLooping
-          usePoster
-          posterSource={require("../../assets/images/Loading.svg")}
-          useNativeControls={false}
-          style={styles.video}
-        />
-        <Input
-          variant="outline"
-          isDisabled={false}
-          isInvalid={false}
-          isReadOnly
-          style={{
-            borderColor: "#000000",
-            borderRadius: 50,
-            marginVertical: 20,
-          }}
-        >
-          <InputField
+    <ImageBackground
+      source={require("../../assets/images/BackgroundSinlgleActivites.png")}
+      style={{ width: "100%", height: "100%", backgroundPosition: "cover" }}
+    >
+      <View style={styles.container}>
+        <View style={styles.separator} />
+        <View style={styles.body}>
+          <Image
+            style={styles.image}
+            source={{ uri: activites[newSlug]?.img }}
+            alt={activites[newSlug]?.name}
+            placeholder="../assets/images/Loading.gif"
+            contentFit="fill"
+          />
+          <Video
+            posterStyle={styles.videoPoster}
+            videoStyle={styles.video}
+            source={{ uri: activites[newSlug]?.video }}
+            rate={1.0}
+            volume={1.0}
+            isMuted={false}
+            resizeMode={ResizeMode.CONTAIN}
+            shouldPlay
+            isLooping
+            usePoster
+            posterSource={require("../../assets/images/Loading.svg")}
+            useNativeControls={false}
+            style={styles.video}
+          />
+          <Input
+            variant="outline"
+            isDisabled={false}
+            isInvalid={false}
+            isReadOnly
             style={{
-              fontSize: 14,
-              color: "#000",
-              fontWeight: "200",
+              borderColor: "#000000",
+              borderRadius: 50,
+              marginVertical: 20,
+            }}
+          >
+            <InputField
+              style={{
+                fontSize: 14,
+                color: "#000",
+                fontWeight: "200",
+                width: "100%",
+              }}
+              placeholderTextColor="#000"
+              placeholder={activites[newSlug]?.name}
+            />
+          </Input>
+
+          <Textarea
+            isReadOnly
+            isInvalid={false}
+            isDisabled={false}
+            style={{
+              borderColor: "#000000",
+              borderRadius: 20,
+              marginVertical: 20,
               width: "100%",
             }}
-            placeholderTextColor="#000"
-            placeholder={activites[newSlug]?.name}
-          />
-        </Input>
-
-        <Textarea
-          isReadOnly
-          isInvalid={false}
-          isDisabled={false}
-          style={{
-            borderColor: "#000000",
-            borderRadius: 20,
-            marginVertical: 20,
-            width: "100%",
-        
-          }}
-          w="$64"
-        >
-          <TextareaInput
-            style={{ fontSize: 14, color: "#000", fontWeight: "200" }}
-            placeholderTextColor="#000"
-            placeholder={activites[newSlug]?.description}
-          />
-        </Textarea>
+            w="$64"
+          >
+            <TextareaInput
+              style={{ fontSize: 14, color: "#000", fontWeight: "200" }}
+              placeholderTextColor="#000"
+              placeholder={activites[newSlug]?.description}
+            />
+          </Textarea>
+        </View>
+        <Box style={styles.buttonContainer}>
+          <Button onTouchEnd={() => router.back()} style={styles.button}>
+            <ArrowLeft color="#000" size={20} />
+            <Text style={styles.buttonTextStyle}>Voltar</Text>
+          </Button>
+        </Box>
       </View>
-      <Box style={styles.buttonContainer}>
-        <Button onTouchEnd={() => router.back()} style={styles.button}>
-          <ArrowLeft color="#000" size={20} />
-          <Text style={styles.buttonTextStyle}>Voltar</Text>
-        </Button>
-      </Box>
-    </View>
     </ImageBackground>
   );
 };

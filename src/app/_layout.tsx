@@ -9,10 +9,10 @@ import {
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { config } from "@gluestack-ui/config"; // Optional if you want to use default theme
 import { GluestackUIProvider } from "@gluestack-ui/themed";
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -55,31 +55,31 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   const client = new ApolloClient({
-    uri: 'https://isciuaavizjxyezatfvj.supabase.co/graphql/v1',
+    uri: "https://isciuaavizjxyezatfvj.supabase.co/graphql/v1",
     headers: {
-      "apiKey": "sbp_764f2eaada024526612e3f490e8183dfebfa60c2",
+      apiKey: "sbp_764f2eaada024526612e3f490e8183dfebfa60c2",
     },
-    cache: new InMemoryCache()
+    cache: new InMemoryCache(),
   });
 
   return (
     <GluestackUIProvider config={config}>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <ApolloProvider client={client}>
-        <Stack>
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="(tabs)"
-            options={{ headerShown: false, presentation: "modal" }}
-          />
-          <Stack.Screen
-            name="Activities/[slug]"
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-        </Stack>
+        <ApolloProvider client={client}>
+          <Stack>
+            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="(tabs)"
+              options={{ headerShown: false, presentation: "modal" }}
+            />
+            <Stack.Screen
+              name="Activities/[slug]"
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+          </Stack>
         </ApolloProvider>
       </ThemeProvider>
     </GluestackUIProvider>

@@ -44,7 +44,6 @@ const StudentSelectorAvatar = ({
           style={{
             borderWidth: 4,
             borderColor: "#DBDBDB",
-          
           }}
         >
           <AvatarFallbackText>{name}</AvatarFallbackText>
