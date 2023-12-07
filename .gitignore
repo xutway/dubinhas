@@ -29,7 +29,9 @@ yarn-error.*
 *.pem
 
 # local env files
+.env
 .env*.local
+
 
 # typescript
 *.tsbuildinfo
@@ -39,3 +41,6 @@ yarn-error.*
 
 expo-env.d.ts
 # @end expo-cli
+# Ignore all generated
+**/generated/**
+src/app/features/.generated/**

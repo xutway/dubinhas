@@ -8,17 +8,21 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "eslint .",
-    "test": "jest --watchAll"
+    "test": "jest --watchAll",
+    "codegen": "graphql-codegen",
+    "watch": "graphql-codegen -w"
   },
   "jest": {
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@apollo/client": "^3.8.8",
     "@expo/vector-icons": "^13.0.0",
     "@gluestack-style/react": "^1.0.12",
     "@gluestack-ui/themed": "^1.0.11",
     "@react-navigation/native": "^6.0.2",
     "@types/react-native-snap-carousel": "^3.8.8",
+    "dotenv": "^16.3.1",
     "expo": "~49.0.15",
     "expo-av": "~13.4.1",
     "expo-font": "~11.4.0",
@@ -29,6 +33,7 @@
     "expo-status-bar": "~1.6.0",
     "expo-system-ui": "~2.4.0",
     "expo-web-browser": "~12.3.2",
+    "graphql": "^16.8.1",
     "lucide-react-native": "^0.292.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -42,6 +47,10 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@graphql-codegen/cli": "^5.0.0",
+    "@graphql-codegen/client-preset": "^4.1.0",
+    "@graphql-codegen/near-operation-file-preset": "^3.0.0",
+    "@graphql-typed-document-node/core": "^3.2.0",
     "@types/react": "~18.2.14",
     "@typescript-eslint/eslint-plugin": "^6.10.0",
     "eslint": "^8.53.0",
@@ -57,7 +66,7 @@
     "jest-expo": "~49.0.0",
     "prettier": "^3.0.3",
     "react-test-renderer": "18.2.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.3.2"
   },
   "overrides": {
     "react-refresh": "~0.14.0"
