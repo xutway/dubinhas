@@ -7,6 +7,7 @@ type TextInputProps = {
   placeholder: string;
   name: string;
   errors: FieldErrors;
+  disabled?: boolean;
 };
 
 export default function TextAreaInput({
@@ -14,6 +15,7 @@ export default function TextAreaInput({
   control,
   name,
   errors,
+  disabled,
 }: TextInputProps) {
   return (
     <Controller
@@ -29,6 +31,7 @@ export default function TextAreaInput({
             width: "100%",
             backgroundColor: "#F6F5F5",
           }}
+          isDisabled={disabled}
           w="$64"
         >
           <TextareaInput

@@ -12,10 +12,17 @@ type ImageInputProps = {
   onPick: (file: ImagePickerSuccessResult | ImagePickerCanceledResult) => void;
   control: Control<any>;
   name: string;
+  disabled?: boolean;
 };
 
-export default function ImageInput({ onPick, control, name }: ImageInputProps) {
+export default function ImageInput({
+  onPick,
+  control,
+  name,
+  disabled,
+}: ImageInputProps) {
   const getFile = async () => {
+    if (disabled) return;
     await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: false,

@@ -80,6 +80,7 @@ export default function ActivityForm() {
   return (
     <View style={styles.container}>
       <ImageInput
+        disabled={loading || isLoading}
         name="imageFile"
         control={control}
         onPick={(file) => {
@@ -89,18 +90,21 @@ export default function ActivityForm() {
         }}
       />
       <TextInput
+        disabled={loading || isLoading}
         control={control}
         placeholder="Nome da atividade"
         name="name"
         errors={errors}
       />
       <TextAreaInput
+        disabled={loading || isLoading}
         placeholder="Breve descrição da atividade"
         control={control}
         name="description"
         errors={errors}
       />
       <VideoInput
+        disabled={loading || isLoading}
         name="videoFile"
         control={control}
         onPick={(file) =>

@@ -7,12 +7,14 @@ type TextInputProps = {
   placeholder: string;
   name: string;
   errors: FieldErrors;
+  disabled?: boolean;
 };
 
 export default function TextInput({
   placeholder,
   control,
   errors,
+  disabled,
 }: TextInputProps) {
   return (
     <Controller
@@ -27,6 +29,7 @@ export default function TextInput({
             borderColor: errors?.name ? "red" : "#000000",
             borderRadius: 50,
           }}
+          isDisabled={disabled}
         >
           <InputField
             onBlur={onBlur}

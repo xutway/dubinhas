@@ -13,9 +13,15 @@ type ImageInputProps = {
   onPick: (file: ImagePickerSuccessResult | ImagePickerCanceledResult) => void;
   control: Control<any>;
   name: string;
+  disabled?: boolean;
 };
 
-export default function VideoInput({ onPick, control, name }: ImageInputProps) {
+export default function VideoInput({
+  onPick,
+  control,
+  name,
+  disabled,
+}: ImageInputProps) {
   const [fileName, setFileName] = useState({} as ImagePickerSuccessResult);
 
   const getFile = async () => {
@@ -41,6 +47,7 @@ export default function VideoInput({ onPick, control, name }: ImageInputProps) {
       render={({ field: { value } }) => (
         <Input
           variant="outline"
+          isDisabled={disabled}
           isReadOnly
           style={{
             borderColor: "#000000",
