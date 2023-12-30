@@ -72,6 +72,8 @@ export default function ActivityForm() {
         image_url: image.path,
       },
     });
+    setValue("imageFile", null);
+    setValue("videoFile", null);
     reset();
   };
 

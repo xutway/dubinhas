@@ -14,7 +14,6 @@ export default function TextInput({
   control,
   errors,
 }: TextInputProps) {
-  console.log("🚀 ~ file: index.tsx:17 ~ errors:", errors?.name);
   return (
     <Controller
       control={control}
@@ -31,7 +30,7 @@ export default function TextInput({
         >
           <InputField
             onBlur={onBlur}
-            values={value}
+            value={value}
             onChangeText={onChange}
             style={{
               fontSize: 14,

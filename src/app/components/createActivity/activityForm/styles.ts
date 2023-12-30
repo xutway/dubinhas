@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   container: {
     display: "flex",
+    maxWidth: 500,
     gap: 20,
   },
   formButtons: {

@@ -49,7 +49,7 @@ export default function VideoInput({ onPick, control, name }: ImageInputProps) {
           onTouchEnd={getFile}
         >
           <InputField
-            value={value[0]?.uri}
+            value={value ? value[0]?.uri : null}
             style={{
               fontSize: 14,
               color: "#000",

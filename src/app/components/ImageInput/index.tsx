@@ -31,10 +31,9 @@ export default function ImageInput({ onPick, control, name }: ImageInputProps) {
         required: true,
       }}
       render={({ field: { value } }) => {
-        console.log("🚀 ~ file: index.tsx:39 ~ ImageInput ~ value:", value);
         return (
           <>
-            {value[0] ? (
+            {value && value[0] ? (
               <Image
                 style={styles?.image}
                 source={{
