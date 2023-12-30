@@ -12,6 +12,7 @@ type TextInputProps = {
 export default function TextAreaInput({
   placeholder,
   control,
+  name,
   errors,
 }: TextInputProps) {
   return (
@@ -45,7 +46,7 @@ export default function TextAreaInput({
           {errors.firstName && <Text>{errors?.root?.message}</Text>}
         </Textarea>
       )}
-      name="name"
+      name={name}
     />
   );
 }
