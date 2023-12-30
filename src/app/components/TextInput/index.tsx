@@ -1,6 +1,6 @@
 import { Control, Controller, FieldErrors } from "react-hook-form";
 
-import { Input, InputField, Text } from "@gluestack-ui/themed";
+import { Input, InputField } from "@gluestack-ui/themed";
 
 type TextInputProps = {
   control: Control<any>;
@@ -14,6 +14,7 @@ export default function TextInput({
   control,
   errors,
 }: TextInputProps) {
+  console.log("🚀 ~ file: index.tsx:17 ~ errors:", errors?.name);
   return (
     <Controller
       control={control}
@@ -24,7 +25,7 @@ export default function TextInput({
         <Input
           variant="outline"
           style={{
-            borderColor: "#000000",
+            borderColor: errors?.name ? "red" : "#000000",
             borderRadius: 50,
           }}
         >
@@ -42,7 +43,6 @@ export default function TextInput({
             placeholderTextColor="#000"
             placeholder={placeholder}
           />
-          {errors.firstName && <Text>{errors?.root?.message}</Text>}
         </Input>
       )}
       name="name"

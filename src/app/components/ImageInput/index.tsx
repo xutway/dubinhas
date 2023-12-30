@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Control, Controller } from "react-hook-form";
 import { StyleSheet, Text, View } from "react-native";
 
 import { Image } from "expo-image";
@@ -10,39 +10,49 @@ import {
 
 type ImageInputProps = {
   onPick: (file: ImagePickerSuccessResult | ImagePickerCanceledResult) => void;
+  control: Control<any>;
+  name: string;
 };
 
-export default function ImageInput({ onPick }: ImageInputProps) {
-  //
-  const [file, setFile] = useState({} as ImagePickerSuccessResult);
-
+export default function ImageInput({ onPick, control, name }: ImageInputProps) {
   const getFile = async () => {
     await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: false,
     }).then((file) => {
-      setFile(file as ImagePickerSuccessResult);
       onPick(file);
     });
   };
 
   return (
-    <>
-      {file?.assets ? (
-        <Image
-          style={styles?.image}
-          source={{
-            uri: file?.assets[0]?.uri,
-          }}
-          onTouchEnd={getFile}
-        />
-      ) : (
-        <View style={styles?.button} onTouchEnd={getFile}>
-          <Text style={styles?.plus}>+</Text>
-          <Text style={styles?.text}>Imagem Atividade</Text>
-        </View>
-      )}
-    </>
+    <Controller
+      control={control}
+      rules={{
+        required: true,
+      }}
+      render={({ field: { value } }) => {
+        console.log("🚀 ~ file: index.tsx:39 ~ ImageInput ~ value:", value);
+        return (
+          <>
+            {value[0] ? (
+              <Image
+                style={styles?.image}
+                source={{
+                  uri: value[0]?.uri,
+                }}
+                onTouchEnd={getFile}
+              />
+            ) : (
+              <View style={styles?.button} onTouchEnd={getFile}>
+                <Text style={styles?.plus}>+</Text>
+                <Text style={styles?.text}>Imagem Atividade</Text>
+              </View>
+            )}
+          </>
+        );
+      }}
+      name={name}
+    />
   );
 }
 

@@ -21,10 +21,10 @@ export default function TextAreaInput({
       rules={{
         required: true,
       }}
-      render={({ field: { onChange, onBlur, value } }) => (
+      render={({ field: { onChange, value } }) => (
         <Textarea
           style={{
-            borderColor: "#000000",
+            borderColor: errors?.[name] ? "red" : "#000000",
             borderRadius: 20,
             width: "100%",
             backgroundColor: "#F6F5F5",
@@ -33,8 +33,7 @@ export default function TextAreaInput({
         >
           <TextareaInput
             placeholder={placeholder}
-            onBlur={onBlur}
-            values={value}
+            value={value}
             onChangeText={onChange}
             style={{
               fontSize: 14,

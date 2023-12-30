@@ -20,6 +20,7 @@ export default function ActivityForm() {
     handleSubmit,
     setValue,
     getValues,
+    reset,
     formState: { errors, isSubmitting: isLoading },
   } = useForm({
     defaultValues: {
@@ -28,15 +29,24 @@ export default function ActivityForm() {
       imageFile: {} as any,
       videoFile: {} as any,
     },
+    shouldUnregister: true,
   });
 
   const { imageUpload } = useFileUpload();
 
   const [createActivity, { loading }] = useInsertNewActivityMutation();
-
   const onSubmit = async (data: any) => {
     const avatarFile = getValues("imageFile");
     const videoFile = getValues("videoFile");
+    if (
+      Object.keys(avatarFile).length === 0 ||
+      Object.keys(videoFile).length === 0
+    ) {
+      Toast?.show("Selecione um video e uma imagem", {
+        position: Toast.positions.TOP,
+      });
+      return;
+    }
 
     const image = await imageUpload(avatarFile);
     const video = await imageUpload(videoFile);
@@ -62,11 +72,14 @@ export default function ActivityForm() {
         image_url: image.path,
       },
     });
+    reset();
   };
 
   return (
     <View style={styles.container}>
       <ImageInput
+        name="imageFile"
+        control={control}
         onPick={(file) => {
           setValue("imageFile", file?.assets, {
             shouldValidate: false,
@@ -86,6 +99,8 @@ export default function ActivityForm() {
         errors={errors}
       />
       <VideoInput
+        name="videoFile"
+        control={control}
         onPick={(file) =>
           setValue("videoFile", file?.assets, {
             shouldValidate: false,
@@ -102,7 +117,10 @@ export default function ActivityForm() {
             borderRadius: 50,
             minWidth: 150,
           }}
-          onPress={() => router.push("/(auth)")}
+          onPress={() => {
+            router.push("/(auth)");
+            reset();
+          }}
         >
           <Text>Cancelar</Text>
         </Button>
