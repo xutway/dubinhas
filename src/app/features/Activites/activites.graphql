@@ -1,5 +1,5 @@
-query{
-  activitiesCollection {
+query activitiesCollection {
+  activityCollection {
     edges {
       node {
         id

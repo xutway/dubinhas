@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useColorScheme } from "react-native";
+import { RootSiblingParent } from "react-native-root-siblings";
 import {
   DarkTheme,
   DefaultTheme,
@@ -20,7 +21,6 @@ export {
 } from "expo-router";
 
 export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
   initialRouteName: "/(auth)/userSelection",
 };
 
@@ -55,9 +55,9 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   const client = new ApolloClient({
-    uri: "https://isciuaavizjxyezatfvj.supabase.co/graphql/v1",
+    uri: process.env.EXPO_PUBLIC_API_URL_GRAPHQL,
     headers: {
-      apiKey: "sbp_764f2eaada024526612e3f490e8183dfebfa60c2",
+      apiKey: process.env.EXPO_PUBLIC_API_KEY as string,
     },
     cache: new InMemoryCache(),
   });
@@ -66,20 +66,27 @@ function RootLayoutNav() {
     <GluestackUIProvider config={config}>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <ApolloProvider client={client}>
-          <Stack>
-            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-            <Stack.Screen
-              name="(tabs)"
-              options={{ headerShown: false, presentation: "modal" }}
-            />
-            <Stack.Screen
-              name="Activities/[slug]"
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-          </Stack>
+          <RootSiblingParent>
+            <Stack>
+              <Stack.Screen
+                options={{
+                  headerShown: false,
+                }}
+                name="createActivity"
+              />
+              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+              <Stack.Screen
+                name="(tabs)"
+                options={{ headerShown: false, presentation: "modal" }}
+              />
+              <Stack.Screen
+                name="Activities/[slug]"
+                options={{
+                  headerShown: false,
+                }}
+              />
+            </Stack>
+          </RootSiblingParent>
         </ApolloProvider>
       </ThemeProvider>
     </GluestackUIProvider>
