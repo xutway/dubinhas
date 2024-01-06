@@ -3,7 +3,7 @@ import { ImageBackground, StyleSheet, View } from "react-native";
 
 import { Image } from "expo-image";
 
-import ActivityForm from "./components/createActivity/activityForm";
+import ActivityForm from "../components/createActivity/activityForm";
 
 import { KeyboardAvoidingView } from "@gluestack-ui/themed";
 

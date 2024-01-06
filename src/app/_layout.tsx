@@ -74,6 +74,12 @@ function RootLayoutNav() {
                 }}
                 name="createActivity"
               />
+              <Stack.Screen
+                options={{
+                  headerShown: false,
+                }}
+                name="createStudent"
+              />
               <Stack.Screen name="(auth)" options={{ headerShown: false }} />
               <Stack.Screen
                 name="(tabs)"

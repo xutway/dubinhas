@@ -3,9 +3,9 @@ import { Dimensions, ImageBackground, StyleSheet, View } from "react-native";
 
 import { useLocalSearchParams } from "expo-router";
 
-import ActivitesList from "../components/Activites/ActivitesList";
-import Header from "../components/home/Header";
-import { activites } from "../mocked/studentes";
+import ActivitesList from "../../components/Activites/ActivitesList";
+import Header from "../../components/home/Header";
+import { activites } from "../../mocked/studentes";
 
 const { height: screenHeith } = Dimensions.get("window");
 export default function TabOneScreen() {

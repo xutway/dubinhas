@@ -4,8 +4,8 @@ import Toast from "react-native-root-toast";
 
 import { router } from "expo-router";
 
-import useFileUpload from "../../../helper/imageUploadHandler";
 import { useCreateStudentMutation } from "../../features/student/mutation.generated";
+import useFileUpload from "../../helper/imageUploadHandler";
 import AvatarInput from "../AvatarInput";
 import { IconType } from "../Icon/icon";
 import TextInput from "../TextInput";
