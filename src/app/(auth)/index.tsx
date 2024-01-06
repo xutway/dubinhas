@@ -1,50 +1,44 @@
-import React, { useEffect } from "react";
-import { Dimensions, ImageBackground, StyleSheet } from "react-native";
-import Carousel from "react-native-snap-carousel";
+import {
+  Alert,
+  Dimensions,
+  ImageBackground,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 
-import StudentSelectorAvatar from "../components/Auth/StudentSelector/StudentSelector";
+import PasswordInput from "../components/Auth/Login/PasswordInput";
+import UsernameInput from "../components/Auth/Login/UsernameInput";
 import HeaderTitle from "../components/HeaderTitle";
 import { View } from "../components/Themed";
-import { users } from "../mocked/studentes";
 
-import { Box } from "@gluestack-ui/themed";
+const { height: screenHeight } = Dimensions.get("window");
 
-const { width: screenWidth, height: screenHeith } = Dimensions.get("window");
-export default function TabOneScreen() {
-  useEffect(() => {
-    Dimensions.addEventListener("change", () => {
-      console.log("resize");
-    });
-  }, []);
+export default function LoginScreen() {
+  const handleSubmit = () => {
+    Alert.alert("Login realizado com sucesso!");
+  };
+
   return (
     <ImageBackground
-      source={require("../../assets/images/Background2.png")}
+      source={require("../../assets/images/BackgroundSinlgleActivites.png")}
       style={{ width: "100%", height: "100%", backgroundPosition: "cover" }}
     >
       <View style={styles.container}>
-        <View
-          style={styles.separator}
-          lightColor="#eee"
-          darkColor="rgba(255,255,255,0.1)"
-        />
-        <HeaderTitle
-          subtitle="Para entrar, role as bolhas até encontrar seu nome e rosto!"
-          title="Olá Coleguinha!"
-        />
-        <Box style={styles.viewTop}>
-          <Carousel
-            sliderWidth={screenWidth}
-            sliderHeight={screenWidth > 500 ? 400 : screenWidth - 60}
-            itemWidth={screenWidth > 500 ? 400 : screenWidth - 150}
-            inactiveSlideShift={0}
-            useScrollView
-            data={users}
-            renderItem={StudentSelectorAvatar}
-            layoutCardOffset={10}
-            layout="default"
-            centerContent
+        <View style={styles.contentHeader}>
+          <HeaderTitle
+            title="Insira seus dados para logar!"
+            subtitle="rápido, simples e seguro!"
           />
-        </Box>
+        </View>
+        <View style={styles.loginView}>
+          <UsernameInput placeholder="Digite o nome de usuário" />
+          <View style={styles.separator} />
+          <PasswordInput placeholder="Digite sua senha" />
+          <TouchableOpacity style={styles.loginButton} onPress={handleSubmit}>
+            <Text style={styles.textButton}>Login</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </ImageBackground>
   );
@@ -53,24 +47,50 @@ export default function TabOneScreen() {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    alignItems: "center",
-    justifyContent: "center",
-    height: screenHeith,
+    padding: "auto",
+    maxWidth: 500,
+    height: screenHeight,
     backgroundColor: "transparent",
   },
   title: {
     fontSize: 20,
     fontWeight: "bold",
   },
+  contentHeader: {
+    alignItems: "center",
+    marginTop: 157,
+    marginBottom: 61,
+    backgroundColor: "transparent",
+  },
+  loginView: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 50,
+    backgroundColor: "transparent",
+  },
+  loginButton: {
+    backgroundColor: "#33BBFF",
+    borderRadius: 30,
+    height: 70,
+    width: "70%",
+    maxHeight: 500,
+    marginTop: 50,
+  },
+  textButton: {
+    marginTop: "auto",
+    marginBottom: "auto",
+    fontWeight: "bold",
+    fontSize: 26,
+    color: "#FFFFFF",
+    textAlign: "center",
+  },
   separator: {
-    height: 1,
+    height: 31,
     width: "80%",
-    marginTop: 30,
-    marginBottom: 100,
   },
   viewTop: {
     marginTop: "auto",
     marginBottom: "auto",
-    maxHeight: screenHeith / 2,
+    maxHeight: Dimensions.get("window").height / 2,
   },
 });
