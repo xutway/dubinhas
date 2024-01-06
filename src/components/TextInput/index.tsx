@@ -31,6 +31,7 @@ export default function TextInput({
           <Input
             variant="outline"
             style={{
+              backgroundColor: "#F6F5F5",
               borderColor: errors?.name ? "red" : "#000000",
               borderRadius: 50,
               alignItems: "center",

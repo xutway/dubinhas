@@ -40,9 +40,11 @@ export default function StudentForm() {
 
       createStudent({
         variables: {
-          nickName: data.name,
-          phone: data.phone,
-          avatarPath: image,
+          input: {
+            nickName: data.name,
+            phone: data.phone,
+            avatar: image.path,
+          },
         },
         onError: () => {
           Toast?.show(
@@ -53,8 +55,12 @@ export default function StudentForm() {
           );
         },
         onCompleted: () => {
+          Toast?.show("Aluno criado com sucesso!", {
+            position: Toast.positions.TOP,
+          });
           setValue("avatarPath", null);
           reset();
+          router.push("/home");
         },
       });
     } catch (err) {}

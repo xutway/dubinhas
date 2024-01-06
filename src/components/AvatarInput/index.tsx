@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Control, Controller } from "react-hook-form";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -8,11 +9,14 @@ import {
   ImagePickerSuccessResult,
 } from "expo-image-picker";
 
+import { Spinner } from "@gluestack-ui/themed";
+
 type AvatarInputProps = {
   onPick: (file: ImagePickerSuccessResult | ImagePickerCanceledResult) => void;
   control: Control<any>;
   name: string;
   disabled?: boolean;
+  loading;
 };
 
 export default function AvatarInput({
@@ -20,13 +24,17 @@ export default function AvatarInput({
   control,
   name,
   disabled,
+  loading,
 }: AvatarInputProps) {
+  const [picking, setpicking] = useState(false);
   const getFile = async () => {
+    setpicking(true);
     if (disabled) return;
     await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: false,
     }).then((file) => {
+      setpicking(false);
       onPick(file);
     });
   };
@@ -39,7 +47,11 @@ export default function AvatarInput({
       }}
       render={({ field: { value } }) => {
         return (
-          <>
+          <View
+            style={{
+              minHeight: 130,
+            }}
+          >
             {value && value[0] ? (
               <View style={styles?.container}>
                 <Image
@@ -53,12 +65,14 @@ export default function AvatarInput({
             ) : (
               <View style={styles?.container}>
                 <View style={styles?.button} onTouchEnd={getFile}>
-                  <Text style={styles?.plus}>+</Text>
+                  <Text style={styles?.plus}>
+                    {loading || picking ? <Spinner size="large" /> : "+"}
+                  </Text>
                 </View>
                 <Text style={styles?.text}>Imagem Aluno</Text>
               </View>
             )}
-          </>
+          </View>
         );
       }}
       name={name}
