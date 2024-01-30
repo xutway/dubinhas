@@ -18,6 +18,7 @@ export default function LoginScreen() {
             subtitle="rápido, simples e seguro!"
           />
         </View>
+
         <LoginForm />
       </View>
     </ImageBackground>
@@ -27,12 +28,19 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
+    display: "flex",
     padding: "auto",
-    maxWidth: 500,
+    alignItems: "center",
+    alignContent: "center",
     height: screenHeight,
-    backgroundColor: "transparent",
   },
 
+  formContainer: {
+    display: "flex",
+    alignItems: "center",
+    width: "100%",
+    maxWidth: 300,
+  },
   contentHeader: {
     alignItems: "center",
     marginTop: 157,

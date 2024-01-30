@@ -24,6 +24,9 @@ const ActivitesList = ({ data, title }: { data: itemProps; title: string }) => {
           data={data}
           ItemSeparatorComponent={() => <View style={{ width: 20 }} />}
           horizontal
+          contentContainerStyle={{
+            marginHorizontal: 10,
+          }}
           renderItem={({ item, index }: { item: itemProps; index: number }) => {
             return (
               <Link

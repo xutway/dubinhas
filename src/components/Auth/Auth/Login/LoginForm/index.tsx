@@ -10,8 +10,6 @@ import { loginFormData, loginFormSchema } from "./types";
 import { Button } from "@gluestack-ui/themed";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const { height: screenHeight } = Dimensions.get("window");
-
 const LoginForm = () => {
   const {
     control,
@@ -58,28 +56,16 @@ const LoginForm = () => {
 export default LoginForm;
 
 const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    padding: "auto",
-    maxWidth: 500,
-    height: screenHeight,
-    backgroundColor: "transparent",
-  },
   title: {
     fontSize: 20,
     fontWeight: "bold",
   },
-  contentHeader: {
-    alignItems: "center",
-    marginTop: 157,
-    marginBottom: 61,
-    backgroundColor: "transparent",
-  },
   loginView: {
+    display: "flex",
+    width: "100%",
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 50,
-    backgroundColor: "transparent",
   },
   loginButton: {
     backgroundColor: "#33BBFF",

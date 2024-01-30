@@ -16,7 +16,7 @@ type AvatarInputProps = {
   control: Control<any>;
   name: string;
   disabled?: boolean;
-  loading;
+  loading?: boolean;
 };
 
 export default function AvatarInput({
