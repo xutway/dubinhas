@@ -3,11 +3,11 @@ import { ImageBackground, StyleSheet, View } from "react-native";
 
 import { Image } from "expo-image";
 
-import ActivityForm from "../components/createActivity/activityForm";
+import StudentForm from "../components/StudentForm";
 
 import { KeyboardAvoidingView } from "@gluestack-ui/themed";
 
-export default function CreateActivityScreen() {
+export default function CreateStudentcreen() {
   return (
     <ImageBackground
       source={require("../assets/images/BackgroundForm.png")}
@@ -16,7 +16,7 @@ export default function CreateActivityScreen() {
       <View style={styles.container}>
         <View style={styles.separator} />
         <View style={styles.formContainer}>
-          <ActivityForm />
+          <StudentForm />
         </View>
       </View>
       <KeyboardAvoidingView
@@ -28,7 +28,7 @@ export default function CreateActivityScreen() {
           style={styles?.image}
           contentFit="fill"
           placeholder="assets/images/Loading.gif"
-          source={require("assets/images/childrenRope.png")}
+          source={require("assets/images/CreateStudentImage.png")}
           alt="KidsPlaying"
         />
       </KeyboardAvoidingView>
@@ -52,6 +52,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     position: "absolute",
     width: "100%",
-    minHeight: 200,
+    minHeight: 350,
   },
 });

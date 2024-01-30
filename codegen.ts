@@ -20,9 +20,12 @@ const config: CodegenConfig = {
   overwrite: true,
   ignoreNoDocuments: true,
   generates: {
-    "src/": {
+    "src/gql/": {
       preset: "near-operation-file",
-      presetConfig: { extension: ".generated.tsx", baseTypesPath: "types.ts" },
+      presetConfig: {
+        extension: ".generated.tsx",
+        baseTypesPath: "graphql.ts",
+      },
       documentTransforms: [addTypenameSelectionDocumentTransform],
       plugins: ["typescript-operations", "typescript-react-apollo"],
       config: {

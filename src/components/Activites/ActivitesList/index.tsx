@@ -1,11 +1,10 @@
 import { FlatList, ImageBackground, Text, View } from "react-native";
 
-import { Link, router } from "expo-router";
-import { LogOut } from "lucide-react-native";
+import { Link } from "expo-router";
 
 import { styles } from "./styles";
 
-import { Box, Button } from "@gluestack-ui/themed";
+import { Box } from "@gluestack-ui/themed";
 
 type itemProps = {
   id: number;
@@ -47,12 +46,6 @@ const ActivitesList = ({ data, title }: { data: itemProps; title: string }) => {
           }}
         />
       </View>
-      <Box style={styles.buttonContainer}>
-        <Button onTouchEnd={() => router.back()} style={styles.button}>
-          <LogOut color="#000" size={30} />
-          <Text style={styles.buttonTextStyle}>SAIR</Text>
-        </Button>
-      </Box>
     </>
   );
 };

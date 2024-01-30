@@ -1,6 +1,8 @@
 import React from "react";
 import { Dimensions, Text } from "react-native";
 
+import { router } from "expo-router";
+
 import { users } from "../../../mocked/studentes";
 import { View } from "../../Themed";
 import styles from "./styles";
@@ -21,6 +23,7 @@ const Header = ({ userID }: { userID: number }) => {
             <Text style={styles.text}>{name}</Text>
           </Box>
           <Avatar
+            onTouchEnd={() => router.push("/createStudent")}
             style={{
               width: screenWidth / 3,
               height: screenWidth / 3,

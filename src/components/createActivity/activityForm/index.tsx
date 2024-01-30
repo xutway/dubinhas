@@ -4,7 +4,7 @@ import Toast from "react-native-root-toast";
 
 import { router } from "expo-router";
 
-import useFileUpload from "../../../../helper/imageUploadHandler";
+import useFileUpload from "../../../helper/imageUploadHandler";
 import { useInsertNewActivityMutation } from "../../../features/Activites/mutations.generated";
 import ImageInput from "../../ImageInput";
 import TextAreaInput from "../../TextAreaInput";

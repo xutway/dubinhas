@@ -68,12 +68,6 @@ function RootLayoutNav() {
         <ApolloProvider client={client}>
           <RootSiblingParent>
             <Stack>
-              <Stack.Screen
-                options={{
-                  headerShown: false,
-                }}
-                name="createActivity"
-              />
               <Stack.Screen name="(auth)" options={{ headerShown: false }} />
               <Stack.Screen
                 name="(tabs)"
@@ -84,6 +78,18 @@ function RootLayoutNav() {
                 options={{
                   headerShown: false,
                 }}
+              />
+              <Stack.Screen
+                options={{
+                  headerShown: false,
+                }}
+                name="createActivity"
+              />
+              <Stack.Screen
+                options={{
+                  headerShown: false,
+                }}
+                name="createStudent"
               />
             </Stack>
           </RootSiblingParent>
