@@ -16,7 +16,6 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { config } from "@gluestack-ui/config"; // Optional if you want to use default theme
 import { GluestackUIProvider } from "@gluestack-ui/themed";
-import HeaderTitle from "components/HeaderTitle";
 
 export {
   // Catch any errors thrown by the Layout component.
