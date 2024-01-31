@@ -103,10 +103,11 @@ export default function StudentForm() {
             borderColor: "#000",
             borderWidth: 1,
             borderRadius: 50,
-            minWidth: 150,
+            minWidth: 130,
+            width: "auto",
           }}
           onPress={() => {
-            router.push("/(auth)");
+            router.back();
             reset();
           }}
         >
@@ -119,7 +120,8 @@ export default function StudentForm() {
             borderColor: "#000",
             borderWidth: 1,
             borderRadius: 50,
-            minWidth: 150,
+            width: "auto",
+            minWidth: 130,
           }}
           onPress={handleSubmit(onSubmit)}
         >

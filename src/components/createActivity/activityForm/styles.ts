@@ -3,14 +3,8 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   container: {
     display: "flex",
-    maxWidth: 500,
+    maxWidth: 400,
     gap: 20,
-  },
-  formButtons: {
-    display: "flex",
-    flexDirection: "row",
-    width: "100%",
-    justifyContent: "space-between",
   },
   plus: {
     color: "#D9D9D9",
@@ -20,6 +14,13 @@ const styles = StyleSheet.create({
   text: {
     color: "#000",
     fontWeight: "200",
+  },
+  formButtons: {
+    display: "flex",
+    flexDirection: "row",
+    width: "100%",
+    gap: 5,
+    justifyContent: "space-between",
   },
   button: {
     backgroundColor: "transparent",

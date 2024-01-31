@@ -19,12 +19,17 @@ const Header = ({ userID }: { userID: number }) => {
     <View>
       <Box style={styles.card}>
         <Box sx={styles.box}>
-          <Box style={styles.textBoxStart}>
+          <Box
+            onTouchEnd={() => router.push("/teacherPage")}
+            style={styles.textBoxStart}
+          >
             <Text style={styles.text}>{name}</Text>
           </Box>
           <Avatar
             onTouchEnd={() => router.push("/createStudent")}
             style={{
+              maxHeight: 150,
+              maxWidth: 150,
               width: screenWidth / 3,
               height: screenWidth / 3,
               marginBottom: -40,

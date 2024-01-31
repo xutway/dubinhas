@@ -24,13 +24,15 @@ export default function CreateActivityScreen() {
         behavior="padding"
         style={{ flex: 1, zIndex: 999 }}
       >
-        <Image
-          style={styles?.image}
-          contentFit="fill"
-          placeholder="assets/images/Loading.gif"
-          source={require("assets/images/childrenRope.png")}
-          alt="KidsPlaying"
-        />
+        <View style={styles.imageContainer}>
+          <Image
+            style={styles?.image}
+            contentFit="fill"
+            placeholder="assets/images/Loading.gif"
+            source={require("assets/images/childrenRope.png")}
+            alt="KidsPlaying"
+          />
+        </View>
       </KeyboardAvoidingView>
     </ImageBackground>
   );
@@ -39,6 +41,7 @@ export default function CreateActivityScreen() {
 const styles = StyleSheet.create({
   container: {
     height: "100%",
+    alignItems: "center",
   },
   formContainer: {
     paddingHorizontal: 30,
@@ -48,10 +51,17 @@ const styles = StyleSheet.create({
     height: 1,
     width: "80%",
   },
-  image: {
+  imageContainer: {
     bottom: 0,
+    minHeight: 200,
     position: "absolute",
     width: "100%",
+    display: "flex",
+    alignItems: "center",
+  },
+  image: {
+    width: "100%",
+    maxWidth: 400,
     minHeight: 200,
   },
 });

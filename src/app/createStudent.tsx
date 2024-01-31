@@ -24,13 +24,15 @@ export default function CreateStudentcreen() {
         behavior="padding"
         style={{ flex: 1, zIndex: 999 }}
       >
-        <Image
-          style={styles?.image}
-          contentFit="fill"
-          placeholder="assets/images/Loading.gif"
-          source={require("assets/images/CreateStudentImage.png")}
-          alt="KidsPlaying"
-        />
+        <View style={styles.imageContainer}>
+          <Image
+            style={styles?.image}
+            contentFit="fill"
+            placeholder="assets/images/Loading.gif"
+            source={require("assets/images/CreateStudentImage.png")}
+            alt="KidsPlaying"
+          />
+        </View>
       </KeyboardAvoidingView>
     </ImageBackground>
   );
@@ -39,19 +41,31 @@ export default function CreateStudentcreen() {
 const styles = StyleSheet.create({
   container: {
     height: "100%",
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
   },
   formContainer: {
+    width: "100%",
     paddingHorizontal: 30,
+    maxWidth: 400,
   },
   separator: {
     marginVertical: 30,
     height: 1,
     width: "80%",
   },
-  image: {
-    bottom: 0,
+  imageContainer: {
+    bottom: 10,
+    minHeight: 200,
     position: "absolute",
     width: "100%",
-    minHeight: 350,
+    display: "flex",
+    alignItems: "center",
+  },
+  image: {
+    width: "100%",
+    maxWidth: 300,
+    minHeight: 200,
   },
 });
