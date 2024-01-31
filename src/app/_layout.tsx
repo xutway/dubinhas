@@ -8,12 +8,15 @@ import {
 } from "@react-navigation/native";
 
 import { useFonts } from "expo-font";
+import { ImageBackground } from "expo-image/build/ImageBackground";
 import { SplashScreen, Stack } from "expo-router";
+import LottieView from "lottie-react-native";
 
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { config } from "@gluestack-ui/config"; // Optional if you want to use default theme
 import { GluestackUIProvider } from "@gluestack-ui/themed";
+import HeaderTitle from "components/HeaderTitle";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -45,7 +48,19 @@ export default function RootLayout() {
   }, [loaded]);
 
   if (!loaded) {
-    return null;
+    return (
+      <ImageBackground
+        source={require("assets/images/Background2.png")}
+        style={{ width: "100%", height: "100%", backgroundPosition: "cover" }}
+      >
+        <LottieView
+          source={require("assets/animations/LoadingSplash.json")}
+          style={{ width: "100%", height: "100%", alignSelf: "center" }}
+          autoPlay
+          loop
+        />
+      </ImageBackground>
+    );
   }
 
   return <RootLayoutNav />;
