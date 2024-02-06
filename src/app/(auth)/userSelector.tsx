@@ -12,9 +12,7 @@ import { Box } from "@gluestack-ui/themed";
 const { width: screenWidth, height: screenHeith } = Dimensions.get("window");
 export default function TabOneScreen() {
   useEffect(() => {
-    Dimensions.addEventListener("change", () => {
-      console.log("resize");
-    });
+    Dimensions.addEventListener("change", () => {});
   }, []);
   return (
     <ImageBackground
