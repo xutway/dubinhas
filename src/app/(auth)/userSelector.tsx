@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Dimensions, ImageBackground, StyleSheet, View } from "react-native";
-import Carousel from "react-native-snap-carousel";
+import Carousel from "react-native-reanimated-carousel";
 
 import StudentSelectorAvatar from "components/Auth/StudentSelector/StudentSelector";
 import HeaderTitle from "components/HeaderTitle";
@@ -20,27 +20,40 @@ export default function TabOneScreen() {
       style={{ width: "100%", height: "100%", backgroundPosition: "cover" }}
     >
       <View style={styles.container}>
-        <View
-          style={styles.separator}
-          lightColor="#eee"
-          darkColor="rgba(255,255,255,0.1)"
-        />
+        <View style={styles.separator} />
         <HeaderTitle
           subtitle="Para entrar, role as bolhas até encontrar seu nome e rosto!"
           title="Olá Coleguinha!"
         />
         <Box style={styles.viewTop}>
           <Carousel
-            sliderWidth={screenWidth}
-            sliderHeight={screenWidth > 500 ? 400 : screenWidth - 60}
-            itemWidth={screenWidth > 500 ? 400 : screenWidth - 150}
-            inactiveSlideShift={0}
-            useScrollView
+            loop
+            width={screenWidth}
+            height={screenHeith / 1.5}
+            scrollAnimationDuration={1000}
             data={users}
-            renderItem={StudentSelectorAvatar}
-            layoutCardOffset={10}
-            layout="default"
-            centerContent
+            style={{
+              display: "flex",
+              alignContent: "center",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            mode="parallax"
+            windowSize={40}
+            modeConfig={{}}
+            renderItem={({ item, index }) => (
+              <View
+                key={item.id}
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  width: "100%",
+                  alignItems: "center",
+                }}
+              >
+                <StudentSelectorAvatar item={item} index={index} />
+              </View>
+            )}
           />
         </Box>
       </View>

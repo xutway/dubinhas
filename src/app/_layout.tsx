@@ -91,7 +91,7 @@ function RootLayoutNav() {
                   headerShown: false,
                 }}
                 name="createStudent"
-              />{" "}
+              />
               <Stack.Screen
                 options={{
                   headerTransparent: true,

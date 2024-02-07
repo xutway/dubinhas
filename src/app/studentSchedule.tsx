@@ -10,12 +10,35 @@ import { router } from "expo-router";
 import { activites } from "../mocked/studentes";
 
 const StudentSchedule = () => {
-  const data = [...activites];
-  const drawerData = [...activites];
+  // TODO: replace this crap with a proper type
+  type activityType = {
+    id: number;
+    name: string;
+    description: string;
+    img: string;
+    video: string;
+    key?: number;
+  }[];
 
-  data.forEach((activity, index) => {
-    activity.key = index;
-  });
+  const data: activityType = [...activites];
+  const drawerData: activityType = [...activites];
+
+  data.forEach(
+    (
+      activity: {
+        id: number;
+        name: string;
+        description: string;
+        img: string;
+        video: string;
+        key?: number;
+      },
+      index,
+    ) => {
+      activity.key = index;
+    },
+  );
+
   useEffect(() => {
     data.push({
       img: "",
@@ -23,6 +46,7 @@ const StudentSchedule = () => {
       video: "",
       name: "Adicionar Atividade",
       description: "Clique para adicionar uma atividade",
+      key: data.length + 1,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -53,6 +77,7 @@ const StudentSchedule = () => {
         onClose={() => setDrawer(!drawer)}
         item={(info) => (
           <ActivitySelectorItem
+            key={info.id}
             data={info}
             onPress={() => {
               console.log("selecionado", info?.id);

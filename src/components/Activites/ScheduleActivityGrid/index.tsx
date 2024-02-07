@@ -67,7 +67,7 @@ const StudentScheduleGrid: React.FC<StudentScheduleGridProps> = ({
       <View style={styles.wrapper}>
         <DraggableGrid
           numColumns={2}
-          renderItem={item}
+          renderItem={(data) => <View key={data?.id}>{item(data)}</View>}
           itemHeight={124}
           data={data}
           onDragRelease={onDragRelease}
