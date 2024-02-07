@@ -22,7 +22,7 @@ export {
 } from "expo-router";
 
 export const unstable_settings = {
-  initialRouteName: "/(auth)/userSelection",
+  initialRouteName: "studentSchedule",
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -91,7 +91,7 @@ function RootLayoutNav() {
                   headerShown: false,
                 }}
                 name="createStudent"
-              />{" "}
+              />
               <Stack.Screen
                 options={{
                   headerTransparent: true,
@@ -104,6 +104,12 @@ function RootLayoutNav() {
                   ),
                 }}
                 name="teacherPage"
+              />
+              <Stack.Screen
+                options={{
+                  headerShown: false,
+                }}
+                name="studentSchedule"
               />
             </Stack>
           </RootSiblingParent>

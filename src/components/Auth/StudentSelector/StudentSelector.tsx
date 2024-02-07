@@ -25,19 +25,19 @@ const StudentSelectorAvatar = ({
 
   return (
     <Link
+      key={index}
       href={{
         pathname: "/home",
         params: { slug: index },
       }}
     >
       <Box
-        key={index}
         sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
       >
         <Avatar
           marginBottom={30}
-          height={screenWidth > 500 ? 400 : screenWidth - 150}
-          width={screenWidth > 500 ? 400 : screenWidth - 150}
+          height={screenWidth - 100}
+          width={screenWidth - 100}
           size="md"
           bgColor="$amber600"
           borderRadius="$full"

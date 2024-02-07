@@ -19,7 +19,6 @@ const PasswordInput = ({
   name,
   errors,
 }: PasswordInputProps) => {
-  console.log("🚀 ~ file: index.tsx:22 ~ errors:", errors?.name);
   const [showPassword, setShowPassword] = useState(false);
   return (
     <Controller
