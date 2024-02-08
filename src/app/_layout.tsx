@@ -8,7 +8,10 @@ import {
 } from "@react-navigation/native";
 
 import { useFonts } from "expo-font";
+
+import { ImageBackground } from "expo-image/build/ImageBackground";
 import { router, SplashScreen, Stack } from "expo-router";
+import LottieView from "lottie-react-native";
 import { LogOutIcon } from "lucide-react-native";
 
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
@@ -46,7 +49,19 @@ export default function RootLayout() {
   }, [loaded]);
 
   if (!loaded) {
-    return null;
+    return (
+      <ImageBackground
+        source={require("assets/images/Background2.png")}
+        style={{ width: "100%", height: "100%", backgroundPosition: "cover" }}
+      >
+        <LottieView
+          source={require("assets/animations/LoadingSplash.json")}
+          style={{ width: "100%", height: "100%", alignSelf: "center" }}
+          autoPlay
+          loop
+        />
+      </ImageBackground>
+    );
   }
 
   return <RootLayoutNav />;
