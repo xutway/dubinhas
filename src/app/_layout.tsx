@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useColorScheme } from "react-native";
+import { Pressable, useColorScheme } from "react-native";
 import { RootSiblingParent } from "react-native-root-siblings";
 import {
   DarkTheme,
@@ -8,14 +8,16 @@ import {
 } from "@react-navigation/native";
 
 import { useFonts } from "expo-font";
+
 import { ImageBackground } from "expo-image/build/ImageBackground";
-import { SplashScreen, Stack } from "expo-router";
+import { router, SplashScreen, Stack } from "expo-router";
 import LottieView from "lottie-react-native";
+import { LogOutIcon } from "lucide-react-native";
 
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { config } from "@gluestack-ui/config"; // Optional if you want to use default theme
-import { GluestackUIProvider } from "@gluestack-ui/themed";
+import { GluestackUIProvider, InputIcon } from "@gluestack-ui/themed";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -23,7 +25,7 @@ export {
 } from "expo-router";
 
 export const unstable_settings = {
-  initialRouteName: "/(auth)/userSelection",
+  initialRouteName: "studentSchedule",
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -104,6 +106,25 @@ function RootLayoutNav() {
                   headerShown: false,
                 }}
                 name="createStudent"
+              />
+              <Stack.Screen
+                options={{
+                  headerTransparent: true,
+                  headerTitle: "",
+                  headerLeft: () => <></>,
+                  headerRight: () => (
+                    <Pressable onPress={() => router.push("/(auth)")}>
+                      <InputIcon as={LogOutIcon} color="#FF948D" size="lg" />
+                    </Pressable>
+                  ),
+                }}
+                name="teacherPage"
+              />
+              <Stack.Screen
+                options={{
+                  headerShown: false,
+                }}
+                name="studentSchedule"
               />
             </Stack>
           </RootSiblingParent>

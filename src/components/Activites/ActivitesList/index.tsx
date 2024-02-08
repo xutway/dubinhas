@@ -1,10 +1,7 @@
-import { FlatList, ImageBackground, Text, View } from "react-native";
+import { FlatList, Text, View } from "react-native";
 
-import { Link } from "expo-router";
-
+import ActivityItemCard from "../ActivityCard";
 import { styles } from "./styles";
-
-import { Box } from "@gluestack-ui/themed";
 
 type itemProps = {
   id: number;
@@ -24,24 +21,22 @@ const ActivitesList = ({ data, title }: { data: itemProps; title: string }) => {
           data={data}
           ItemSeparatorComponent={() => <View style={{ width: 20 }} />}
           horizontal
+          contentContainerStyle={{
+            marginHorizontal: 10,
+          }}
+          ListHeaderComponentStyle={{
+            marginRight: 20,
+          }}
+          ListHeaderComponent={() => (
+            <ActivityItemCard
+              name="Nova atv"
+              description="Adiciona nova atv"
+              isAddButton
+            />
+          )}
           renderItem={({ item, index }: { item: itemProps; index: number }) => {
             return (
-              <Link
-                href={{
-                  pathname: "/Activities/[slug]",
-                  params: { slug: index },
-                }}
-              >
-                <ImageBackground
-                  source={{ uri: item?.img }}
-                  style={styles.container}
-                >
-                  <Box style={styles.textBox}>
-                    <Text style={styles.textTitle}>{item?.name}</Text>
-                    <Text style={styles.textSubtitle}>{item?.name}</Text>
-                  </Box>
-                </ImageBackground>
-              </Link>
+              <ActivityItemCard index={index} img={item.img} name={item.name} />
             );
           }}
         />

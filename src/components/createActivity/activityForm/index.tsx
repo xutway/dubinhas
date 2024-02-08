@@ -4,8 +4,8 @@ import Toast from "react-native-root-toast";
 
 import { router } from "expo-router";
 
-import useFileUpload from "../../../helper/imageUploadHandler";
 import { useInsertNewActivityMutation } from "../../../features/Activites/mutations.generated";
+import useFileUpload from "../../../helper/imageUploadHandler";
 import ImageInput from "../../ImageInput";
 import TextAreaInput from "../../TextAreaInput";
 import TextInput from "../../TextInput";
@@ -121,7 +121,7 @@ export default function ActivityForm() {
             borderColor: "#000",
             borderWidth: 1,
             borderRadius: 50,
-            minWidth: 150,
+            minWidth: 130,
           }}
           onPress={() => {
             router.push("/(auth)");
@@ -137,7 +137,7 @@ export default function ActivityForm() {
             borderColor: "#000",
             borderWidth: 1,
             borderRadius: 50,
-            minWidth: 150,
+            minWidth: 130,
           }}
           onPress={handleSubmit(onSubmit)}
         >

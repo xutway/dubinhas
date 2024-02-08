@@ -37,6 +37,5 @@ export const activites = [
     description: "Escrever",
     img: "https://i.imgur.com/sYYa21z.jpg",
     video: "https://i.imgur.com/7IWik9M.mp4",
-  }
-
+  },
 ];

@@ -1,5 +1,4 @@
 import React from "react";
-import { Dimensions } from "react-native";
 
 import { Link } from "expo-router";
 
@@ -13,32 +12,30 @@ import {
   Text,
 } from "@gluestack-ui/themed";
 
-const StudentSelectorAvatar = ({
+const AvatarComponent = ({
   item,
   index,
+  size,
 }: {
   item: AvatarType;
   index: number;
+  size?: "sm" | "md" | "lg" | "xl" | "2xl";
 }) => {
   const { img, name } = item;
-  const { width: screenWidth } = Dimensions.get("window");
 
   return (
     <Link
-      key={index}
       href={{
         pathname: "/home",
         params: { slug: index },
       }}
     >
       <Box
+        key={index}
         sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
       >
         <Avatar
-          marginBottom={30}
-          height={screenWidth - 100}
-          width={screenWidth - 100}
-          size="md"
+          size={size || "md"}
           bgColor="$amber600"
           borderRadius="$full"
           style={{
@@ -49,17 +46,15 @@ const StudentSelectorAvatar = ({
           <AvatarFallbackText>{name}</AvatarFallbackText>
           <AvatarImage
             source={{
-              height: screenWidth > 500 ? 500 : screenWidth - 150,
-              width: screenWidth > 500 ? 500 : screenWidth - 150,
               uri: img,
             }}
           />
         </Avatar>
         <Text
+          size={size || "md"}
           style={{
-            fontSize: 27,
+            fontSize: 12,
             height: 50,
-            lineHeight: 50,
             fontWeight: "600",
             color: "#000",
           }}
@@ -71,4 +66,4 @@ const StudentSelectorAvatar = ({
   );
 };
 
-export default StudentSelectorAvatar;
+export default AvatarComponent;
