@@ -16,7 +16,7 @@ export default HeaderTitle;
 
 const styles = StyleSheet.create({
   container: {
-    width: "70%",
+    width: "100%",
     alignItems: "center",
     justifyContent: "center",
   },

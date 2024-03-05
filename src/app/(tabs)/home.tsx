@@ -25,7 +25,7 @@ export default function TabOneScreen() {
       style={{ width: "100%", height: "100%", backgroundPosition: "cover" }}
     >
       <ScrollView scrollEnabled style={styles.container}>
-        <Header userID={parseInt(slug?.toString())} />
+        <Header userID={parseInt(slug?.toString()) ?? 1} />
         <View style={styles.separator} />
         <ActivitesList
           title="Turno da Manhã"

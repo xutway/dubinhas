@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from "react";
 import { Pressable, useColorScheme } from "react-native";
 import { RootSiblingParent } from "react-native-root-siblings";
@@ -11,6 +12,8 @@ import { useFonts } from "expo-font";
 import { router, SplashScreen, Stack } from "expo-router";
 import { LogOutIcon } from "lucide-react-native";
 
+import { auth, getUserAuth } from "../config/firebaseConfig";
+
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { config } from "@gluestack-ui/config"; // Optional if you want to use default theme
@@ -22,7 +25,7 @@ export {
 } from "expo-router";
 
 export const unstable_settings = {
-  initialRouteName: "studentSchedule",
+  initialRouteName: "index",
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -33,11 +36,17 @@ export default function RootLayout() {
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     ...FontAwesome.font,
   });
-
+  const user = getUserAuth();
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
     if (error) throw error;
   }, [error]);
+  // improve this when the teacher page is ready
+  useEffect(() => {
+    if (loaded && user) {
+      router.push("/teacherPage");
+    }
+  }, [loaded]);
 
   useEffect(() => {
     if (loaded) {
@@ -62,6 +71,7 @@ function RootLayoutNav() {
     },
     cache: new InMemoryCache(),
   });
+  console.log(auth);
 
   return (
     <GluestackUIProvider config={config}>
@@ -69,6 +79,12 @@ function RootLayoutNav() {
         <ApolloProvider client={client}>
           <RootSiblingParent>
             <Stack>
+              <Stack.Screen
+                options={{
+                  headerShown: false,
+                }}
+                name="index"
+              />
               <Stack.Screen name="(auth)" options={{ headerShown: false }} />
               <Stack.Screen
                 name="(tabs)"
@@ -98,7 +114,7 @@ function RootLayoutNav() {
                   headerTitle: "",
                   headerLeft: () => <></>,
                   headerRight: () => (
-                    <Pressable onPress={() => router.push("/(auth)")}>
+                    <Pressable onPress={() => router.push("/")}>
                       <InputIcon as={LogOutIcon} color="#FF948D" size="lg" />
                     </Pressable>
                   ),

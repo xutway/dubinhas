@@ -5,43 +5,56 @@ import Toast from "react-native-root-toast";
 import PasswordInput from "components/Auth/Auth/Login/PasswordInput";
 import UsernameInput from "components/Auth/Auth/Login/UsernameInput";
 import { router } from "expo-router";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { updateProfile } from "firebase/auth";
 
-import { auth, storeAuth } from "../../../../../config/firebaseConfig";
-import { loginFormData, loginFormSchema } from "./types";
+import { auth } from "../../../../../config/firebaseConfig";
+import { registerFormData, registerFormSchema } from "./types";
 
+import "firebase/firestore";
+import { createUserWithEmailAndPassword } from "@firebase/auth";
 import { Button } from "@gluestack-ui/themed";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const LoginForm = () => {
+const RegisterForm = () => {
   const {
     control,
     handleSubmit,
     reset,
 
     formState: { errors, isSubmitting: isLoading, disabled },
-  } = useForm<loginFormData>({
+  } = useForm<registerFormData>({
     shouldUnregister: true,
-    resolver: zodResolver(loginFormSchema),
+
+    resolver: zodResolver(registerFormSchema),
   });
 
-  const onSubmit = async (data: loginFormData) => {
-    const { username: email, password } = data;
-    signInWithEmailAndPassword(auth, email, password)
+  const onSubmit = async (data: any) => {
+    const { email, password } = data;
+
+    await createUserWithEmailAndPassword(auth, email, password)
       .then(() => {
-        Toast?.show("Login efetuado com Sucesso", {
+        updateProfile(auth.currentUser, {
+          displayName: data.username,
+        });
+        Toast?.show("Usuário criado com sucesso!", {
           position: Toast.positions.TOP,
         });
-        storeAuth(auth).then(() => {
-          router.push("/teacherPage");
-        });
+        router.push("/(auth)/");
       })
-      .catch(() => {
-        Toast?.show("Erro ao efetuar login", {
-          position: Toast.positions.TOP,
-        });
+      .catch((err) => {
+        if (err.code === "auth/email-already-in-use") {
+          Toast?.show("Erro ao criar usuário! Email já cadastrado", {
+            position: Toast.positions.TOP,
+          });
+          return;
+        }
+        Toast?.show(
+          "Erro ao criar usuário! Por favor revise os dados inseridos",
+          { position: Toast.positions.TOP },
+        );
       });
     reset(data);
+    router.push("/(auth)/");
   };
 
   return (
@@ -53,11 +66,25 @@ const LoginForm = () => {
         placeholder="Digite o nome de usuário"
       />
       <View style={styles.separator} />
+      <UsernameInput
+        control={control}
+        errors={errors}
+        name="email"
+        placeholder="Digite seu email"
+      />
+      <View style={styles.separator} />
       <PasswordInput
         errors={errors}
         control={control}
         name="password"
         placeholder="Digite sua senha"
+      />
+      <View style={styles.separator} />
+      <PasswordInput
+        errors={errors}
+        control={control}
+        name="passwordConfirmation"
+        placeholder="Confirme sua senha"
       />
       <Button
         isDisabled={isLoading || disabled}
@@ -70,7 +97,7 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default RegisterForm;
 
 const styles = StyleSheet.create({
   title: {

@@ -33,10 +33,9 @@ export default function TabLayout() {
         options={{
           tabBarStyle: { display: "none" },
           headerShown: false,
-
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
           headerRight: () => (
-            <Link href="/index" asChild>
+            <Link href="/loginScreen" asChild>
               <Pressable>
                 {({ pressed }) => (
                   <FontAwesome
@@ -49,6 +48,15 @@ export default function TabLayout() {
               </Pressable>
             </Link>
           ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="register"
+        options={{
+          tabBarStyle: { display: "none" },
+          headerShown: false,
+          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
       />
 
