@@ -3,8 +3,10 @@ import { Text, View } from "react-native";
 import Toast from "react-native-root-toast";
 
 import { router } from "expo-router";
+import { addDoc, collection } from "firebase/firestore";
+import { getStorage, ref } from "firebase/storage";
 
-import { useInsertNewActivityMutation } from "../../../features/Activites/mutations.generated";
+import { db } from "../../../config/firebaseConfig";
 import useFileUpload from "../../../helper/imageUploadHandler";
 import ImageInput from "../../ImageInput";
 import TextAreaInput from "../../TextAreaInput";
@@ -33,54 +35,59 @@ export default function ActivityForm() {
   });
 
   const { imageUpload } = useFileUpload();
-
-  const [createActivity, { loading }] = useInsertNewActivityMutation();
+  const baseURL = process.env.EXPO_PUBLIC_FIREBASE_BUCKET;
   const onSubmit = async (data: any) => {
-    const avatarFile = getValues("imageFile");
-    const videoFile = getValues("videoFile");
-    if (
-      Object.keys(avatarFile).length === 0 ||
-      Object.keys(videoFile).length === 0
-    ) {
-      Toast?.show("Selecione um video e uma imagem", {
+    try {
+      const avatarFile = getValues("imageFile");
+      const videoFile = getValues("videoFile");
+
+      if (
+        Object.keys(avatarFile).length === 0 ||
+        Object.keys(videoFile).length === 0
+      ) {
+        Toast?.show("Selecione um video e uma imagem", {
+          position: Toast.positions.TOP,
+        });
+        return;
+      }
+
+      const storage = getStorage();
+      const activitiesStorage = ref(storage, "files/");
+
+      const image = await imageUpload(
+        activitiesStorage,
+        avatarFile,
+        "activities",
+      );
+      const video = await imageUpload(
+        activitiesStorage,
+        videoFile,
+        "activities",
+      );
+      if (image && video) {
+        await addDoc(collection(db, "activities"), {
+          description: data.description,
+          name: data.name,
+          videoFile: baseURL + "/" + video.fullPath,
+          imageFile: baseURL + "/" + image.fullPath,
+        });
+      }
+      Toast?.show("Atividade criada com sucesso!", {
         position: Toast.positions.TOP,
       });
-      return;
+    } catch (error) {
+      Toast?.show("Erro ao criar atividade. Por favor, tente novamente.", {
+        position: Toast.positions.TOP,
+      });
     }
-
-    const image = await imageUpload(avatarFile);
-    const video = await imageUpload(videoFile);
-
-    await createActivity({
-      onCompleted: () => {
-        Toast?.show("Atividade criada com sucesso!", {
-          position: Toast.positions.TOP,
-        });
-      },
-      onError: () => {
-        Toast?.show("Erro ao criar atividade", {
-          position: Toast.positions.TOP,
-        });
-      },
-      variables: {
-        activity_name: data.name,
-        activity_description: data.description,
-        activity_shift: "MANHA",
-        video_name: video.path,
-        image_name: video.path,
-        video_url: video.path,
-        image_url: image.path,
-      },
-    });
-    setValue("imageFile", null);
-    setValue("videoFile", null);
     reset();
+    router.push("/teacherPage");
   };
 
   return (
     <View style={styles.container}>
       <ImageInput
-        disabled={loading || isLoading}
+        disabled={isLoading}
         name="imageFile"
         control={control}
         onPick={(file) => {
@@ -90,21 +97,21 @@ export default function ActivityForm() {
         }}
       />
       <TextInput
-        disabled={loading || isLoading}
+        disabled={isLoading}
         control={control}
         placeholder="Nome da atividade"
         name="name"
         errors={errors}
       />
       <TextAreaInput
-        disabled={loading || isLoading}
+        disabled={isLoading}
         placeholder="Breve descrição da atividade"
         control={control}
         name="description"
         errors={errors}
       />
       <VideoInput
-        disabled={loading || isLoading}
+        disabled={isLoading}
         name="videoFile"
         control={control}
         onPick={(file) =>
@@ -115,7 +122,7 @@ export default function ActivityForm() {
       />
       <View style={styles.formButtons}>
         <Button
-          isDisabled={loading || isLoading}
+          isDisabled={isLoading}
           style={{
             backgroundColor: "#FF948D",
             borderColor: "#000",
@@ -124,14 +131,14 @@ export default function ActivityForm() {
             minWidth: 130,
           }}
           onPress={() => {
-            router.push("/(auth)");
+            router.push("/teacherPage");
             reset();
           }}
         >
           <Text>Cancelar</Text>
         </Button>
         <Button
-          isDisabled={loading || isLoading}
+          isDisabled={isLoading}
           sx={{
             backgroundColor: "#9EE699",
             borderColor: "#000",

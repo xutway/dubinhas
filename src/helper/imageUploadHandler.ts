@@ -1,22 +1,22 @@
-import { supabase } from "./supabase";
+import { ref, uploadBytes } from "firebase/storage";
 
-type ImageType = {
-  fileName: string;
-} & Partial<File>;
 const useFileUpload = () => {
-  const imageUpload = async (file: ImageType) => {
-    const currentTimeStamp = new Date().getTime();
-    const { data, error } = await supabase.storage
-      .from(process.env.EXPO_PUBLIC_SUPABASE_BUCKET)
-      .upload(`public/${currentTimeStamp}`, file as File, {
-        cacheControl: "3600",
-        upsert: false,
-      });
+  const imageUpload = async (storage: any, file: File, path: string) => {
+    const newFile = file as any;
+    const filetoBlob = await fetch(newFile[0]?.uri).then((res) => res.blob());
+    const filename = newFile[0]?.uri.split("ImagePicker/")[1];
+    const newMetadata = {
+      contentType: `${file[0]?.type}/${filename.split(".")[1]}`,
+    };
 
-    if (error) {
-      throw error;
-    }
-    return data;
+    const storageRef = ref(storage, `${path}/` + filename);
+    const { ref: fileref } = await uploadBytes(
+      storageRef,
+      filetoBlob,
+      newMetadata,
+    );
+
+    return fileref;
   };
   return {
     imageUpload,

@@ -37,7 +37,7 @@ export default function TextAreaInput({
           <TextareaInput
             placeholder={placeholder}
             value={value}
-            onChangeText={onChange}
+            onChangeText={(e) => onChange(e)}
             style={{
               fontSize: 14,
               color: "#000",

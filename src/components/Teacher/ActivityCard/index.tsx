@@ -10,7 +10,7 @@ type ActivityProps = {
   data: {
     id: number;
     name: string;
-    img: string;
+    imageFile: string;
     description: string;
     date?: string;
   };
@@ -27,7 +27,7 @@ const ActivityCard = ({ data }: ActivityProps) => {
           }}
         >
           <ImageBackground
-            source={{ uri: data.img || "" }}
+            source={{ uri: data.imageFile || "" }}
             style={styles.container}
           >
             <Box style={styles.textBox}>

@@ -7,12 +7,10 @@ import {
   getReactNativePersistence,
   initializeAuth,
 } from "firebase/auth";
-import { getStorage, ref } from "firebase/storage";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyBt3MJoaKaE3pdViK0FDf98DX-SY60w0cA",
   authDomain: "dubinhas.firebaseapp.com",
@@ -36,29 +34,37 @@ if (getApps().length === 0) {
   auth = getAuth(firebaseApp);
 }
 
+export const db = getFirestore(firebaseApp);
 export default firebaseApp;
 
+// Firebase storage
+export const storage = getStorage(firebaseApp, "gs://dubinhas.appspot.com");
+
+// Auth related functions
 export const storeAuth = async (auth) => {
   try {
     const jsonValue = JSON.stringify(auth);
     await AsyncStorage.setItem("auth", jsonValue);
-  } catch (e) {}
+  } catch (e) {
+    // handle error
+  }
 };
+
 export const getUserAuth = async () => {
   try {
     const jsonValue = await AsyncStorage.getItem("auth");
     return jsonValue != null ? JSON.parse(jsonValue) : null;
   } catch (e) {
-    // error reading value
+    // handle error
   }
 };
+
 export const clearAuth = async () => {
   try {
     await AsyncStorage.removeItem("auth");
-  } catch (e) {}
+  } catch (e) {
+    // handle error
+  }
 };
+
 export const userdataaa = getUserAuth();
-
-const storage = getStorage(firebaseApp, "gs://dubinhas.appspot.com");
-
-export const activitiesStorage = ref(storage, "activities");
