@@ -7,18 +7,19 @@ import {
   getReactNativePersistence,
   initializeAuth,
 } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { connectFirestoreEmulator, getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 // Firebase configuration
+
 const firebaseConfig = {
-  apiKey: "AIzaSyBt3MJoaKaE3pdViK0FDf98DX-SY60w0cA",
-  authDomain: "dubinhas.firebaseapp.com",
-  projectId: "dubinhas",
+  apiKey: process.env.EXPO_PUBLIC_API_KEY,
+  authDomain: process.env.EXPO_PUBLIC_AUTH_DOMAIN,
+  projectId: process.env.EXPO_PUBLIC_PROJECT_ID,
   storageBucket: "dubinhas.appspot.com",
-  messagingSenderId: "111037886929",
-  appId: "1:111037886929:web:d36615b9a8c24e03d670f0",
-  measurementId: "G-756GWMNKVT",
+  messagingSenderId: process.env.EXPO_PUBLIC_MESSAGING_SENDER_ID,
+  appId: process.env.EXPO_PUBLIC_APP_ID,
+  measurementId: process.env.EXPO_PUBLIC_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
@@ -35,11 +36,12 @@ if (getApps().length === 0) {
 }
 
 export const db = getFirestore(firebaseApp);
+
 export default firebaseApp;
 
 // Firebase storage
 export const storage = getStorage(firebaseApp, "gs://dubinhas.appspot.com");
-
+connectFirestoreEmulator(db, "192.168.1.22", 8080);
 // Auth related functions
 export const storeAuth = async (auth) => {
   try {

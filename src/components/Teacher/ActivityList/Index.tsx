@@ -1,55 +1,52 @@
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 
 import SearchInput from "components/SearchInput";
 import ActivityAddButton from "components/Teacher/ActivityAddButton";
 import ActivityCard from "components/Teacher/ActivityCard";
-import { router } from "expo-router";
-import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
+import { router, useFocusEffect } from "expo-router";
 
-import { db } from "../../../config/firebaseConfig";
+import useActitivities from "../../../features/Activites/activities";
+
+import { Spinner } from "@gluestack-ui/themed";
 
 type ActivityListProps = {
-  activities: any[];
+  activities?: any[];
   onSearch?: (value: string) => void;
 };
 
 const ActivityList: React.FC<ActivityListProps> = () => {
+  const { getActivities, loading } = useActitivities();
   const [searchWhere, setsearchWhere] = useState("");
   const [activitiesList, setActivitiesList] = useState<any[]>([]);
-  const activitiesRef = query(
-    collection(db, "activities"),
-    searchWhere.length > 0 && where("name", "==", searchWhere),
-    orderBy("name"),
-  );
 
-  useEffect(() => {
-    const handleData = async () => {
-      await getDocs(activitiesRef).then((querySnapshot) => {
-        const data: any[] = [];
-        querySnapshot.forEach((doc) => {
-          data.push({ id: doc.id, ...doc.data() });
-        });
-        console.log("🚀 ~ awaitgetDocs ~ data:", data);
+  useFocusEffect(
+    useCallback(() => {
+      let isMounted = true;
 
-        setActivitiesList(data);
+      getActivities(searchWhere).then((data) => {
+        if (isMounted) {
+          setActivitiesList([...data]);
+        }
       });
-    };
 
-    handleData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchWhere]);
+      return () => {
+        isMounted = false;
+      };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [searchWhere]),
+  );
 
   const handleSearchWithDebounce = (value: string) => {
     if (searchWhere !== value) {
       setTimeout(() => {
         setsearchWhere(value);
-      }, 2000);
+      }, 800);
     } else {
       if (searchWhere !== "") {
         setTimeout(() => {
           setsearchWhere("");
-        }, 2000);
+        }, 800);
       }
     }
   };
@@ -65,22 +62,27 @@ const ActivityList: React.FC<ActivityListProps> = () => {
           placeholder="Pesquise Por atividade"
         />
       </View>
-      <FlatList
-        data={activitiesList || []}
-        ItemSeparatorComponent={() => <View style={{ width: 5 }} />}
-        horizontal
-        refreshing
-        renderItem={(data) => {
-          return <ActivityCard data={data.item} />;
-        }}
-        ListHeaderComponent={
-          <ActivityAddButton
-            onPress={() => router.push("/createActivity")}
-            description="Cadastra nova atividade"
-            name="Nova atividade"
-          />
-        }
-      />
+      {loading ? (
+        <Spinner />
+      ) : (
+        <FlatList
+          data={activitiesList || []}
+          ItemSeparatorComponent={() => <View style={{ width: 5 }} />}
+          horizontal
+          refreshing={loading}
+          onRefresh={() => console.log("refreshing")}
+          renderItem={(data) => {
+            return <ActivityCard data={data.item} />;
+          }}
+          ListHeaderComponent={
+            <ActivityAddButton
+              onPress={() => router.push("/createActivity")}
+              description="Cadastra nova atividade"
+              name="Nova atividade"
+            />
+          }
+        />
+      )}
     </View>
   );
 };

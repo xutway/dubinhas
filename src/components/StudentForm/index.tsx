@@ -3,8 +3,10 @@ import { Text, View } from "react-native";
 import Toast from "react-native-root-toast";
 
 import { router } from "expo-router";
+import { addDoc, collection } from "firebase/firestore";
+import { getStorage, ref } from "firebase/storage";
 
-import { useCreateStudentMutation } from "../../features/student/mutation.generated";
+import { db } from "../../config/firebaseConfig";
 import useFileUpload from "../../helper/imageUploadHandler";
 import AvatarInput from "../AvatarInput";
 import { IconType } from "../Icon/icon";
@@ -29,41 +31,36 @@ export default function StudentForm() {
     },
     shouldUnregister: true,
   });
-  const [createStudent, { loading }] = useCreateStudentMutation();
   const { imageUpload } = useFileUpload();
-  const disableSubmit = isLoading || loading;
+  const disableSubmit = isLoading;
+  const baseURL = process.env.EXPO_PUBLIC_FIREBASE_BUCKET;
   const onSubmit = async (data: any) => {
     try {
       const avatarFile = getValues("avatarPath");
-
-      const image = await imageUpload(avatarFile);
-
-      createStudent({
-        variables: {
-          input: {
-            nickName: data.name,
-            phone: data.phone,
-            avatar: image.path,
-          },
-        },
-        onError: () => {
-          Toast?.show(
-            "Erro ao criar Aluno! Por favor revise os dados inseridos",
-            {
-              position: Toast.positions.TOP,
-            },
-          );
-        },
-        onCompleted: () => {
-          Toast?.show("Aluno criado com sucesso!", {
-            position: Toast.positions.TOP,
-          });
-          setValue("avatarPath", null);
-          reset();
-          router.push("/home");
-        },
+      const storage = getStorage();
+      const studentStorage = ref(storage, "files/");
+      const image = await imageUpload(studentStorage, avatarFile, "students");
+      if (!image) {
+        Toast?.show("Selecione uma imagem", {
+          position: Toast.positions.TOP,
+        });
+        return;
+      }
+      await addDoc(collection(db, "student"), {
+        name: data.name,
+        phone: data.phone,
+        img: baseURL + "/" + image.fullPath,
       });
-    } catch (err) {}
+      Toast?.show("Aluno cadastrado com sucesso", {
+        position: Toast.positions.TOP,
+      });
+      reset();
+      router.push("/teacherPage");
+    } catch (err) {
+      Toast?.show("Erro ao cadastrar aluno", {
+        position: Toast.positions.TOP,
+      });
+    }
   };
 
   return (

@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { Link } from "expo-router";
 
+import useFileUpload from "../../helper/imageUploadHandler";
 import { AvatarType } from "./types";
 
 import {
@@ -22,7 +23,24 @@ const AvatarComponent = ({
   size?: "sm" | "md" | "lg" | "xl" | "2xl";
 }) => {
   const { img, name } = item;
+  console.log("🚀 ~ item:", item);
+  const { getStorage } = useFileUpload();
+  const [url, setUrl] = useState<string>("");
 
+  const handleImage = async () => {
+    await getStorage(img)
+      .then((data) => {
+        setUrl(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    handleImage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <Link
       href={{
@@ -46,7 +64,7 @@ const AvatarComponent = ({
           <AvatarFallbackText>{name}</AvatarFallbackText>
           <AvatarImage
             source={{
-              uri: img,
+              uri: url,
             }}
           />
         </Avatar>

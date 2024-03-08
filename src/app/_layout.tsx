@@ -12,7 +12,7 @@ import { useFonts } from "expo-font";
 import { router, SplashScreen, Stack } from "expo-router";
 import { LogOutIcon } from "lucide-react-native";
 
-import { auth, getUserAuth } from "../config/firebaseConfig";
+import { getUserAuth } from "../config/firebaseConfig";
 
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
@@ -71,7 +71,6 @@ function RootLayoutNav() {
     },
     cache: new InMemoryCache(),
   });
-  console.log(auth);
 
   return (
     <GluestackUIProvider config={config}>
