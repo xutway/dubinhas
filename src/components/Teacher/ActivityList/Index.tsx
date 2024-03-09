@@ -62,7 +62,7 @@ const ActivityList: React.FC<ActivityListProps> = () => {
           placeholder="Pesquise Por atividade"
         />
       </View>
-      {loading ? (
+      {loading && activitiesList?.length > 0 ? (
         <Spinner />
       ) : (
         <FlatList
@@ -72,7 +72,7 @@ const ActivityList: React.FC<ActivityListProps> = () => {
           refreshing={loading}
           onRefresh={() => console.log("refreshing")}
           renderItem={(data) => {
-            return <ActivityCard data={data.item} />;
+            return <ActivityCard data={data?.item} />;
           }}
           ListHeaderComponent={
             <ActivityAddButton

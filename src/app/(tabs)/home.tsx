@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dimensions,
   ImageBackground,
@@ -12,35 +12,65 @@ import { LogOut } from "lucide-react-native";
 
 import ActivitesList from "../../components/Activites/ActivitesList";
 import Header from "../../components/home/Header";
-import { activites } from "../../mocked/studentes";
+import { auth } from "../../config/firebaseConfig";
+import useSchedule from "../../features/Schedule/schedule";
 
 import { Box, Button, ScrollView } from "@gluestack-ui/themed";
 
 const { height: screenHeith } = Dimensions.get("window");
 export default function TabOneScreen() {
   const { slug } = useLocalSearchParams();
+  const isAuthed = !!auth.currentUser;
+  const { getScheduleByStudent } = useSchedule();
+  const [activites, setActivites] = useState({});
+
+  const handleGetSchedule = async (id: string) => {
+    const data = await getScheduleByStudent(id);
+
+    setActivites({
+      MANHA: data?.MANHA ? data.MANHA[0].activitiesList : [],
+      TARDE: data?.TARDE ? data.TARDE[0].activitiesList : [],
+      NOITE: data?.NOITE ? data.NOITE[0].activitiesList : [],
+    });
+  };
+
+  useEffect(() => {
+    if (slug === "" || !slug) return;
+    handleGetSchedule(slug?.toString());
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <ImageBackground
       source={require("../../assets/images/BackgroundActivites.png")}
       style={{ width: "100%", height: "100%", backgroundPosition: "cover" }}
     >
       <ScrollView scrollEnabled style={styles.container}>
-        <Header userID={parseInt(slug?.toString()) ?? 1} />
+        <Header userID={slug?.toString() ?? ""} />
         <View style={styles.separator} />
         <ActivitesList
+          shift="MANHA"
+          id={slug?.toString()}
+          isTeacher={isAuthed}
           title="Turno da Manhã"
           // @ts-ignore
-          data={activites}
+          data={activites.MANHA}
         />
         <ActivitesList
+          shift="TARDE"
+          isTeacher={isAuthed}
+          id={slug?.toString()}
           title="Turno da Tarde"
           // @ts-ignore
-          data={activites}
+          data={activites.TARDE}
         />
         <ActivitesList
+          shift="NOITE"
+          isTeacher={isAuthed}
+          id={slug?.toString()}
           title="Turno da Noite"
           // @ts-ignore
-          data={activites}
+          data={activites?.NOITE}
         />
       </ScrollView>
       <Box style={styles.buttonContainer}>

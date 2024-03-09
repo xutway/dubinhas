@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useEffect } from "react";
 import {
   Dimensions,
   ImageBackground,
@@ -12,7 +13,8 @@ import { Image } from "expo-image";
 import { router, useLocalSearchParams } from "expo-router";
 import { ArrowLeft } from "lucide-react-native";
 
-import { activites } from "../../mocked/studentes";
+import useActitivities from "../../features/Activites/activities";
+import useFileUpload from "../../helper/imageUploadHandler";
 
 import {
   Box,
@@ -27,8 +29,27 @@ const { width: screenWidth } = Dimensions.get("window");
 const Activites = () => {
   const { slug } = useLocalSearchParams();
 
-  const newSlug = parseInt(slug.toString());
+  const { getOneActivity } = useActitivities();
 
+  const { getStorage } = useFileUpload();
+
+  const [data, setData] = React.useState<any>({});
+
+  const handleGetOneActivity = async (id: string) => {
+    const data = await getOneActivity(id);
+    const [img, video] = await Promise.all([
+      getStorage(data.imageFile),
+      getStorage(data.videoFile),
+    ]);
+    data.imageFile = img;
+    data.videoFile = video;
+    setData(data);
+  };
+
+  useEffect(() => {
+    handleGetOneActivity(slug?.toString());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slug]);
   return (
     <ImageBackground
       source={require("../../assets/images/BackgroundSinlgleActivites.png")}
@@ -39,15 +60,17 @@ const Activites = () => {
         <View style={styles.body}>
           <Image
             style={styles.image}
-            source={{ uri: activites[newSlug]?.img }}
-            alt={activites[newSlug]?.name}
+            source={{
+              uri: data.imageFile ?? "https://via.placeholder.com/150",
+            }}
+            alt={data.name}
             placeholder="../assets/images/Loading.gif"
             contentFit="fill"
           />
           <Video
             posterStyle={styles.videoPoster}
             videoStyle={styles.video}
-            source={{ uri: activites[newSlug]?.video }}
+            source={{ uri: data.videoFile }}
             rate={1.0}
             volume={1.0}
             isMuted={false}
@@ -78,7 +101,7 @@ const Activites = () => {
                 width: "100%",
               }}
               placeholderTextColor="#000"
-              placeholder={activites[newSlug]?.name}
+              placeholder={data?.name}
             />
           </Input>
 
@@ -97,7 +120,7 @@ const Activites = () => {
             <TextareaInput
               style={{ fontSize: 14, color: "#000", fontWeight: "200" }}
               placeholderTextColor="#000"
-              placeholder={activites[newSlug]?.description}
+              placeholder={data?.description}
             />
           </Textarea>
         </View>
@@ -117,11 +140,12 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     display: "flex",
+
     alignItems: "center",
   },
   body: {
-    width: screenWidth - 100,
-    marginHorizontal: 20,
+    width: "100%",
+    paddingHorizontal: 20,
     maxWidth: 400,
     display: "flex",
     alignItems: "center",

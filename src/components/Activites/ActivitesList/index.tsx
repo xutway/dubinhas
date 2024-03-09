@@ -8,10 +8,23 @@ type itemProps = {
   name: string;
   img: string;
   description: string;
+  shift: string;
   date: string;
 };
 
-const ActivitesList = ({ data, title }: { data: itemProps; title: string }) => {
+const ActivitesList = ({
+  data,
+  title,
+  isTeacher,
+  shift,
+  id,
+}: {
+  data: itemProps;
+  title: string;
+  shift: string;
+  isTeacher: boolean;
+  id: string | number;
+}) => {
   return (
     <>
       <View>
@@ -19,7 +32,6 @@ const ActivitesList = ({ data, title }: { data: itemProps; title: string }) => {
         <FlatList
           // @ts-ignore
           data={data}
-          ItemSeparatorComponent={() => <View style={{ width: 20 }} />}
           horizontal
           contentContainerStyle={{
             marginHorizontal: 10,
@@ -28,11 +40,17 @@ const ActivitesList = ({ data, title }: { data: itemProps; title: string }) => {
             marginRight: 20,
           }}
           ListHeaderComponent={() => (
-            <ActivityItemCard
-              name="Nova atv"
-              description="Adiciona nova atv"
-              isAddButton
-            />
+            <>
+              {isTeacher && (
+                <ActivityItemCard
+                  name="Nova atv"
+                  description="Adiciona nova atv"
+                  shift={shift}
+                  isAddButton
+                  index={id}
+                />
+              )}
+            </>
           )}
           renderItem={({ item, index }: { item: itemProps; index: number }) => {
             return (

@@ -1,29 +1,57 @@
 import { useState } from "react";
 
-import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
 
 import { db } from "../../config/firebaseConfig";
 
 const useActitivities = () => {
   const [loading, setLoading] = useState(false);
   const getActivities = async (name?: string) => {
-    setLoading(true);
-    const activitiesRef = query(
-      collection(db, "activities"),
-      name.length > 0 ? where("name", "==", name) : null,
-      orderBy("name"),
-    );
+    try {
+      setLoading(true);
+      const activitiesRef = query(
+        collection(db, "activities"),
+        name?.length > 0 ? where("name", "==", name) : null,
+        orderBy("name"),
+      );
 
-    return getDocs(activitiesRef).then((querySnapshot) => {
-      const data: any[] = [];
-      querySnapshot.forEach((doc) => {
-        data.push({ id: doc.id, ...doc.data() });
+      return getDocs(activitiesRef).then((querySnapshot) => {
+        const data: any[] = [];
+        querySnapshot.forEach((doc) => {
+          data.push({ id: doc.id, ...doc.data() });
+        });
+
+        setLoading(false);
+        return data;
       });
+    } catch (error) {
       setLoading(false);
-      return data;
-    });
+      console.error("Error getting document h:", error);
+    }
   };
-  return { getActivities, loading };
+
+  const getOneActivity = async (id: string) => {
+    try {
+      setLoading(true);
+      const docRef = doc(db, "activities", id);
+      const data = (await getDoc(docRef)).data();
+      setLoading(false);
+
+      return data;
+    } catch (error) {
+      setLoading(false);
+      console.error("Error getting document:", error);
+    }
+  };
+  return { getActivities, loading, getOneActivity };
 };
 
 export default useActitivities;

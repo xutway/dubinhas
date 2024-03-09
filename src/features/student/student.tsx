@@ -1,6 +1,14 @@
 import { useState } from "react";
 
-import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
 
 import { db } from "../../config/firebaseConfig";
 
@@ -23,7 +31,15 @@ const useStudent = () => {
       return data;
     });
   };
-  return { getStudent, loading };
+  const getOneStudent = async (id: string) => {
+    setLoading(true);
+    const docRef = doc(db, "student", id);
+    const data = (await getDoc(docRef)).data();
+    setLoading(false);
+
+    return data;
+  };
+  return { getStudent, loading, getOneStudent };
 };
 
 export default useStudent;

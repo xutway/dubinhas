@@ -45,7 +45,10 @@ const ActivityCard = ({ data }: ActivityProps) => {
             params: { slug: data.id },
           }}
         >
-          <ImageBackground source={{ uri: url || "" }} style={styles.container}>
+          <ImageBackground
+            source={{ uri: url || null }}
+            style={styles.container}
+          >
             <Box style={styles.textBox}>
               <Text style={styles.textTitle}>{data.name}</Text>
               <Text style={styles.textSubtitle}>{data.description}</Text>

@@ -22,8 +22,7 @@ const AvatarComponent = ({
   index: number;
   size?: "sm" | "md" | "lg" | "xl" | "2xl";
 }) => {
-  const { img, name } = item;
-  console.log("🚀 ~ item:", item);
+  const { img, name, id } = item;
   const { getStorage } = useFileUpload();
   const [url, setUrl] = useState<string>("");
 
@@ -40,12 +39,12 @@ const AvatarComponent = ({
   useEffect(() => {
     handleImage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [id]);
   return (
     <Link
       href={{
         pathname: "/home",
-        params: { slug: index },
+        params: { slug: id },
       }}
     >
       <Box
@@ -64,7 +63,7 @@ const AvatarComponent = ({
           <AvatarFallbackText>{name}</AvatarFallbackText>
           <AvatarImage
             source={{
-              uri: url,
+              uri: url || null,
             }}
           />
         </Avatar>
