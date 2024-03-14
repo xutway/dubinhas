@@ -10,7 +10,7 @@ import { Box } from "@gluestack-ui/themed";
 
 type ActivityProps = {
   data: {
-    id: number;
+    id: any;
     name: string;
     imageFile: string;
     description: string;
@@ -41,8 +41,8 @@ const ActivityCard = ({ data }: ActivityProps) => {
       <View>
         <Link
           href={{
-            pathname: "/Activities/[slug]",
-            params: { slug: data.id },
+            pathname: "createActivity",
+            params: { activityID: data.id },
           }}
         >
           <ImageBackground

@@ -37,6 +37,7 @@ const Activites = () => {
 
   const handleGetOneActivity = async (id: string) => {
     const data = await getOneActivity(id);
+
     const [img, video] = await Promise.all([
       getStorage(data.imageFile),
       getStorage(data.videoFile),

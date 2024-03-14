@@ -8,19 +8,19 @@ import { router } from "expo-router";
 import StudentScheduleGrid from "../ScheduleActivityGrid";
 
 interface ScheduleActivityGridContainerProps {
-  data?: any[]; // replace any with the actual type of the data
-  onDragRelease?: (data: any) => void; // replace any with the actual type of the data
-  onCancel?: () => void;
+  data?: any[];
+  onDragRelease?: (data: any) => void;
   onConfirm?: (data: any) => void;
   title?: string;
   onAdd?: () => void;
   initialData?: any;
   activities: any;
+  onSearch?: (value: string) => void;
 }
 
 const ScheduleActivityGridContainer: React.FC<
   ScheduleActivityGridContainerProps
-> = ({ onConfirm, initialData, activities }) => {
+> = ({ onConfirm, initialData, activities, onSearch }) => {
   const drawerData = [...activities];
 
   const activitiesArr = initialData;
@@ -34,10 +34,8 @@ const ScheduleActivityGridContainer: React.FC<
   });
 
   const [drawer, setDrawer] = useState(false);
-  console.log("🚀 ~ activitiesToHandle:", activitiesToHandle);
 
   const data = [...activitiesToHandle] ?? [];
-  console.log("🚀 ~ activitiesToHandle:", activitiesToHandle);
 
   const [state, setState] = useState({ data });
 
@@ -58,7 +56,7 @@ const ScheduleActivityGridContainer: React.FC<
   const handleAdd = (data: any) => {
     const newData = [...state.data];
     newData?.push({
-      imgageFile: data.imageFile,
+      imageFile: data.imageFile,
       id: data.id,
       videoFile: data.videoFile,
       name: data.name,
@@ -80,7 +78,7 @@ const ScheduleActivityGridContainer: React.FC<
         onAdd={() => setDrawer(!drawer)}
       />
       <Drawer
-        onSearch={() => {}}
+        onSearch={onSearch}
         searchBarLabel="Pesquisar  Atividade"
         isOpen={drawer}
         onOpen={function (): void {

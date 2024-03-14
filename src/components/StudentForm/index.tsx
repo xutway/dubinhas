@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 import Toast from "react-native-root-toast";
 
 import { router } from "expo-router";
-import { addDoc, collection } from "firebase/firestore";
+import { collection, doc, writeBatch } from "firebase/firestore";
 import { getStorage, ref } from "firebase/storage";
 
 import { db } from "../../config/firebaseConfig";
@@ -40,17 +40,35 @@ export default function StudentForm() {
       const storage = getStorage();
       const studentStorage = ref(storage, "files/");
       const image = await imageUpload(studentStorage, avatarFile, "students");
+
       if (!image) {
         Toast?.show("Selecione uma imagem", {
           position: Toast.positions.TOP,
         });
         return;
       }
-      await addDoc(collection(db, "student"), {
+
+      const batch = writeBatch(db);
+
+      const studentRef = doc(collection(db, "student"));
+      batch.set(studentRef, {
         name: data.name,
         phone: data.phone,
         img: baseURL + "/" + image.fullPath,
       });
+
+      const scheduleData = {
+        activities: {
+          activitiesList: [],
+        },
+        studentId: studentRef.id,
+      };
+
+      const scheduleRef = doc(collection(db, "schedule"));
+      batch.set(scheduleRef, scheduleData);
+      batch.update(studentRef, { scheduleID: scheduleRef.id });
+      await batch.commit();
+
       Toast?.show("Aluno cadastrado com sucesso", {
         position: Toast.positions.TOP,
       });

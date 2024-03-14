@@ -13,6 +13,7 @@ type ImageInputProps = {
   control: Control<any>;
   name: string;
   disabled?: boolean;
+  defaultValue?: string;
 };
 
 export default function ImageInput({
@@ -30,7 +31,6 @@ export default function ImageInput({
       onPick(file);
     });
   };
-
   return (
     <Controller
       control={control}
@@ -38,13 +38,14 @@ export default function ImageInput({
         required: true,
       }}
       render={({ field: { value } }) => {
+        const hasFile = value[0]?.uri?.lenght > 0 || value.length > 0;
         return (
           <>
-            {value && value[0] ? (
+            {hasFile ? (
               <Image
                 style={styles?.image}
                 source={{
-                  uri: value[0]?.uri,
+                  uri: value[0]?.uri?.lenght || value,
                 }}
                 onTouchEnd={getFile}
               />

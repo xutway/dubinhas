@@ -5,6 +5,8 @@ import HeaderTitle from "components/HeaderTitle";
 import ImageCard from "components/ImageCard";
 import { router } from "expo-router";
 
+import { auth } from "../config/firebaseConfig";
+
 import { Box } from "@gluestack-ui/themed";
 
 const { height: screenHeith } = Dimensions.get("window");
@@ -12,6 +14,7 @@ export default function WelcomeScreen() {
   useEffect(() => {
     Dimensions.addEventListener("change", () => {});
   }, []);
+  const authed = auth.currentUser;
   return (
     <ImageBackground
       source={require("../assets/images/Background2.png")}
@@ -26,14 +29,16 @@ export default function WelcomeScreen() {
         <ImageCard
           $width={150}
           $height={150}
-          onPress={() => router.push("/loginScreen")}
+          onPress={() =>
+            router.push(authed ? "/teacherPage" : "/(auth)/loginScreen")
+          }
           image={require("assets/images/Professor.png")}
           text="Professor \ Administrador"
         />
         <ImageCard
           $width={300}
           $height={150}
-          onPress={() => router.push("/userSelector")}
+          onPress={() => router.push("/(auth)/userSelector")}
           image={require("assets/images/student.png")}
           text="Aluno"
         />

@@ -2,6 +2,7 @@ import { Pressable, useColorScheme } from "react-native";
 
 import { Link, Tabs } from "expo-router";
 
+import { auth } from "../../config/firebaseConfig";
 import Colors from "../../constants/Colors";
 
 import FontAwesome from "@expo/vector-icons/FontAwesome";
@@ -32,6 +33,7 @@ export default function TabLayout() {
         name="index"
         options={{
           tabBarStyle: { display: "none" },
+
           headerShown: false,
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
           headerRight: () => (

@@ -6,7 +6,7 @@ import { styles } from "./styles";
 type itemProps = {
   id: number;
   name: string;
-  img: string;
+  File: string;
   description: string;
   shift: string;
   date: string;
@@ -19,7 +19,7 @@ const ActivitesList = ({
   shift,
   id,
 }: {
-  data: itemProps;
+  data: any;
   title: string;
   shift: string;
   isTeacher: boolean;
@@ -52,9 +52,13 @@ const ActivitesList = ({
               )}
             </>
           )}
-          renderItem={({ item, index }: { item: itemProps; index: number }) => {
+          renderItem={({ item }: { item: itemProps; index: number }) => {
             return (
-              <ActivityItemCard index={index} img={item.img} name={item.name} />
+              <ActivityItemCard
+                index={item.id}
+                img={item.imageFile}
+                name={item.name}
+              />
             );
           }}
         />

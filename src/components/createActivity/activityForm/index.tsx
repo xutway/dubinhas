@@ -1,12 +1,10 @@
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Text, View } from "react-native";
-import Toast from "react-native-root-toast";
 
-import { router } from "expo-router";
-import { addDoc, collection } from "firebase/firestore";
-import { getStorage, ref } from "firebase/storage";
+import { router, useLocalSearchParams } from "expo-router";
 
-import { db } from "../../../config/firebaseConfig";
+import useActitivities from "../../../features/Activites/activities";
 import useFileUpload from "../../../helper/imageUploadHandler";
 import ImageInput from "../../ImageInput";
 import TextAreaInput from "../../TextAreaInput";
@@ -17,71 +15,69 @@ import styles from "./styles";
 import { Button } from "@gluestack-ui/themed";
 
 export default function ActivityForm() {
+  const { activityID } = useLocalSearchParams();
+  const { getStorage: getFileStorage } = useFileUpload();
+  const { getOneActivity, updateActivity, createActivity } = useActitivities();
+  const [activity, setActivity] = useState({} as any);
+
   const {
     control,
     handleSubmit,
     setValue,
-    getValues,
+
     reset,
     formState: { errors, isSubmitting: isLoading },
   } = useForm({
     defaultValues: {
-      description: "",
-      name: "",
-      imageFile: {} as any,
-      videoFile: {} as any,
+      description: activity?.description ?? "",
+      name: activity?.name ?? "",
+      imageFile: activity?.imageFile || ({} as any),
+      videoFile: activity?.videoFile || ({} as any),
     },
     shouldUnregister: true,
   });
+  const handleGetOneActivity = async (id: string) => {
+    const data = await getOneActivity(id);
+    const [imageFile, videoFile] = await Promise.all([
+      (data.imageFile = getFileStorage(data.imageFile)),
+      (data.imageFile = getFileStorage(data.videoFile)),
+    ]);
 
-  const { imageUpload } = useFileUpload();
-  const baseURL = process.env.EXPO_PUBLIC_FIREBASE_BUCKET;
-  const onSubmit = async (data: any) => {
-    try {
-      const avatarFile = getValues("imageFile");
-      const videoFile = getValues("videoFile");
-
-      if (
-        Object.keys(avatarFile).length === 0 ||
-        Object.keys(videoFile).length === 0
-      ) {
-        Toast?.show("Selecione um video e uma imagem", {
-          position: Toast.positions.TOP,
-        });
-        return;
-      }
-
-      const storage = getStorage();
-      const activitiesStorage = ref(storage, "files/");
-
-      const image = await imageUpload(
-        activitiesStorage,
-        avatarFile,
-        "activities",
-      );
-      const video = await imageUpload(
-        activitiesStorage,
-        videoFile,
-        "activities",
-      );
-      if (image && video) {
-        await addDoc(collection(db, "activities"), {
-          description: data.description,
-          name: data.name,
-          videoFile: baseURL + "/" + video.fullPath,
-          imageFile: baseURL + "/" + image.fullPath,
-        });
-      }
-      Toast?.show("Atividade criada com sucesso!", {
-        position: Toast.positions.TOP,
-      });
-    } catch (error) {
-      Toast?.show("Erro ao criar atividade. Por favor, tente novamente.", {
-        position: Toast.positions.TOP,
-      });
+    setActivity({ ...data, imageFile, videoFile });
+    reset({
+      description: data.description,
+      name: data.name,
+      imageFile,
+      videoFile,
+    });
+  };
+  useEffect(() => {
+    if (activityID) {
+      handleGetOneActivity(activityID?.toString());
     }
-    reset();
-    router.push("/teacherPage");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activityID]);
+
+  const onSubmit = async (data: any) => {
+    if (activityID) {
+      await updateActivity(
+        activityID,
+        data,
+        data.imageFile,
+        data.videoFile,
+      ).then(() => {
+        router.push("/teacherPage");
+        reset();
+      });
+    } else {
+      await createActivity(data, data.imageFile, data.videoFile).then(() => {
+        router.push("/teacherPage");
+        reset();
+      });
+
+      reset();
+      router.push("/teacherPage");
+    }
   };
 
   return (

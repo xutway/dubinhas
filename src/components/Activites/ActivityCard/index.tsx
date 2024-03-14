@@ -1,7 +1,10 @@
+import { useEffect, useState } from "react";
 import { ImageBackground, Pressable, StyleSheet, Text } from "react-native";
 
 import { View } from "components/Themed";
 import { router } from "expo-router";
+
+import useFileUpload from "../../../helper/imageUploadHandler";
 
 import { Box } from "@gluestack-ui/themed";
 
@@ -22,6 +25,19 @@ const ActivityItemCard: React.FC<ActivityItemCardProps> = ({
   description,
   isAddButton,
 }) => {
+  const { getStorage } = useFileUpload();
+
+  const [url, setUrl] = useState<string>();
+
+  useEffect(() => {
+    if (!img || img.length === 0) return;
+    const fetchImage = async () => {
+      const data = await getStorage(img);
+      setUrl(data);
+    };
+    fetchImage();
+  });
+
   return (
     <Box
       style={{
@@ -56,7 +72,10 @@ const ActivityItemCard: React.FC<ActivityItemCardProps> = ({
             })
           }
         >
-          <ImageBackground source={{ uri: img }} style={styles.container}>
+          <ImageBackground
+            source={{ uri: url || null }}
+            style={styles.container}
+          >
             <Box style={styles.textBox}>
               <Text style={styles.textTitle}>{name}</Text>
               <Text style={styles.textSubtitle}>{name}</Text>

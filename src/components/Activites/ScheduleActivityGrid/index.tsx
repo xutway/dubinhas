@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
-import { ImageBackground, Text, useWindowDimensions, View } from "react-native";
+import { Text, useWindowDimensions, View } from "react-native";
 import DraggableGrid from "react-native-draggable-grid";
 
 import HeaderTitle from "components/HeaderTitle";
 
 import useFileUpload from "../../../helper/imageUploadHandler";
-import { StyledCard, styles } from "./styles";
+import GridItem from "../GridItem";
+import { styles } from "./styles";
 
-import { Box, Button, Pressable } from "@gluestack-ui/themed";
+import { Button } from "@gluestack-ui/themed";
 
 interface StudentScheduleGridProps {
   title: string;
@@ -52,41 +53,9 @@ const StudentScheduleGrid: React.FC<StudentScheduleGridProps> = ({
         item.img = img;
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
   // This needs to be a function to work with the DraggableGrid component, dont ask me why
-  const item = (item) => {
-    const AddButon = item.name === "Adicionar Atividade";
-    return (
-      <Box
-        sx={{
-          width: width / 2.1,
-          maxWidth: 400,
-        }}
-      >
-        {AddButon ? (
-          <Pressable onPress={onAdd} width="$full" style={StyledCard.container}>
-            <Box width="$full" style={StyledCard.buttonContainer}>
-              <Text style={StyledCard?.plus}>+</Text>
-            </Box>
-            <Box width="$full" style={StyledCard.textBox}>
-              <Text style={StyledCard.textTitle}>{item.name}</Text>
-              <Text style={StyledCard.textSubtitle}>{item.description}</Text>
-            </Box>
-          </Pressable>
-        ) : (
-          <ImageBackground
-            source={{ uri: item.img }}
-            style={StyledCard.container}
-          >
-            <Box style={StyledCard.textBox}>
-              <Text style={StyledCard.textTitle}>{item.name}</Text>
-              <Text style={StyledCard.textSubtitle}>{item.name}</Text>
-            </Box>
-          </ImageBackground>
-        )}
-      </Box>
-    );
-  };
 
   return (
     <View style={styles.container}>
@@ -94,7 +63,11 @@ const StudentScheduleGrid: React.FC<StudentScheduleGridProps> = ({
       <View style={styles.wrapper}>
         <DraggableGrid
           numColumns={2}
-          renderItem={(data) => <View key={data?.id}>{item(data)}</View>}
+          renderItem={(data) => (
+            <View key={data?.id}>
+              <GridItem item={data} onAdd={onAdd} width={width} />
+            </View>
+          )}
           itemHeight={124}
           data={data}
           onDragRelease={onDragRelease}

@@ -18,7 +18,7 @@ const useStudent = () => {
     setLoading(true);
     const studentsRef = query(
       collection(db, "student"),
-      name.length > 0 ? where("name", "==", name) : null,
+      name.length > 0 ? where("name", "==", name + "~") : null,
       orderBy("name"),
     );
 
