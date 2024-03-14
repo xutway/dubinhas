@@ -42,7 +42,12 @@ const Header = ({ userID }: { userID: string }) => {
             <Text style={styles.text}>{name}</Text>
           </Box>
           <Avatar
-            onTouchEnd={() => router.push("/createStudent")}
+            onTouchEnd={() =>
+              router.push({
+                pathname: "/createStudent",
+                params: { userID },
+              })
+            }
             style={{
               maxHeight: 150,
               maxWidth: 150,

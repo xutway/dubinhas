@@ -1,12 +1,12 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Text, View } from "react-native";
 import Toast from "react-native-root-toast";
 
-import { router } from "expo-router";
-import { collection, doc, writeBatch } from "firebase/firestore";
+import { router, useLocalSearchParams } from "expo-router";
 import { getStorage, ref } from "firebase/storage";
 
-import { db } from "../../config/firebaseConfig";
+import useStudent from "../../features/student/student";
 import useFileUpload from "../../helper/imageUploadHandler";
 import AvatarInput from "../AvatarInput";
 import { IconType } from "../Icon/icon";
@@ -25,15 +25,35 @@ export default function StudentForm() {
     formState: { errors, isSubmitting: isLoading },
   } = useForm({
     defaultValues: {
-      phonew: "",
+      phone: "",
       name: "",
       avatarPath: null,
     },
     shouldUnregister: true,
   });
-  const { imageUpload } = useFileUpload();
-  const disableSubmit = isLoading;
-  const baseURL = process.env.EXPO_PUBLIC_FIREBASE_BUCKET;
+  const { userID } = useLocalSearchParams();
+  const { imageUpload, getStorage: getFileStorage } = useFileUpload();
+
+  const { loading, registerStudent, getOneStudent, updateStudent } =
+    useStudent();
+
+  const disableSubmit = isLoading || loading;
+
+  useEffect(() => {
+    const fetchStudent = async () => {
+      if (!userID) return;
+      const data = await getOneStudent(userID.toString());
+      const img = await getFileStorage(data.img);
+      reset({
+        name: data.name,
+        phone: data.phone,
+        avatarPath: img,
+      });
+    };
+    fetchStudent();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userID]);
+
   const onSubmit = async (data: any) => {
     try {
       const avatarFile = getValues("avatarPath");
@@ -48,30 +68,12 @@ export default function StudentForm() {
         return;
       }
 
-      const batch = writeBatch(db);
+      if (userID) {
+        await updateStudent(userID, data, image);
+      } else {
+        await registerStudent(data, image);
+      }
 
-      const studentRef = doc(collection(db, "student"));
-      batch.set(studentRef, {
-        name: data.name,
-        phone: data.phone,
-        img: baseURL + "/" + image.fullPath,
-      });
-
-      const scheduleData = {
-        activities: {
-          activitiesList: [],
-        },
-        studentId: studentRef.id,
-      };
-
-      const scheduleRef = doc(collection(db, "schedule"));
-      batch.set(scheduleRef, scheduleData);
-      batch.update(studentRef, { scheduleID: scheduleRef.id });
-      await batch.commit();
-
-      Toast?.show("Aluno cadastrado com sucesso", {
-        position: Toast.positions.TOP,
-      });
       reset();
       router.push("/teacherPage");
     } catch (err) {
