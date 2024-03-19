@@ -1,19 +1,30 @@
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import {
+  getDownloadURL,
+  ref,
+  StorageReference,
+  uploadBytes,
+} from "firebase/storage";
 
 import { storage } from "../config/firebaseConfig";
 
 const useFileUpload = () => {
   const fetchToFile = async (url: string) => {
-    const response = await fetch(url);
+    try {
+      const response = await fetch(url);
 
-    const blob = await response.blob();
+      const blob = await response.blob();
 
-    const data = new File([blob], "image.jpg", { type: "image/jpeg" });
+      const data = new File([blob], "image.jpg", { type: "image/jpeg" });
 
-    return data;
+      return data;
+    } catch (err) {
+      console.log("ERROR FETCHING FILE TO BLOB", err);
+    }
   };
-  const getStorage = (path: string) => {
+
+  const getStorage = async (path: string) => {
     const gsReference = getDownloadURL(ref(storage, path));
+
     return gsReference;
   };
   const imageUpload = async (
@@ -28,17 +39,18 @@ const useFileUpload = () => {
       res.blob(),
     );
     const filename = newFile[0]?.uri?.split("ImagePicker/")[1] ?? name;
+
     const newMetadata = {
       contentType: `${file[0]?.type}/${filename?.split(".")[1]}`,
     };
 
     const storageRef = ref(storage, `${path}/` + filename);
-    const { ref: fileref } = await uploadBytes(
-      storageRef,
-      filetoBlob,
-      newMetadata,
-    );
-
+    let fileref: StorageReference;
+    await uploadBytes(storageRef, filetoBlob, newMetadata)
+      .then((snapshot) => {
+        fileref = snapshot.ref;
+      })
+      .catch((err) => console.log("ERROR UPLOADING IMAGE", err));
     return fileref;
   };
   return {

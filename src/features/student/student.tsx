@@ -50,11 +50,7 @@ const useStudent = () => {
   const registerStudent = async (data, avatarPath) => {
     try {
       setLoading(true);
-      const storage = getStorage();
-      const studentStorage = ref(storage, "files/");
-      const image = await imageUpload(studentStorage, avatarPath, "students");
-
-      if (!image) {
+      if (!avatarPath) {
         Toast?.show("Selecione uma imagem", {
           position: Toast.positions.TOP,
         });
@@ -62,12 +58,11 @@ const useStudent = () => {
       }
 
       const batch = writeBatch(db);
-
       const studentRef = doc(collection(db, "student"));
       batch.set(studentRef, {
         name: data.name,
         phone: data.phone,
-        img: baseURL + "/" + image.fullPath,
+        img: baseURL + "/" + avatarPath.fullPath,
       });
 
       const scheduleData = {
@@ -87,7 +82,6 @@ const useStudent = () => {
       });
       setLoading(true);
     } catch (err) {
-      console.log("🚀 ~ registerStudent ~ err:", err);
       setLoading(false);
       Toast?.show("Erro ao cadastrar aluno", {
         position: Toast.positions.TOP,

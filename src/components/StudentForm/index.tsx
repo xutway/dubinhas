@@ -69,6 +69,7 @@ export default function StudentForm() {
       }
 
       if (userID) {
+        console.log("entrou aqui");
         await updateStudent(userID, data, image);
       } else {
         await registerStudent(data, image);

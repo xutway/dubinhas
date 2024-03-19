@@ -14,7 +14,9 @@ export default function WelcomeScreen() {
   useEffect(() => {
     Dimensions.addEventListener("change", () => {});
   }, []);
+
   const authed = auth.currentUser;
+
   return (
     <ImageBackground
       source={require("../assets/images/Background2.png")}

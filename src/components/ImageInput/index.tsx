@@ -39,13 +39,14 @@ export default function ImageInput({
       }}
       render={({ field: { value } }) => {
         const hasFile = value[0]?.uri?.lenght > 0 || value.length > 0;
+
         return (
           <>
             {hasFile ? (
               <Image
                 style={styles?.image}
                 source={{
-                  uri: value[0]?.uri?.lenght || value,
+                  uri: value[0]?.uri || value,
                 }}
                 onTouchEnd={getFile}
               />

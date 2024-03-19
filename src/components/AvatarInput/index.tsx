@@ -46,7 +46,6 @@ export default function AvatarInput({
         required: true,
       }}
       render={({ field: { value } }) => {
-        console.log("🚀 ~ value:", value);
         const hasFile = value?.length > 0 || value?.length > 0;
         return (
           <View
