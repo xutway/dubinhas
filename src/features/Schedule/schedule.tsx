@@ -95,10 +95,15 @@ const useSchedule = () => {
       }
 
       const data = querySnapshot.docs.map((doc) => {
+        let activitiesToday = [];
         const schedule = doc.data();
-        const activitiesToday = schedule.activities.filter(
-          (activity) => formatFirebaseDate(activity.day) === handleDate(today),
-        );
+
+        if (doc.data()?.activities.length > 0) {
+          activitiesToday = schedule?.activities?.filter(
+            (activity) =>
+              formatFirebaseDate(activity.day) === handleDate(today),
+          );
+        }
 
         return { ...schedule, activities: activitiesToday };
       });

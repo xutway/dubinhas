@@ -40,7 +40,7 @@ export default function WelcomeScreen() {
         <ImageCard
           $width={300}
           $height={150}
-          onPress={() => router.push("/(auth)/userSelector")}
+          onPress={() => router.push("/userSelector")}
           image={require("assets/images/student.png")}
           text="Aluno"
         />

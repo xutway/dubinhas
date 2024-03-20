@@ -25,15 +25,17 @@ const useStudent = () => {
     setLoading(true);
     const studentsRef = query(
       collection(db, "student"),
-      name.length > 0 ? where("name", "==", name + "~") : null,
+      name?.length > 0 ? where("name", "==", name + "~") : null,
       orderBy("name"),
     );
 
     return getDocs(studentsRef).then((querySnapshot) => {
       const data: any[] = [];
-      querySnapshot.forEach((doc) => {
+      console.log("🚀 ~ returngetDocs ~ data:", data);
+      querySnapshot?.forEach((doc) => {
         data.push({ id: doc.id, ...doc.data() });
       });
+
       setLoading(false);
       return data;
     });
@@ -41,11 +43,23 @@ const useStudent = () => {
 
   const getOneStudent = async (id: string) => {
     setLoading(true);
-    const docRef = doc(db, "student", id);
-    const data = (await getDoc(docRef)).data();
-    setLoading(false);
 
-    return data;
+    const docRef = doc(db, "student", id);
+
+    let docSnap;
+    try {
+      docSnap = await getDoc(docRef);
+      if (!docSnap.exists) {
+        // If document doesn't exist in cache, get from server
+        docSnap = await getDoc(docRef);
+      }
+    } catch (error) {
+      // If there's any error (including not finding the document in cache), get from server
+      docSnap = await getDoc(docRef);
+    }
+
+    setLoading(false);
+    return docSnap.data();
   };
   const registerStudent = async (data, avatarPath) => {
     try {

@@ -7,7 +7,12 @@ import {
   getReactNativePersistence,
   initializeAuth,
 } from "firebase/auth";
-import { connectFirestoreEmulator, getFirestore } from "firebase/firestore";
+import {
+  connectFirestoreEmulator,
+  getFirestore,
+  initializeFirestore,
+  memoryLocalCache,
+} from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 // Firebase configuration
@@ -27,6 +32,9 @@ let firebaseApp;
 export let auth;
 if (getApps().length === 0) {
   firebaseApp = initializeApp(firebaseConfig);
+  initializeFirestore(firebaseApp, {
+    localCache: memoryLocalCache(),
+  });
   auth = initializeAuth(firebaseApp, {
     persistence: getReactNativePersistence(AsyncStorage),
   });

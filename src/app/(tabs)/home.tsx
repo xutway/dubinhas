@@ -35,11 +35,12 @@ export default function TabOneScreen() {
   };
 
   useEffect(() => {
-    if (slug === "" || !slug) return;
+    if (slug.toString() === "" || !slug) return;
     handleGetSchedule(slug?.toString());
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
+
   return (
     <ImageBackground
       source={require("../../assets/images/BackgroundActivites.png")}

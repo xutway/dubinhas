@@ -1,23 +1,25 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect } from "react";
-import { Pressable, useColorScheme } from "react-native";
+import { useEffect, useState } from "react";
+import { useColorScheme } from "react-native";
 import { RootSiblingParent } from "react-native-root-siblings";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   DarkTheme,
   DefaultTheme,
   ThemeProvider,
 } from "@react-navigation/native";
 
+import DialogModal from "components/Dialog";
 import { useFonts } from "expo-font";
 import { router, SplashScreen, Stack } from "expo-router";
-import { LogOutIcon } from "lucide-react-native";
+import { signOut } from "firebase/auth";
 
-import { getUserAuth } from "../config/firebaseConfig";
+import { auth, getUserAuth } from "../config/firebaseConfig";
 
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { config } from "@gluestack-ui/config"; // Optional if you want to use default theme
-import { GluestackUIProvider, InputIcon } from "@gluestack-ui/themed";
+import { GluestackUIProvider } from "@gluestack-ui/themed";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -43,7 +45,7 @@ export default function RootLayout() {
   }, [error]);
   // improve this when the teacher page is ready
   useEffect(() => {
-    if (loaded && user) {
+    if (loaded && auth?.currentUser) {
       router.push("/teacherPage");
     }
   }, [loaded]);
@@ -62,8 +64,9 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
+  const authUser = auth;
   const colorScheme = useColorScheme();
-
+  const [dialog, setDialog] = useState(false);
   const client = new ApolloClient({
     uri: process.env.EXPO_PUBLIC_API_URL_GRAPHQL,
     headers: {
@@ -72,6 +75,22 @@ function RootLayoutNav() {
     cache: new InMemoryCache(),
   });
 
+  // ...
+  const handleSignout = async () => {
+    signOut(authUser)
+      .then(() => {
+        AsyncStorage.clear()
+          .then(() => {
+            router.push("/");
+          })
+          .catch((error) => {
+            console.error("Failed to clear AsyncStorage:", error);
+          });
+      })
+      .catch((error) => {
+        console.error("Failed to sign out:", error);
+      });
+  };
   return (
     <GluestackUIProvider config={config}>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
@@ -112,10 +131,15 @@ function RootLayoutNav() {
                   headerTransparent: true,
                   headerTitle: "",
                   headerLeft: () => <></>,
+
                   headerRight: () => (
-                    <Pressable onPress={() => router.push("/")}>
-                      <InputIcon as={LogOutIcon} color="#FF948D" size="lg" />
-                    </Pressable>
+                    <DialogModal
+                      isOpen={dialog}
+                      bodyText="Tem certeza que deseja sair:"
+                      title="Tem certeza que deseja sair:"
+                      onCancel={() => setDialog(false)}
+                      onConfirm={() => handleSignout()}
+                    />
                   ),
                 }}
                 name="teacherPage"
@@ -125,6 +149,12 @@ function RootLayoutNav() {
                   headerShown: false,
                 }}
                 name="studentSchedule"
+              />
+              <Stack.Screen
+                options={{
+                  headerShown: false,
+                }}
+                name="userSelector"
               />
             </Stack>
           </RootSiblingParent>
