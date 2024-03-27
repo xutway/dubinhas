@@ -46,18 +46,19 @@ export default function AvatarInput({
         required: true,
       }}
       render={({ field: { value } }) => {
+        const hasFile = value?.length > 0 || value?.length > 0;
         return (
           <View
             style={{
               minHeight: 130,
             }}
           >
-            {value && value[0] ? (
+            {hasFile ? (
               <View style={styles?.container}>
                 <Image
                   style={styles?.image}
                   source={{
-                    uri: value[0]?.uri,
+                    uri: value[0]?.uri ?? value,
                   }}
                   onTouchEnd={getFile}
                 />

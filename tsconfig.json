@@ -6,8 +6,10 @@
     "paths": {
       "components/*": ["./src/components/*"],
       "assets/*": ["./src/assets/*"],
+      "@firebase/auth": ["./node_modules/@firebase/auth/dist/index.rn.d.ts"]
       
-    }
+    },
+
   },
   "include": [
     "**/*.ts",

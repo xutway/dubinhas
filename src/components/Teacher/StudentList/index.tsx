@@ -1,36 +1,71 @@
+import { useCallback, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 
 import AddButton from "components/AddButtonRound";
 import AvatarComponent from "components/Avatar/Index";
 import SearchInput from "components/SearchInput";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
+
+import useStudent from "../../../features/student/student";
+
+import { Spinner } from "@gluestack-ui/themed";
 
 type StudentListProps = {
-  users: any[]; // Substitua any pelo tipo correto de seus usuários
+  users?: any[];
 };
 
-const StudentList: React.FC<StudentListProps> = ({ users }) => {
+const StudentList: React.FC<StudentListProps> = () => {
+  const { getStudent, loading } = useStudent();
+  const [searchWhere, setsearchWhere] = useState("");
+  const [studentList, setStudentList] = useState<any[]>([]);
+
+  useFocusEffect(
+    useCallback(() => {
+      let isMounted = true;
+
+      getStudent(searchWhere).then((data) => {
+        if (isMounted) {
+          setStudentList([...data]);
+        }
+      });
+
+      return () => {
+        isMounted = false;
+      };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [searchWhere]),
+  );
   return (
     <View style={styles.inputContainer}>
       <Text style={styles.inputTitle}>Alunos</Text>
       <View style={{ maxWidth: 250 }}>
-        <SearchInput onChange={() => {}} placeholder="Pesquise Por aluno" />
+        <SearchInput
+          onChange={(text) => setsearchWhere(text)}
+          placeholder="Pesquise Por aluno"
+        />
       </View>
-      <FlatList
-        data={users}
-        ItemSeparatorComponent={() => <View style={{ width: 5 }} />}
-        horizontal
-        // @ts-ignore
-        renderItem={(data, index) => {
-          return <AvatarComponent item={data.item} index={index} size="2xl" />;
-        }}
-        ListHeaderComponent={
-          <AddButton
-            name="Novo aluno"
-            onPress={() => router.push("/createStudent")}
-          />
-        }
-      />
+      {loading ? (
+        <Spinner height={178} />
+      ) : (
+        <FlatList
+          data={studentList}
+          ItemSeparatorComponent={() => <View style={{ width: 5 }} />}
+          horizontal
+          refreshing={loading}
+          // @ts-ignore
+          renderItem={(data, index) => {
+            return (
+              <AvatarComponent item={data.item} index={index} size="2xl" />
+            );
+          }}
+          ListHeaderComponent={
+            <AddButton
+              name="Novo aluno"
+              onPress={() => router.push("/createStudent")}
+            />
+          }
+        />
+      )}
     </View>
   );
 };

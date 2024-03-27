@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Dimensions } from "react-native";
 
 import { Link } from "expo-router";
 
+import useFileUpload from "../../../helper/imageUploadHandler";
 import { AvatarType } from "./types";
 
 import {
@@ -20,15 +21,25 @@ const StudentSelectorAvatar = ({
   item: AvatarType;
   index: number;
 }) => {
-  const { img, name } = item;
-  const { width: screenWidth } = Dimensions.get("window");
+  const { img, name, id } = item;
 
+  const { width: screenWidth } = Dimensions.get("window");
+  const { getStorage } = useFileUpload();
+  const [url, setUrl] = useState("");
+  useEffect(() => {
+    const fetchImage = async () => {
+      const data = await getStorage(img);
+      setUrl(data);
+    };
+    fetchImage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [img]);
   return (
     <Link
       key={index}
       href={{
         pathname: "/home",
-        params: { slug: index },
+        params: { slug: id },
       }}
     >
       <Box
@@ -51,7 +62,7 @@ const StudentSelectorAvatar = ({
             source={{
               height: screenWidth > 500 ? 500 : screenWidth - 150,
               width: screenWidth > 500 ? 500 : screenWidth - 150,
-              uri: img,
+              uri: url || null,
             }}
           />
         </Avatar>

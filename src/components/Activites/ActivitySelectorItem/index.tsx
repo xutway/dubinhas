@@ -1,13 +1,16 @@
+import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text } from "react-native";
 
 import { Image } from "expo-image";
+
+import useFileUpload from "../../../helper/imageUploadHandler";
 
 import { Box } from "@gluestack-ui/themed";
 
 type ActivitySelectorItemProps = {
   onPress: () => void;
   data: {
-    img: string;
+    imageFile: string;
     name: string;
     description: string;
   };
@@ -16,7 +19,19 @@ const ActivitySelectorItem: React.FC<ActivitySelectorItemProps> = ({
   data,
   onPress,
 }: ActivitySelectorItemProps) => {
-  const { img, name, description } = data;
+  const { imageFile, name, description } = data;
+  const { getStorage } = useFileUpload();
+
+  const [url, setUrl] = useState<string>();
+
+  useEffect(() => {
+    const fetchImage = async () => {
+      const data = await getStorage(imageFile);
+      setUrl(data);
+    };
+    fetchImage();
+  });
+
   return (
     <Box
       sx={{
@@ -25,7 +40,7 @@ const ActivitySelectorItem: React.FC<ActivitySelectorItemProps> = ({
       style={styles.box}
     >
       <Pressable style={styles.container} onPress={onPress}>
-        <Image style={styles.image} source={img} alt={name} />
+        <Image style={styles.image} source={url || null} alt={name} />
         <Box style={styles.content}>
           <Text style={styles.title}>{name}</Text>
           <Text>{description}</Text>

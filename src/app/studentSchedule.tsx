@@ -1,91 +1,118 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
+import Toast from "react-native-root-toast";
 
-import ActivitySelectorItem from "components/Activites/ActivitySelectorItem";
-import Drawer from "components/Activites/Drawer";
-import StudentScheduleGrid from "components/Activites/ScheduleActivityGrid";
+import ScheduleActivityGridContainer from "components/Activites/ScheduleActivityGridContainer";
 import Header from "components/home/Header";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
+import { arrayUnion, doc, DocumentData, updateDoc } from "firebase/firestore";
 
-import { activites } from "../mocked/studentes";
+import { db } from "../config/firebaseConfig";
+import useActitivities from "../features/Activites/activities";
+import useSchedule from "../features/Schedule/schedule";
+
+import { Spinner } from "@gluestack-ui/themed";
 
 const StudentSchedule = () => {
+  const { getOneSchedule, loading } = useSchedule();
+
+  const { getActivities } = useActitivities();
+
+  const { shift, userID } = useLocalSearchParams();
   // TODO: replace this crap with a proper type
-  type activityType = {
-    id: number;
-    name: string;
-    description: string;
-    img: string;
-    video: string;
-    key?: number;
-  }[];
 
-  const data: activityType = [...activites];
-  const drawerData: activityType = [...activites];
+  const [schedule, setSChedule] = useState<DocumentData>();
+  const [activities, setActivites] = useState([]);
+  const [searchWhere, setsearchWhere] = useState("");
 
-  data.forEach(
-    (
-      activity: {
-        id: number;
-        name: string;
-        description: string;
-        img: string;
-        video: string;
-        key?: number;
-      },
-      index,
-    ) => {
-      activity.key = index;
-    },
-  );
+  const handleGetOneActivity = async (id?: string) => {
+    const data = await getOneSchedule(id, userID?.toString());
+
+    const activities =
+      data?.activities?.filter(
+        (activity) =>
+          activity?.SHIFT === shift?.toString() &&
+          activity?.day?.toDate()?.toDateString() === new Date().toDateString(),
+      ) || [];
+
+    setSChedule(activities);
+  };
+
+  const handleGetActivities = async (search: string) => {
+    const data: DocumentData[] = await getActivities(search);
+    setActivites(data);
+  };
+
+  const handleSubmit = async (data: any, studentID) => {
+    try {
+      const currentDate = new Date();
+
+      const newActivity = {
+        activitiesList: data,
+        day: currentDate,
+        SHIFT: shift ?? "MANHA",
+      };
+
+      const schedule = await getOneSchedule("", studentID);
+      const scheduleRef = doc(db, "schedule", schedule.id);
+
+      await updateDoc(scheduleRef, {
+        activities: arrayUnion(newActivity),
+      });
+
+      Toast?.show("Agenda salva com sucesso", {
+        position: Toast.positions.TOP,
+      });
+      router.push("/home");
+    } catch (error) {
+      Toast?.show("Erro ao salvar Agenda", {
+        position: Toast.positions.TOP,
+      });
+    }
+  };
+
+  const handleSearchWithDebounce = (value: string) => {
+    if (searchWhere !== value) {
+      setTimeout(() => {
+        setsearchWhere(value);
+      }, 800);
+    } else {
+      if (searchWhere !== "") {
+        setTimeout(() => {
+          setsearchWhere("");
+        }, 800);
+      }
+    }
+  };
 
   useEffect(() => {
-    data.push({
-      img: "",
-      id: data.length + 1,
-      video: "",
-      name: "Adicionar Atividade",
-      description: "Clique para adicionar uma atividade",
-      key: data.length + 1,
-    });
+    if (userID === "" || !userID) return;
+    handleGetOneActivity(userID?.toString());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [userID]);
 
-  const [state, setState] = useState({ data });
+  // This useEffect will run when searchWhere changes
+  useEffect(() => {
+    handleGetActivities(searchWhere);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchWhere]);
 
-  const [drawer, setDrawer] = useState(false);
+  const hide = loading || !schedule || !activities;
 
   return (
     <View>
-      <Header userID={1} />
+      <Header userID={userID?.toString()} />
       <View style={styles.separator} />
-      <StudentScheduleGrid
-        data={state.data}
-        onDragRelease={(data) => setState({ data })}
-        onCancel={() => router.back()}
-        onConfirm={() => {}}
-        title="Turno da Manhã"
-        onAdd={() => setDrawer(!drawer)}
-      />
-      <Drawer
-        onSearch={() => {}}
-        searchBarLabel="Pesquisar  Atividade"
-        isOpen={drawer}
-        onOpen={function (): void {
-          throw new Error("Function not implemented.");
-        }}
-        onClose={() => setDrawer(!drawer)}
-        item={(info) => (
-          <ActivitySelectorItem
-            key={info.id}
-            data={info}
-            onPress={() => {
-              console.log("selecionado", info?.id);
-            }}
-          />
-        )}
-        data={drawerData}
-      />
+      {hide ? (
+        <Spinner />
+      ) : (
+        <ScheduleActivityGridContainer
+          activities={activities}
+          onConfirm={(data) => handleSubmit(data, userID?.toString())}
+          initialData={schedule}
+          onSearch={(e) => handleSearchWithDebounce(e)}
+        />
+      )}
     </View>
   );
 };

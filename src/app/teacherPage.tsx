@@ -3,7 +3,7 @@ import { ImageBackground, StyleSheet, View } from "react-native";
 import ActivityList from "components/Teacher/ActivityList/Index";
 import StudentList from "components/Teacher/StudentList";
 
-import { activites, users } from "../mocked/studentes";
+import { users } from "../mocked/studentes";
 
 const TeacherPage = () => {
   return (
@@ -14,7 +14,7 @@ const TeacherPage = () => {
       >
         <View style={styles.separator} />
         <StudentList users={users} />
-        <ActivityList activities={activites} />
+        <ActivityList />
         <View style={styles.inputContainer} />
       </ImageBackground>
     </View>

@@ -6,12 +6,25 @@ import { styles } from "./styles";
 type itemProps = {
   id: number;
   name: string;
-  img: string;
+  File: string;
   description: string;
+  shift: string;
   date: string;
 };
 
-const ActivitesList = ({ data, title }: { data: itemProps; title: string }) => {
+const ActivitesList = ({
+  data,
+  title,
+  isTeacher,
+  shift,
+  id,
+}: {
+  data: any;
+  title: string;
+  shift: string;
+  isTeacher: boolean;
+  id: string | number;
+}) => {
   return (
     <>
       <View>
@@ -19,7 +32,6 @@ const ActivitesList = ({ data, title }: { data: itemProps; title: string }) => {
         <FlatList
           // @ts-ignore
           data={data}
-          ItemSeparatorComponent={() => <View style={{ width: 20 }} />}
           horizontal
           contentContainerStyle={{
             marginHorizontal: 10,
@@ -28,15 +40,25 @@ const ActivitesList = ({ data, title }: { data: itemProps; title: string }) => {
             marginRight: 20,
           }}
           ListHeaderComponent={() => (
-            <ActivityItemCard
-              name="Nova atv"
-              description="Adiciona nova atv"
-              isAddButton
-            />
+            <>
+              {isTeacher && (
+                <ActivityItemCard
+                  name="Nova atv"
+                  description="Adiciona nova atv"
+                  shift={shift}
+                  isAddButton
+                  index={id}
+                />
+              )}
+            </>
           )}
-          renderItem={({ item, index }: { item: itemProps; index: number }) => {
+          renderItem={({ item }: { item: itemProps; index: number }) => {
             return (
-              <ActivityItemCard index={index} img={item.img} name={item.name} />
+              <ActivityItemCard
+                index={item.id}
+                img={item.imageFile}
+                name={item.name}
+              />
             );
           }}
         />

@@ -1,7 +1,10 @@
-import { ImageBackground, StyleSheet, Text } from "react-native";
+import { useEffect, useState } from "react";
+import { ImageBackground, Pressable, StyleSheet, Text } from "react-native";
 
 import { View } from "components/Themed";
-import { Link } from "expo-router";
+import { router } from "expo-router";
+
+import useFileUpload from "../../../helper/imageUploadHandler";
 
 import { Box } from "@gluestack-ui/themed";
 
@@ -10,25 +13,48 @@ type ActivityItemCardProps = {
   name?: string;
   description?: string;
   isAddButton?: boolean;
-  index?: number;
+  shift?: string;
+  index?: string | number;
 };
 
 const ActivityItemCard: React.FC<ActivityItemCardProps> = ({
   img,
+  shift,
   name,
   index,
   description,
   isAddButton,
 }) => {
+  const { getStorage } = useFileUpload();
+
+  const [url, setUrl] = useState<string>();
+
+  useEffect(() => {
+    if (!img || img.length === 0) return;
+    const fetchImage = async () => {
+      const data = await getStorage(img);
+      setUrl(data);
+    };
+    fetchImage();
+  });
+
   return (
-    <Link
-      href={{
-        pathname: isAddButton ? "/studentSchedule" : "/Activities/[slug]",
-        params: { slug: index },
+    <Box
+      style={{
+        margin: 0,
+        padding: 0,
       }}
     >
       {isAddButton ? (
-        <View style={styles.container}>
+        <Pressable
+          style={styles.container}
+          onPress={() => {
+            router.push({
+              pathname: "/studentSchedule",
+              params: { userID: index, shift },
+            });
+          }}
+        >
           <View style={styles.buttonContainer}>
             <Text style={styles?.plus}>+</Text>
           </View>
@@ -36,16 +62,28 @@ const ActivityItemCard: React.FC<ActivityItemCardProps> = ({
             <Text style={styles.textTitle}>{name}</Text>
             <Text style={styles.textSubtitle}>{description}</Text>
           </Box>
-        </View>
+        </Pressable>
       ) : (
-        <ImageBackground source={{ uri: img }} style={styles.container}>
-          <Box style={styles.textBox}>
-            <Text style={styles.textTitle}>{name}</Text>
-            <Text style={styles.textSubtitle}>{name}</Text>
-          </Box>
-        </ImageBackground>
+        <Pressable
+          onPress={() =>
+            router.push({
+              pathname: "/Activities/[slug]",
+              params: { slug: index?.toString() },
+            })
+          }
+        >
+          <ImageBackground
+            source={{ uri: url || null }}
+            style={styles.container}
+          >
+            <Box style={styles.textBox}>
+              <Text style={styles.textTitle}>{name}</Text>
+              <Text style={styles.textSubtitle}>{name}</Text>
+            </Box>
+          </ImageBackground>
+        </Pressable>
       )}
-    </Link>
+    </Box>
   );
 };
 

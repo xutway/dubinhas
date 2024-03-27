@@ -1,10 +1,10 @@
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Text, View } from "react-native";
-import Toast from "react-native-root-toast";
 
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 
-import { useInsertNewActivityMutation } from "../../../features/Activites/mutations.generated";
+import useActitivities from "../../../features/Activites/activities";
 import useFileUpload from "../../../helper/imageUploadHandler";
 import ImageInput from "../../ImageInput";
 import TextAreaInput from "../../TextAreaInput";
@@ -15,72 +15,75 @@ import styles from "./styles";
 import { Button } from "@gluestack-ui/themed";
 
 export default function ActivityForm() {
+  const { activityID } = useLocalSearchParams();
+  const { getStorage: getFileStorage } = useFileUpload();
+  const { getOneActivity, updateActivity, createActivity } = useActitivities();
+  const [activity, setActivity] = useState({} as any);
+
   const {
     control,
     handleSubmit,
     setValue,
-    getValues,
+
     reset,
     formState: { errors, isSubmitting: isLoading },
   } = useForm({
     defaultValues: {
-      description: "",
-      name: "",
-      imageFile: {} as any,
-      videoFile: {} as any,
+      description: activity?.description ?? "",
+      name: activity?.name ?? "",
+      imageFile: activity?.imageFile || ({} as any),
+      videoFile: activity?.videoFile || ({} as any),
     },
     shouldUnregister: true,
   });
+  const handleGetOneActivity = async (id: string) => {
+    const data = await getOneActivity(id);
+    const [imageFile, videoFile] = await Promise.all([
+      (data.imageFile = getFileStorage(data.imageFile)),
+      (data.imageFile = getFileStorage(data.videoFile)),
+    ]);
 
-  const { imageUpload } = useFileUpload();
-
-  const [createActivity, { loading }] = useInsertNewActivityMutation();
-  const onSubmit = async (data: any) => {
-    const avatarFile = getValues("imageFile");
-    const videoFile = getValues("videoFile");
-    if (
-      Object.keys(avatarFile).length === 0 ||
-      Object.keys(videoFile).length === 0
-    ) {
-      Toast?.show("Selecione um video e uma imagem", {
-        position: Toast.positions.TOP,
-      });
-      return;
-    }
-
-    const image = await imageUpload(avatarFile);
-    const video = await imageUpload(videoFile);
-
-    await createActivity({
-      onCompleted: () => {
-        Toast?.show("Atividade criada com sucesso!", {
-          position: Toast.positions.TOP,
-        });
-      },
-      onError: () => {
-        Toast?.show("Erro ao criar atividade", {
-          position: Toast.positions.TOP,
-        });
-      },
-      variables: {
-        activity_name: data.name,
-        activity_description: data.description,
-        activity_shift: "MANHA",
-        video_name: video.path,
-        image_name: video.path,
-        video_url: video.path,
-        image_url: image.path,
-      },
+    setActivity({ ...data, imageFile, videoFile });
+    reset({
+      description: data.description,
+      name: data.name,
+      imageFile,
+      videoFile,
     });
-    setValue("imageFile", null);
-    setValue("videoFile", null);
-    reset();
+  };
+  useEffect(() => {
+    if (activityID) {
+      handleGetOneActivity(activityID?.toString());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activityID]);
+
+  const onSubmit = async (data: any) => {
+    if (activityID) {
+      await updateActivity(
+        activityID,
+        data,
+        data.imageFile,
+        data.videoFile,
+      ).then(() => {
+        router.push("/teacherPage");
+        reset();
+      });
+    } else {
+      await createActivity(data, data.imageFile, data.videoFile).then(() => {
+        router.push("/teacherPage");
+        reset();
+      });
+
+      reset();
+      router.push("/teacherPage");
+    }
   };
 
   return (
     <View style={styles.container}>
       <ImageInput
-        disabled={loading || isLoading}
+        disabled={isLoading}
         name="imageFile"
         control={control}
         onPick={(file) => {
@@ -90,21 +93,21 @@ export default function ActivityForm() {
         }}
       />
       <TextInput
-        disabled={loading || isLoading}
+        disabled={isLoading}
         control={control}
         placeholder="Nome da atividade"
         name="name"
         errors={errors}
       />
       <TextAreaInput
-        disabled={loading || isLoading}
+        disabled={isLoading}
         placeholder="Breve descrição da atividade"
         control={control}
         name="description"
         errors={errors}
       />
       <VideoInput
-        disabled={loading || isLoading}
+        disabled={isLoading}
         name="videoFile"
         control={control}
         onPick={(file) =>
@@ -115,7 +118,7 @@ export default function ActivityForm() {
       />
       <View style={styles.formButtons}>
         <Button
-          isDisabled={loading || isLoading}
+          isDisabled={isLoading}
           style={{
             backgroundColor: "#FF948D",
             borderColor: "#000",
@@ -124,14 +127,14 @@ export default function ActivityForm() {
             minWidth: 130,
           }}
           onPress={() => {
-            router.push("/(auth)");
+            router.push("/teacherPage");
             reset();
           }}
         >
           <Text>Cancelar</Text>
         </Button>
         <Button
-          isDisabled={loading || isLoading}
+          isDisabled={isLoading}
           sx={{
             backgroundColor: "#9EE699",
             borderColor: "#000",
