@@ -1,6 +1,6 @@
-import { Pressable, useColorScheme } from "react-native";
+import { useColorScheme } from "react-native";
 
-import { Link, Tabs } from "expo-router";
+import { Tabs } from "expo-router";
 
 import Colors from "../../constants/Colors";
 
@@ -28,7 +28,7 @@ export default function TabLayout() {
         tabBarStyle: { display: "none" },
       }}
     >
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="index"
         options={{
           tabBarStyle: { display: "none" },
@@ -50,10 +50,19 @@ export default function TabLayout() {
             </Link>
           ),
         }}
-      />
+      /> */}
+
+      {/* <Tabs.Screen
+        name="register"
+        options={{
+          tabBarStyle: { display: "none" },
+          headerShown: false,
+          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+        }}
+      /> */}
 
       <Tabs.Screen
-        name="register"
+        name="loginScreen"
         options={{
           tabBarStyle: { display: "none" },
           headerShown: false,

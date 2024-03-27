@@ -26,7 +26,6 @@ export default function TabOneScreen() {
 
   const handleGetSchedule = async (id: string) => {
     const data = await getScheduleByStudent(id);
-
     setActivites({
       MANHA: data?.MANHA ? data.MANHA[0].activitiesList : [],
       TARDE: data?.TARDE ? data.TARDE[0].activitiesList : [],
@@ -35,7 +34,7 @@ export default function TabOneScreen() {
   };
 
   useEffect(() => {
-    if (slug.toString() === "" || !slug) return;
+    if (slug?.toString() === "" || !slug) return;
     handleGetSchedule(slug?.toString());
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

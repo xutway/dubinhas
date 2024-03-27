@@ -22,7 +22,7 @@ export default function TabOneScreen() {
     handleStudents();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const hasStudents = students?.length > 0;
+  const noData = students?.length > 0;
   return (
     <ImageBackground
       source={require("assets/images/Background2.png")}
@@ -35,8 +35,8 @@ export default function TabOneScreen() {
           title="Olá Coleguinha!"
         />
         <Box style={styles.viewTop}>
-          {loading || !hasStudents ? (
-            () => <Spinner />
+          {loading || noData ? (
+            <Spinner />
           ) : (
             <Carousel
               loop

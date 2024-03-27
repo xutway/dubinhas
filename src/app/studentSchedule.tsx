@@ -31,7 +31,7 @@ const StudentSchedule = () => {
     const activities =
       data?.activities?.filter(
         (activity) =>
-          activity.SHIFT === shift.toString() &&
+          activity?.SHIFT === shift?.toString() &&
           activity?.day?.toDate()?.toDateString() === new Date().toDateString(),
       ) || [];
 

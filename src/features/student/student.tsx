@@ -31,7 +31,6 @@ const useStudent = () => {
 
     return getDocs(studentsRef).then((querySnapshot) => {
       const data: any[] = [];
-      console.log("🚀 ~ returngetDocs ~ data:", data);
       querySnapshot?.forEach((doc) => {
         data.push({ id: doc.id, ...doc.data() });
       });
@@ -85,7 +84,6 @@ const useStudent = () => {
         },
         studentId: studentRef.id,
       };
-
       const scheduleRef = doc(collection(db, "schedule"));
       batch.set(scheduleRef, scheduleData);
       batch.update(studentRef, { scheduleID: scheduleRef.id });
@@ -94,7 +92,7 @@ const useStudent = () => {
       Toast?.show("Aluno cadastrado com sucesso", {
         position: Toast.positions.TOP,
       });
-      setLoading(true);
+      setLoading(false);
     } catch (err) {
       setLoading(false);
       Toast?.show("Erro ao cadastrar aluno", {

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Control, Controller } from "react-hook-form";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -7,6 +8,8 @@ import {
   ImagePickerCanceledResult,
   ImagePickerSuccessResult,
 } from "expo-image-picker";
+
+import { Spinner } from "@gluestack-ui/themed";
 
 type ImageInputProps = {
   onPick: (file: ImagePickerSuccessResult | ImagePickerCanceledResult) => void;
@@ -22,14 +25,19 @@ export default function ImageInput({
   name,
   disabled,
 }: ImageInputProps) {
+  const [isLoading, setIsloading] = useState(false);
+
   const getFile = async () => {
     if (disabled) return;
+    setIsloading(true);
+
     await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: false,
     }).then((file) => {
       onPick(file);
     });
+    setIsloading(false);
   };
   return (
     <Controller
@@ -42,7 +50,7 @@ export default function ImageInput({
 
         return (
           <>
-            {hasFile ? (
+            {hasFile && !isLoading ? (
               <Image
                 style={styles?.image}
                 source={{
@@ -52,7 +60,7 @@ export default function ImageInput({
               />
             ) : (
               <View style={styles?.button} onTouchEnd={getFile}>
-                <Text style={styles?.plus}>+</Text>
+                {isLoading ? <Spinner size="large" /> : "+"}
                 <Text style={styles?.text}>Imagem Atividade</Text>
               </View>
             )}

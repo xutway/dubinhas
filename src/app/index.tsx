@@ -15,7 +15,7 @@ export default function WelcomeScreen() {
     Dimensions.addEventListener("change", () => {});
   }, []);
 
-  const authed = auth.currentUser;
+  const authed = auth?.currentUser;
 
   return (
     <ImageBackground

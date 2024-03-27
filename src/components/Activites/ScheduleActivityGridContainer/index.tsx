@@ -26,8 +26,8 @@ const ScheduleActivityGridContainer: React.FC<
   const activitiesArr = initialData;
 
   const activitiesToHandle = [];
-  activitiesArr?.forEach((activity) => {
-    activity.activitiesList.forEach((activity: any, index) => {
+  activitiesArr?.forEach((activity, index) => {
+    activity.activitiesList.forEach((activity: any) => {
       activity.key = index + 1;
       activitiesToHandle.push(activity);
     });

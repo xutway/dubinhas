@@ -10,7 +10,7 @@ const GridItem = ({ item, onAdd, width }) => {
   const [url, setUrl] = useState<string>("");
   const AddButon = item.name === "Adicionar Atividade";
   useEffect(() => {
-    if (!item) return;
+    if (!item || item?.img?.length === 0) return;
     const fetchImage = async () => {
       await getStorage(item.imageFile)
         .then((img) => {

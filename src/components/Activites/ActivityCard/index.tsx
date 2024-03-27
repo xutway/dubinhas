@@ -68,7 +68,7 @@ const ActivityItemCard: React.FC<ActivityItemCardProps> = ({
           onPress={() =>
             router.push({
               pathname: "/Activities/[slug]",
-              params: { slug: index.toString() },
+              params: { slug: index?.toString() },
             })
           }
         >

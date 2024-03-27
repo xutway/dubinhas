@@ -42,7 +42,7 @@ export default function StudentForm() {
   useEffect(() => {
     const fetchStudent = async () => {
       if (!userID) return;
-      const data = await getOneStudent(userID.toString());
+      const data = await getOneStudent(userID?.toString());
       const img = await getFileStorage(data.img);
       reset({
         name: data.name,
@@ -60,7 +60,6 @@ export default function StudentForm() {
       const storage = getStorage();
       const studentStorage = ref(storage, "files/");
       const image = await imageUpload(studentStorage, avatarFile, "students");
-
       if (!image) {
         Toast?.show("Selecione uma imagem", {
           position: Toast.positions.TOP,
@@ -74,7 +73,6 @@ export default function StudentForm() {
       } else {
         await registerStudent(data, image);
       }
-
       reset();
       router.push("/teacherPage");
     } catch (err) {

@@ -29,27 +29,30 @@ const firebaseConfig = {
 
 // Initialize Firebase
 let firebaseApp;
-export let auth;
+let firebaseAuth;
 if (getApps().length === 0) {
   firebaseApp = initializeApp(firebaseConfig);
   initializeFirestore(firebaseApp, {
     localCache: memoryLocalCache(),
   });
-  auth = initializeAuth(firebaseApp, {
+  firebaseAuth = initializeAuth(firebaseApp, {
     persistence: getReactNativePersistence(AsyncStorage),
   });
 } else {
   firebaseApp = getApp();
-  auth = getAuth(firebaseApp);
+  firebaseAuth = getAuth(firebaseApp);
 }
 
+export const auth = firebaseAuth;
 export const db = getFirestore(firebaseApp);
 
 export default firebaseApp;
 
 // Firebase storage
 export const storage = getStorage(firebaseApp, "gs://dubinhas.appspot.com");
-connectFirestoreEmulator(db, "192.168.1.22", 8080);
+process.env.EXPO_PUBLIC_ENVOIRMENT === "dev" &&
+  connectFirestoreEmulator(db, "192.168.1.22", 8080);
+
 // Auth related functions
 export const storeAuth = async (auth) => {
   try {
