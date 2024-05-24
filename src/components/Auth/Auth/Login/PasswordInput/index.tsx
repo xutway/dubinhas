@@ -30,6 +30,7 @@ const PasswordInput = ({
         <>
           <Input isDisabled={disabled} style={styles.loginItems}>
             <InputField
+              autoCapitalize="none"
               placeholder={placeholder}
               value={value}
               onChangeText={onChange}

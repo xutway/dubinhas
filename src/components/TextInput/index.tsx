@@ -8,6 +8,7 @@ type TextInputProps = {
   placeholder: string;
   name: string;
   errors: FieldErrors;
+  maxLength?: number;
   disabled?: boolean;
   children?: React.ReactNode;
 };
@@ -18,6 +19,7 @@ export default function TextInput({
   errors,
   children,
   name,
+  maxLength,
   disabled,
 }: TextInputProps) {
   return (
@@ -51,6 +53,7 @@ export default function TextInput({
                 width: "100%",
                 backgroundColor: "#F6F5F5",
               }}
+              maxLength={maxLength}
               placeholderTextColor="#000"
               placeholder={placeholder}
             />

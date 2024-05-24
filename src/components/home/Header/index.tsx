@@ -3,6 +3,7 @@ import { Dimensions, Text } from "react-native";
 
 import { router } from "expo-router";
 
+import { auth } from "../../../config/firebaseConfig";
 import useStudent from "../../../features/student/student";
 import useFileUpload from "../../../helper/imageUploadHandler";
 import { View } from "../../Themed";
@@ -11,10 +12,11 @@ import styles from "./styles";
 import { Avatar, AvatarImage, Box } from "@gluestack-ui/themed";
 
 const { width: screenWidth } = Dimensions.get("window");
-
 const Header = ({ userID }: { userID: string }) => {
   const { getOneStudent } = useStudent();
   const { getStorage } = useFileUpload();
+
+  const authed = auth?.currentUser;
 
   const [data, setData] = React.useState<any>({});
 
@@ -35,14 +37,12 @@ const Header = ({ userID }: { userID: string }) => {
     <View>
       <Box style={styles.card}>
         <Box sx={styles.box}>
-          <Box
-            onTouchEnd={() => router.push("/teacherPage")}
-            style={styles.textBoxStart}
-          >
+          <Box style={styles.textBoxStart}>
             <Text style={styles.text}>{name}</Text>
           </Box>
           <Avatar
             onTouchEnd={() =>
+              authed &&
               router.push({
                 pathname: "/createStudent",
                 params: { userID },

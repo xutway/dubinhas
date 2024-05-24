@@ -54,12 +54,12 @@ const ActivityList: React.FC<ActivityListProps> = () => {
   return (
     <View style={styles.inputContainer}>
       <Text style={styles.inputTitle}>Atividades Cadastradas</Text>
-      <View style={{ maxWidth: 250 }}>
+      <View>
         <SearchInput
           onChange={(e) => {
             handleSearchWithDebounce(e);
           }}
-          placeholder="Pesquise Por atividade"
+          placeholder="Pesquisar por atividade"
         />
       </View>
       {loading && activitiesList?.length > 0 ? (

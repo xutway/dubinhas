@@ -38,10 +38,10 @@ const StudentList: React.FC<StudentListProps> = () => {
   return (
     <View style={styles.inputContainer}>
       <Text style={styles.inputTitle}>Alunos</Text>
-      <View style={{ maxWidth: 250 }}>
+      <View>
         <SearchInput
           onChange={(text) => setsearchWhere(text)}
-          placeholder="Pesquise Por aluno"
+          placeholder="Pesquisar por atividade"
         />
       </View>
       {loading ? (

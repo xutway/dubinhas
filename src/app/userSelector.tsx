@@ -22,7 +22,7 @@ export default function TabOneScreen() {
     handleStudents();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const noData = students?.length > 0;
+  const noData = !students?.length;
   return (
     <ImageBackground
       source={require("assets/images/Background2.png")}
@@ -31,7 +31,7 @@ export default function TabOneScreen() {
       <View style={styles.container}>
         <View style={styles.separator} />
         <HeaderTitle
-          subtitle="Para entrar, role as bolhas até encontrar seu nome e rosto!"
+          subtitle="Para entrar, arraste para o lado as bolhas até encontrar seu nome e rosto!"
           title="Olá Coleguinha!"
         />
         <Box style={styles.viewTop}>

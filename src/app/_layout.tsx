@@ -137,7 +137,7 @@ function RootLayoutNav() {
                   <DialogModal
                     isOpen={dialog}
                     bodyText="Tem certeza que deseja sair:"
-                    title="Tem certeza que deseja sair:"
+                    title="Aviso"
                     onCancel={() => setDialog(false)}
                     onConfirm={() => handleSignout()}
                   />

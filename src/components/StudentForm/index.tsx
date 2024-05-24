@@ -100,6 +100,7 @@ export default function StudentForm() {
         control={control}
         placeholder="Nome do aluno"
         name="name"
+        maxLength={32}
         errors={errors}
       />
       <TextInput
@@ -108,6 +109,7 @@ export default function StudentForm() {
         control={control}
         placeholder="Telefone"
         name="phone"
+        maxLength={15}
         errors={errors}
       />
 
