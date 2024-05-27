@@ -13,7 +13,7 @@ import { Image } from "expo-image";
 import { router, useLocalSearchParams } from "expo-router";
 import { ArrowLeft } from "lucide-react-native";
 
-import useActitivities from "../../features/Activites/activities";
+import useActitivities from "../../features/Activities/activities";
 import useFileUpload from "../../helper/imageUploadHandler";
 
 import {

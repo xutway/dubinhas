@@ -17,6 +17,7 @@ interface StudentScheduleGridProps {
   onCancel: () => void;
   onConfirm: (id: string[]) => void;
   onAdd: (data: any) => void;
+  onRemove: (id: string) => void;
 }
 
 const StudentScheduleGrid: React.FC<StudentScheduleGridProps> = ({
@@ -26,6 +27,7 @@ const StudentScheduleGrid: React.FC<StudentScheduleGridProps> = ({
   onCancel,
   onConfirm,
   onAdd,
+  onRemove,
 }) => {
   const { width } = useWindowDimensions();
 
@@ -65,7 +67,12 @@ const StudentScheduleGrid: React.FC<StudentScheduleGridProps> = ({
           numColumns={2}
           renderItem={(data) => (
             <View key={data?.id}>
-              <GridItem item={data} onAdd={onAdd} width={width} />
+              <GridItem
+                onRemove={onRemove}
+                item={data}
+                onAdd={onAdd}
+                width={width}
+              />
             </View>
           )}
           itemHeight={124}

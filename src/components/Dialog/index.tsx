@@ -27,6 +27,7 @@ interface Props {
   onCancel?: () => void;
   onConfirm?: () => void;
   isOpen?: boolean;
+  hideIcon?: boolean;
 }
 
 const DialogModal: React.FC<Props> = ({
@@ -34,15 +35,19 @@ const DialogModal: React.FC<Props> = ({
   bodyText,
   onCancel,
   onConfirm,
+  hideIcon,
+  isOpen,
 }) => {
   const [showAlertDialog, setShowAlertDialog] = React.useState(false);
   return (
     <Center>
-      <Pressable onPress={() => setShowAlertDialog(true)}>
-        <InputIcon as={LogOutIcon} color="#FF948D" size="lg" />
-      </Pressable>
+      {!hideIcon && (
+        <Pressable onPress={() => setShowAlertDialog(true)}>
+          <InputIcon as={LogOutIcon} color="#FF948D" size="lg" />
+        </Pressable>
+      )}
       <AlertDialog
-        isOpen={showAlertDialog}
+        isOpen={showAlertDialog || isOpen}
         onClose={() => {
           setShowAlertDialog(false);
         }}

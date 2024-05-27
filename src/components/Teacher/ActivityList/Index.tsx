@@ -1,12 +1,13 @@
 import { useCallback, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 
 import SearchInput from "components/SearchInput";
 import ActivityAddButton from "components/Teacher/ActivityAddButton";
 import ActivityCard from "components/Teacher/ActivityCard";
-import { router, useFocusEffect } from "expo-router";
+import { router } from "expo-router";
 
-import useActitivities from "../../../features/Activites/activities";
+import useActitivities from "../../../features/Activities/activities";
 
 import { Spinner } from "@gluestack-ui/themed";
 
@@ -70,7 +71,7 @@ const ActivityList: React.FC<ActivityListProps> = () => {
           ItemSeparatorComponent={() => <View style={{ width: 5 }} />}
           horizontal
           refreshing={loading}
-          onRefresh={() => console.log("refreshing")}
+          // onRefresh={() => console.log("refreshing")}
           renderItem={(data) => {
             return <ActivityCard data={data?.item} />;
           }}

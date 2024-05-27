@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Text, View } from "react-native";
 import Toast from "react-native-root-toast";
@@ -12,8 +12,10 @@ import AvatarInput from "../AvatarInput";
 import { IconType } from "../Icon/icon";
 import TextInput from "../TextInput";
 import styles from "./styles";
+import { studentFormDta, studentSchema } from "./types";
 
 import { Button } from "@gluestack-ui/themed";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function StudentForm() {
   const {
@@ -22,18 +24,19 @@ export default function StudentForm() {
     setValue,
     getValues,
     reset,
-    formState: { errors, isSubmitting: isLoading },
-  } = useForm({
+    formState: { errors, isSubmitting: isLoading, disabled },
+  } = useForm<studentFormDta>({
     defaultValues: {
       phone: "",
       name: "",
       avatarPath: null,
     },
     shouldUnregister: true,
+    resolver: zodResolver(studentSchema),
   });
   const { userID } = useLocalSearchParams();
   const { imageUpload, getStorage: getFileStorage } = useFileUpload();
-
+  const [currentStudent, setCurrentStudent] = useState(null);
   const { loading, registerStudent, getOneStudent, updateStudent } =
     useStudent();
 
@@ -44,6 +47,7 @@ export default function StudentForm() {
       if (!userID) return;
       const data = await getOneStudent(userID?.toString());
       const img = await getFileStorage(data.img);
+      setCurrentStudent({ ...data, img });
       reset({
         name: data.name,
         phone: data.phone,
@@ -51,30 +55,42 @@ export default function StudentForm() {
       });
     };
     fetchStudent();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userID]);
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: studentFormDta) => {
     try {
       const avatarFile = getValues("avatarPath");
       const storage = getStorage();
       const studentStorage = ref(storage, "files/");
-      const image = await imageUpload(studentStorage, avatarFile, "students");
+      let image;
+      if (!avatarFile || currentStudent?.img === "") {
+        Toast?.show("Selecione uma imagem", {
+          position: Toast.positions.TOP,
+        });
+        return;
+      }
+      if (avatarFile !== currentStudent?.img) {
+        const res = await imageUpload(studentStorage, avatarFile, "students");
+        // @ts-ignore
+        image = res?._location.path;
+      } else {
+        image = currentStudent?.img;
+      }
       if (!image) {
         Toast?.show("Selecione uma imagem", {
           position: Toast.positions.TOP,
         });
         return;
       }
-
       if (userID) {
-        console.log("entrou aqui");
         await updateStudent(userID, data, image);
       } else {
         await registerStudent(data, image);
       }
       reset();
-      router.push("/teacherPage");
+      // router.push("/teacherPage");
     } catch (err) {
       Toast?.show("Erro ao cadastrar aluno", {
         position: Toast.positions.TOP,
@@ -85,7 +101,7 @@ export default function StudentForm() {
   return (
     <View style={styles.container}>
       <AvatarInput
-        disabled={isLoading}
+        disabled={isLoading || loading}
         name="avatarPath"
         control={control}
         onPick={(file) => {
@@ -96,7 +112,7 @@ export default function StudentForm() {
       />
       <TextInput
         children={<IconType name="user" size={15} color="#D9D9D9" />}
-        disabled={isLoading}
+        disabled={isLoading || loading}
         control={control}
         placeholder="Nome do aluno"
         name="name"
@@ -105,7 +121,7 @@ export default function StudentForm() {
       />
       <TextInput
         children={<IconType name="phone" size={15} color="#D9D9D9" />}
-        disabled={isLoading}
+        disabled={isLoading || loading}
         control={control}
         placeholder="Telefone"
         name="phone"
@@ -132,7 +148,7 @@ export default function StudentForm() {
           <Text>Cancelar</Text>
         </Button>
         <Button
-          isDisabled={disableSubmit}
+          isDisabled={disableSubmit || disabled}
           sx={{
             backgroundColor: "#9EE699",
             borderColor: "#000",

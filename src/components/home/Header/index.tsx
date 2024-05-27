@@ -29,7 +29,7 @@ const Header = ({ userID }: { userID: string }) => {
   };
 
   useEffect(() => {
-    handleGetOneStudent(userID);
+    handleGetOneStudent(userID?.toString());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userID]);
   const { name, img, phone } = data;

@@ -1,13 +1,14 @@
 import React from "react";
-import { Control, Controller, FieldErrors } from "react-hook-form";
+import { Control, Controller } from "react-hook-form";
+import { Text } from "react-native";
 
-import { Input, InputField } from "@gluestack-ui/themed";
+import { Box, Input, InputField } from "@gluestack-ui/themed";
 
 type TextInputProps = {
   control: Control<any>;
   placeholder: string;
   name: string;
-  errors: FieldErrors;
+  errors: any;
   maxLength?: number;
   disabled?: boolean;
   children?: React.ReactNode;
@@ -29,7 +30,7 @@ export default function TextInput({
         required: true,
       }}
       render={({ field: { onChange, onBlur, value } }) => (
-        <>
+        <Box>
           <Input
             variant="outline"
             style={{
@@ -58,7 +59,12 @@ export default function TextInput({
               placeholder={placeholder}
             />
           </Input>
-        </>
+          {errors[name] && (
+            <Text style={{ paddingLeft: 10, color: "red", fontSize: 12 }}>
+              {errors[name].message}
+            </Text>
+          )}
+        </Box>
       )}
       name={name}
     />

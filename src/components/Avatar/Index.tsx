@@ -17,9 +17,11 @@ const AvatarComponent = ({
   item,
   index,
   size,
+  scheduleId,
 }: {
   item: AvatarType;
   index: number;
+  scheduleId?: string;
   size?: "sm" | "md" | "lg" | "xl" | "2xl";
 }) => {
   const { img, name, id } = item;
@@ -44,7 +46,7 @@ const AvatarComponent = ({
     <Link
       href={{
         pathname: "/home",
-        params: { slug: id },
+        params: { slug: id, ...(scheduleId && { scheduleId }) },
       }}
     >
       <Box

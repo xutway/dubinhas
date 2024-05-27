@@ -5,16 +5,15 @@ import Toast from "react-native-root-toast";
 import ScheduleActivityGridContainer from "components/Activites/ScheduleActivityGridContainer";
 import Header from "components/home/Header";
 import { router, useLocalSearchParams } from "expo-router";
-import { arrayUnion, doc, DocumentData, updateDoc } from "firebase/firestore";
+import { DocumentData } from "firebase/firestore";
 
-import { db } from "../config/firebaseConfig";
-import useActitivities from "../features/Activites/activities";
+import useActitivities from "../features/Activities/activities";
 import useSchedule from "../features/Schedule/schedule";
 
 import { Spinner } from "@gluestack-ui/themed";
 
 const StudentSchedule = () => {
-  const { getOneSchedule, loading } = useSchedule();
+  const { loading, insertActivity, getScheduleByStudent } = useSchedule();
 
   const { getActivities } = useActitivities();
 
@@ -26,16 +25,9 @@ const StudentSchedule = () => {
   const [searchWhere, setsearchWhere] = useState("");
 
   const handleGetOneActivity = async (id?: string) => {
-    const data = await getOneSchedule(id, userID?.toString());
+    const data = await getScheduleByStudent(id);
 
-    const activities =
-      data?.activities?.filter(
-        (activity) =>
-          activity?.SHIFT === shift?.toString() &&
-          activity?.day?.toDate()?.toDateString() === new Date().toDateString(),
-      ) || [];
-
-    setSChedule(activities);
+    setSChedule(data);
   };
 
   const handleGetActivities = async (search: string) => {
@@ -43,27 +35,20 @@ const StudentSchedule = () => {
     setActivites(data);
   };
 
-  const handleSubmit = async (data: any, studentID) => {
+  const handleSubmit = async (data: any, studentID, shift: string) => {
     try {
       const currentDate = new Date();
-
-      const newActivity = {
-        activitiesList: data,
-        day: currentDate,
-        SHIFT: shift ?? "MANHA",
+      const formatedDate = `${currentDate?.getDate()}-${currentDate?.getMonth()}-${currentDate.getFullYear()}`;
+      const newSchedule = {
+        studentId: studentID,
+        [shift]: data,
+        date: formatedDate,
       };
-
-      const schedule = await getOneSchedule("", studentID);
-      const scheduleRef = doc(db, "schedule", schedule.id);
-
-      await updateDoc(scheduleRef, {
-        activities: arrayUnion(newActivity),
-      });
-
+      await insertActivity(newSchedule, studentID, shift);
       Toast?.show("Agenda salva com sucesso", {
         position: Toast.positions.TOP,
       });
-      router.push("/home");
+      router.push("/teacherPage");
     } catch (error) {
       Toast?.show("Erro ao salvar Agenda", {
         position: Toast.positions.TOP,
@@ -108,8 +93,10 @@ const StudentSchedule = () => {
       ) : (
         <ScheduleActivityGridContainer
           activities={activities}
-          onConfirm={(data) => handleSubmit(data, userID?.toString())}
-          initialData={schedule}
+          onConfirm={(data) =>
+            handleSubmit(data, userID?.toString(), shift?.toString())
+          }
+          initialData={schedule?.[shift?.toString()]}
           onSearch={(e) => handleSearchWithDebounce(e)}
         />
       )}

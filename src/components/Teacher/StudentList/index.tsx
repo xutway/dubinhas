@@ -52,10 +52,17 @@ const StudentList: React.FC<StudentListProps> = () => {
           ItemSeparatorComponent={() => <View style={{ width: 5 }} />}
           horizontal
           refreshing={loading}
+          keyExtractor={(item, index) => `${item.id}-${index}`}
           // @ts-ignore
           renderItem={(data, index) => {
             return (
-              <AvatarComponent item={data.item} index={index} size="2xl" />
+              <AvatarComponent
+                scheduleId={!!data?.scheduleIds?.lenght && data?.scheduleIds[0]}
+                item={data.item}
+                index={index}
+                key={data.item.id}
+                size="2xl"
+              />
             );
           }}
           ListHeaderComponent={
