@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { Text, View } from "react-native";
 import Toast from "react-native-root-toast";
 
+import DialogModal from "components/Dialog";
 import { router, useLocalSearchParams } from "expo-router";
 import { getStorage, ref } from "firebase/storage";
 
@@ -37,11 +38,20 @@ export default function StudentForm() {
   const { userID } = useLocalSearchParams();
   const { imageUpload, getStorage: getFileStorage } = useFileUpload();
   const [currentStudent, setCurrentStudent] = useState(null);
-  const { loading, registerStudent, getOneStudent, updateStudent } =
-    useStudent();
+  const [dialog, setDialog] = useState(false);
+  const {
+    loading,
+    registerStudent,
+    getOneStudent,
+    updateStudent,
+    deleteStudent,
+  } = useStudent();
 
   const disableSubmit = isLoading || loading;
-
+  const handleDelete = async (id: string) => {
+    await deleteStudent(id);
+    router.push("/teacherPage");
+  };
   useEffect(() => {
     const fetchStudent = async () => {
       if (!userID) return;
@@ -90,7 +100,7 @@ export default function StudentForm() {
         await registerStudent(data, image);
       }
       reset();
-      // router.push("/teacherPage");
+      router.push("/teacherPage");
     } catch (err) {
       Toast?.show("Erro ao cadastrar aluno", {
         position: Toast.positions.TOP,
@@ -130,6 +140,24 @@ export default function StudentForm() {
       />
 
       <View style={styles.formButtons}>
+        {userID && (
+          <Button
+            isDisabled={isLoading}
+            style={{
+              backgroundColor: "#fff2a8",
+              borderColor: "#000",
+              borderWidth: 1,
+              borderRadius: 50,
+              minWidth: 100,
+              width: "auto",
+            }}
+            onPress={() => {
+              setDialog(true);
+            }}
+          >
+            <Text>Deletar</Text>
+          </Button>
+        )}
         <Button
           isDisabled={isLoading}
           style={{
@@ -137,7 +165,7 @@ export default function StudentForm() {
             borderColor: "#000",
             borderWidth: 1,
             borderRadius: 50,
-            minWidth: 130,
+            minWidth: userID ? 100 : 130,
             width: "auto",
           }}
           onPress={() => {
@@ -155,12 +183,30 @@ export default function StudentForm() {
             borderWidth: 1,
             borderRadius: 50,
             width: "auto",
-            minWidth: 130,
+            minWidth: userID ? 100 : 130,
           }}
           onPress={handleSubmit(onSubmit)}
         >
           <Text>Concluir</Text>
         </Button>
+      </View>
+      <View
+        style={{
+          position: "absolute",
+          bottom: 0,
+          zIndex: 0,
+        }}
+      >
+        <DialogModal
+          isOpen={dialog}
+          hideIcon
+          bodyText={`Tem certeza que deseja apagar o aluno ${currentStudent?.name}?`}
+          title="Aviso"
+          onCancel={() => setDialog(false)}
+          onConfirm={() => {
+            handleDelete(userID?.toString());
+          }}
+        />
       </View>
     </View>
   );

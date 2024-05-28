@@ -13,7 +13,6 @@ import {
   AlertDialogHeader,
   Button,
   ButtonGroup,
-  ButtonText,
   Center,
   CloseIcon,
   Icon,
@@ -66,24 +65,37 @@ const DialogModal: React.FC<Props> = ({
           <AlertDialogFooter>
             <ButtonGroup space="lg">
               <Button
-                variant="outline"
-                action="secondary"
+                style={{
+                  backgroundColor: "#bdbdbdda",
+                  borderColor: "#000",
+                  borderWidth: 1,
+                  borderRadius: 50,
+                  minWidth: 100,
+                  width: "auto",
+                }}
                 onPress={() => {
                   setShowAlertDialog(false);
                   onCancel && onCancel();
                 }}
               >
-                <ButtonText>Cancelar</ButtonText>
+                <Text>Cancelar</Text>
               </Button>
               <Button
-                bg="$error600"
+                sx={{
+                  backgroundColor: "#FF948D",
+                  borderColor: "#000",
+                  borderWidth: 1,
+                  borderRadius: 50,
+                  width: "auto",
+                  minWidth: 100,
+                }}
                 action="negative"
                 onPress={() => {
                   setShowAlertDialog(false);
                   onConfirm && onConfirm();
                 }}
               >
-                <ButtonText>Confirmar</ButtonText>
+                <Text>Concluir</Text>
               </Button>
             </ButtonGroup>
           </AlertDialogFooter>

@@ -2,7 +2,6 @@ import { useState } from "react";
 import Toast from "react-native-root-toast";
 
 import {
-  addDoc,
   collection,
   doc,
   getDoc,
@@ -19,6 +18,26 @@ const useStudent = () => {
   const baseURL = process.env.EXPO_PUBLIC_FIREBASE_BUCKET;
 
   const [loading, setLoading] = useState(false);
+
+  const deleteStudent = async (id) => {
+    setLoading(true);
+    const batch = writeBatch(db);
+    const studentRef = doc(db, "student", id);
+    batch.delete(studentRef);
+
+    const scheduleRef = query(
+      collection(db, "schedule"),
+      where("studentId", "==", id),
+    );
+    const scheduleSnapshot = await getDocs(scheduleRef);
+
+    scheduleSnapshot.forEach((doc) => {
+      batch.delete(doc.ref);
+    });
+
+    await batch.commit();
+    setLoading(false);
+  };
   const getStudent = async (name?: string) => {
     setLoading(true);
     const studentsRef = query(
@@ -76,11 +95,11 @@ const useStudent = () => {
         img: baseURL + "/" + avatarPath,
       });
 
-      const schedule = await addDoc(collection(db, "schedule"), {
-        date: new Date(),
-        studentId: studentRef.id,
-      });
-      batch.update(studentRef, { scheduleIds: [schedule.id] });
+      // const schedule = await addDoc(collection(db, "schedule"), {
+      //   date: new Date(),
+      //   studentId: studentRef.id,
+      // });
+      // batch.update(studentRef, { scheduleIds: [schedule.id] });
       await batch.commit();
 
       Toast?.show("Aluno cadastrado com sucesso", {
@@ -128,7 +147,14 @@ const useStudent = () => {
       setLoading(false);
     }
   };
-  return { getStudent, loading, getOneStudent, registerStudent, updateStudent };
+  return {
+    getStudent,
+    loading,
+    getOneStudent,
+    registerStudent,
+    updateStudent,
+    deleteStudent,
+  };
 };
 
 export default useStudent;
