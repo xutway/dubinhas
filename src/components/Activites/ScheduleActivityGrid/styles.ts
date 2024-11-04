@@ -1,5 +1,6 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 
+const { height } = Dimensions.get("window");
 export const StyledCard = StyleSheet.create({
   container: {
     height: 122,
@@ -79,11 +80,11 @@ export const styles = StyleSheet.create({
   },
   buttonContainer: {
     display: "flex",
-    position: "fixed",
+    position: "absolute",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-around",
     width: "100%",
-    bottom: -50,
+    bottom: height / 10,
   },
 });

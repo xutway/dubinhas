@@ -69,6 +69,7 @@ const StudentSelectorAvatar = ({
         <Text
           style={{
             fontSize: 27,
+            maxWidth: screenWidth - 100,
             height: 50,
             lineHeight: 50,
             fontWeight: "600",

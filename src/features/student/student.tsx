@@ -11,16 +11,33 @@ import {
   where,
   writeBatch,
 } from "firebase/firestore";
-import { getStorage, ref } from "firebase/storage";
 
 import { db } from "../../config/firebaseConfig";
-import useFileUpload from "../../helper/imageUploadHandler";
 
 const useStudent = () => {
   const baseURL = process.env.EXPO_PUBLIC_FIREBASE_BUCKET;
-  const { imageUpload } = useFileUpload();
 
   const [loading, setLoading] = useState(false);
+
+  const deleteStudent = async (id) => {
+    setLoading(true);
+    const batch = writeBatch(db);
+    const studentRef = doc(db, "student", id);
+    batch.delete(studentRef);
+
+    const scheduleRef = query(
+      collection(db, "schedule"),
+      where("studentId", "==", id),
+    );
+    const scheduleSnapshot = await getDocs(scheduleRef);
+
+    scheduleSnapshot.forEach((doc) => {
+      batch.delete(doc.ref);
+    });
+
+    await batch.commit();
+    setLoading(false);
+  };
   const getStudent = async (name?: string) => {
     setLoading(true);
     const studentsRef = query(
@@ -29,7 +46,7 @@ const useStudent = () => {
       orderBy("name"),
     );
 
-    return getDocs(studentsRef).then((querySnapshot) => {
+    return await getDocs(studentsRef).then((querySnapshot) => {
       const data: any[] = [];
       querySnapshot?.forEach((doc) => {
         data.push({ id: doc.id, ...doc.data() });
@@ -75,18 +92,14 @@ const useStudent = () => {
       batch.set(studentRef, {
         name: data.name,
         phone: data.phone,
-        img: baseURL + "/" + avatarPath.fullPath,
+        img: baseURL + "/" + avatarPath,
       });
 
-      const scheduleData = {
-        activities: {
-          activitiesList: [],
-        },
-        studentId: studentRef.id,
-      };
-      const scheduleRef = doc(collection(db, "schedule"));
-      batch.set(scheduleRef, scheduleData);
-      batch.update(studentRef, { scheduleID: scheduleRef.id });
+      // const schedule = await addDoc(collection(db, "schedule"), {
+      //   date: new Date(),
+      //   studentId: studentRef.id,
+      // });
+      // batch.update(studentRef, { scheduleIds: [schedule.id] });
       await batch.commit();
 
       Toast?.show("Aluno cadastrado com sucesso", {
@@ -104,11 +117,8 @@ const useStudent = () => {
   const updateStudent = async (id, data, avatarPath) => {
     try {
       setLoading(true);
-      const storage = getStorage();
-      const studentStorage = ref(storage, "files/");
-      const image = await imageUpload(studentStorage, avatarPath, "students");
 
-      if (!image) {
+      if (!avatarPath) {
         Toast?.show("Selecione uma imagem", {
           position: Toast.positions.TOP,
         });
@@ -121,7 +131,7 @@ const useStudent = () => {
       batch.update(studentRef, {
         name: data.name,
         phone: data.phone,
-        img: baseURL + "/" + image.fullPath,
+        img: baseURL + "/" + avatarPath,
       });
 
       await batch.commit();
@@ -137,7 +147,14 @@ const useStudent = () => {
       setLoading(false);
     }
   };
-  return { getStudent, loading, getOneStudent, registerStudent, updateStudent };
+  return {
+    getStudent,
+    loading,
+    getOneStudent,
+    registerStudent,
+    updateStudent,
+    deleteStudent,
+  };
 };
 
 export default useStudent;

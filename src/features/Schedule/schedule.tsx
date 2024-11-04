@@ -3,27 +3,16 @@ import { useState } from "react";
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore";
 
 import { db } from "../../config/firebaseConfig";
-
-const formatFirebaseDate = (date: any) => {
-  const newDate = new Date(date.seconds * 1000 + date.nanoseconds / 1000000);
-  newDate.setHours(newDate.getHours() - 3);
-  const formattedDate = newDate.toISOString().split("T")[0];
-  return formattedDate;
-};
-
-const handleDate = (date: Date) => {
-  const newDate = new Date(date).setHours(date.getHours() - 3);
-  const formattedDate = new Date(newDate).toISOString().split("T")[0];
-  return formattedDate;
-};
 
 const useSchedule = () => {
   const [loading, setLoading] = useState(false);
@@ -41,13 +30,64 @@ const useSchedule = () => {
     }
   };
 
+  const insertActivity = async (
+    data: any,
+    studentId: string,
+    shift: string,
+  ) => {
+    const studentRef = doc(db, "student", studentId);
+    const student = await getDoc(studentRef);
+    const scheduleId = student?.data()?.scheduleIds[0];
+    const currentDate = new Date();
+
+    const formatedDate = `${currentDate?.getDate()}-${currentDate?.getMonth()}-${currentDate.getFullYear()}`;
+    if (!scheduleId) {
+      const scheduleObj = {
+        studentId: data.studentId,
+        [shift]: data[shift],
+        date: formatedDate,
+      };
+      const scheduleCreated = await addDoc(
+        collection(db, "schedule"),
+        scheduleObj,
+      );
+      await updateDoc(studentRef, {
+        scheduleIds: [scheduleCreated.id],
+      });
+    }
+    if (scheduleId) {
+      const scheduleRef = doc(db, "schedule", scheduleId);
+      let currentSchedule;
+      try {
+        currentSchedule = (await getDoc(scheduleRef)).data();
+      } catch (error) {
+        console.error("Error getting document:", error);
+      }
+      await deleteDoc(scheduleRef);
+      const newScheduleObj = {
+        ...currentSchedule,
+        studentId: data.studentId,
+        [shift]: [...data[shift]],
+
+        date: formatedDate,
+      };
+
+      const newScheduleCreated = await addDoc(
+        collection(db, "schedule"),
+        newScheduleObj,
+      );
+      await updateDoc(studentRef, {
+        scheduleIds: [newScheduleCreated.id],
+      });
+    }
+  };
   const getOneSchedule = async (id: string, userID?: string) => {
     try {
       setLoading(true);
       let scheduleId;
       if (userID) {
         const user = await getDoc(doc(db, "student", userID));
-        scheduleId = user.data().scheduleID;
+        scheduleId = user.data().scheduleIds[0];
       } else {
         scheduleId = id;
       }
@@ -55,21 +95,8 @@ const useSchedule = () => {
       const docRef = doc(db, "schedule", scheduleId);
 
       const data = (await getDoc(docRef))?.data();
-      let activitiesArr;
+      const activitiesArr = data[0];
 
-      if (data.activities?.length > 0) {
-        activitiesArr = data?.activities;
-        for (const activity of activitiesArr) {
-          const newActivityList = await Promise.all(
-            activity.activitiesList.map(async (activityID: any) => {
-              const activityRef = doc(db, "activities", activityID);
-              const docSnapshot = await getDoc(activityRef);
-              return docSnapshot.data();
-            }),
-          );
-          activity.activitiesList = newActivityList;
-        }
-      }
       data.activities = activitiesArr;
 
       setLoading(false);
@@ -81,61 +108,83 @@ const useSchedule = () => {
     }
   };
 
-  const getScheduleByStudent = async (id: string) => {
-    try {
-      const today = new Date();
+  const fetchActivities = async (ids) => {
+    const activitiesRef = collection(db, "activities");
+    const activities = [];
 
-      const q = query(collection(db, "schedule"), where("studentId", "==", id));
+    for (const id of ids) {
+      const docRef = doc(activitiesRef, id);
+      const docSnapshot = await getDoc(docRef);
+
+      if (docSnapshot.exists()) {
+        activities.push({ id, ...docSnapshot.data() });
+      } else {
+        console.log(`Documento com ID ${id} não encontrado.`);
+      }
+    }
+
+    return activities;
+  };
+
+  const getScheduleByStudent = async (id: string) => {
+    const currentDate = new Date();
+
+    const formatedDate = `${currentDate?.getDate()}-${currentDate?.getMonth()}-${currentDate.getFullYear()}`;
+    try {
+      const q = query(
+        collection(db, "schedule"),
+        where("studentId", "==", id),
+        where("date", "==", formatedDate),
+      );
 
       const querySnapshot = await getDocs(q);
 
       if (querySnapshot.empty) {
-        console.log("No matching documents.");
-        return;
-      }
+        console.log("Schedule not found.");
 
-      const data = querySnapshot.docs.map((doc) => {
-        let activitiesToday = [];
-        const schedule = doc.data();
+        // Create a new schedule
+        const newSchedule = {
+          date: formatedDate,
+          studentId: id,
+        };
 
-        if (doc.data()?.activities.length > 0) {
-          activitiesToday = schedule?.activities?.filter(
-            (activity) =>
-              formatFirebaseDate(activity.day) === handleDate(today),
-          );
-        }
-
-        return { ...schedule, activities: activitiesToday };
-      });
-
-      const activitiesArr = data[0]?.activities;
-
-      for (const activity of activitiesArr) {
-        const newActivityList = await Promise.all(
-          activity.activitiesList.map(async (activityID: any) => {
-            const activityRef = doc(db, "activities", activityID);
-            const docSnapshot = await getDoc(activityRef);
-            const activityData = { ...docSnapshot.data(), id: docSnapshot.id };
-
-            return activityData;
-          }),
+        const newScheduleRef = await addDoc(
+          collection(db, "schedule"),
+          newSchedule,
         );
-        activity.activitiesList = newActivityList;
+        const newScheduleId = newScheduleRef.id;
+        await updateDoc(doc(db, "student", id), {
+          scheduleIds: [newScheduleId],
+        });
+        return {};
       }
-      const groupedActivities = activitiesArr.reduce((acc, activity) => {
-        const shift = activity.SHIFT;
-        if (!acc[shift]) {
-          acc[shift] = [];
-        }
-        acc[shift].push(activity);
-        return acc;
-      }, {});
-      return groupedActivities;
+
+      const data = querySnapshot.docs[0]?.data();
+      const manhaIds = data?.MANHA || [];
+      const tardeIds = data?.TARDE || [];
+      const noiteIds = data?.NOITE || [];
+
+      if (!manhaIds && !tardeIds && !noiteIds) {
+        console.log("No matching documents.");
+        return {};
+      }
+      const obj = {
+        MANHA: manhaIds?.length > 0 ? await fetchActivities(manhaIds) : [],
+        TARDE: tardeIds?.length > 0 ? await fetchActivities(tardeIds) : [],
+        NOITE: noiteIds?.length > 0 ? await fetchActivities(noiteIds) : [],
+      };
+      return obj;
     } catch (error) {
       console.error("Error getting document:", error);
     }
   };
-  return { loading, getOneSchedule, getScheduleByStudent, createOneSchedule };
+  return {
+    loading,
+    getOneSchedule,
+    getScheduleByStudent,
+    createOneSchedule,
+    insertActivity,
+  };
 };
 
 export default useSchedule;

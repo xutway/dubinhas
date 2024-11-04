@@ -4,7 +4,7 @@ import { Text, View } from "react-native";
 
 import { router, useLocalSearchParams } from "expo-router";
 
-import useActitivities from "../../../features/Activites/activities";
+import useActitivities from "../../../features/Activities/activities";
 import useFileUpload from "../../../helper/imageUploadHandler";
 import ImageInput from "../../ImageInput";
 import TextAreaInput from "../../TextAreaInput";

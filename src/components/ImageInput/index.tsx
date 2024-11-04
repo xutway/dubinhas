@@ -60,7 +60,7 @@ export default function ImageInput({
               />
             ) : (
               <View style={styles?.button} onTouchEnd={getFile}>
-                {isLoading ? <Spinner size="large" /> : "+"}
+                {isLoading ? <Spinner size="large" /> : <Text>+</Text>}
                 <Text style={styles?.text}>Imagem Atividade</Text>
               </View>
             )}

@@ -9,6 +9,7 @@ import { styles } from "./styles";
 import { Box } from "@gluestack-ui/themed";
 
 type ActivityProps = {
+  schedule?: string;
   data: {
     id: any;
     name: string;
@@ -18,7 +19,7 @@ type ActivityProps = {
   };
 };
 
-const ActivityCard = ({ data }: ActivityProps) => {
+const ActivityCard = ({ data, schedule }: ActivityProps) => {
   const [url, setUrl] = useState<string>("");
 
   const { getStorage } = useFileUpload();

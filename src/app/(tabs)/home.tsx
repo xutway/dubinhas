@@ -21,29 +21,24 @@ const { height: screenHeith } = Dimensions.get("window");
 export default function TabOneScreen() {
   const { slug } = useLocalSearchParams();
   const isAuthed = !!auth.currentUser;
-  const { getScheduleByStudent } = useSchedule();
+  const { getScheduleByStudent, loading } = useSchedule();
   const [activites, setActivites] = useState({});
 
-  const handleGetSchedule = async (id: string) => {
-    const data = await getScheduleByStudent(id);
-    setActivites({
-      MANHA: data?.MANHA ? data.MANHA[0].activitiesList : [],
-      TARDE: data?.TARDE ? data.TARDE[0].activitiesList : [],
-      NOITE: data?.NOITE ? data.NOITE[0].activitiesList : [],
-    });
-  };
-
   useEffect(() => {
-    if (slug?.toString() === "" || !slug) return;
-    handleGetSchedule(slug?.toString());
+    async function handleGetSchedule() {
+      if (slug?.toString() === "" || !slug) return;
+      const data = await getScheduleByStudent(slug?.toString());
+      setActivites(data);
+    }
+    handleGetSchedule();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slug]);
+  }, [slug?.toString()]);
 
   return (
     <ImageBackground
       source={require("../../assets/images/BackgroundActivites.png")}
-      style={{ width: "100%", height: "100%", backgroundPosition: "cover" }}
+      style={{ width: "100%", height: "100%" }}
     >
       <ScrollView scrollEnabled style={styles.container}>
         <Header userID={slug?.toString() ?? ""} />
@@ -54,15 +49,18 @@ export default function TabOneScreen() {
           isTeacher={isAuthed}
           title="Turno da Manhã"
           // @ts-ignore
-          data={activites.MANHA}
+
+          data={activites?.MANHA}
+          loading={loading}
         />
         <ActivitesList
           shift="TARDE"
+          loading={loading}
           isTeacher={isAuthed}
           id={slug?.toString()}
           title="Turno da Tarde"
           // @ts-ignore
-          data={activites.TARDE}
+          data={activites?.TARDE}
         />
         <ActivitesList
           shift="NOITE"
@@ -71,6 +69,7 @@ export default function TabOneScreen() {
           title="Turno da Noite"
           // @ts-ignore
           data={activites?.NOITE}
+          loading={loading}
         />
       </ScrollView>
       <Box style={styles.buttonContainer}>
@@ -87,7 +86,7 @@ const { width: scr } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    height: screenHeith,
+    height: screenHeith - 50,
   },
   title: {
     fontSize: 20,
@@ -112,6 +111,7 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: "#000",
     backgroundColor: "#FF948D",
+    // @ts-ignore
     position: "sticky",
     bottom: 30,
   },

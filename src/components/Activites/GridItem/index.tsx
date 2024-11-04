@@ -3,9 +3,9 @@ import { ImageBackground, StyleSheet, Text } from "react-native";
 
 import useFileUpload from "../../../helper/imageUploadHandler";
 
-import { Box, Pressable } from "@gluestack-ui/themed";
+import { Box, CloseIcon, Pressable } from "@gluestack-ui/themed";
 
-const GridItem = ({ item, onAdd, width }) => {
+const GridItem = ({ item, onAdd, width, onRemove }) => {
   const { getStorage } = useFileUpload();
   const [url, setUrl] = useState<string>("");
   const AddButon = item.name === "Adicionar Atividade";
@@ -47,6 +47,12 @@ const GridItem = ({ item, onAdd, width }) => {
           source={{ uri: url || null }}
           style={StyledCard.container}
         >
+          <Pressable
+            onPress={() => onRemove(item?.id)}
+            style={StyledCard.removeButton}
+          >
+            <CloseIcon color="white" />
+          </Pressable>
           <Box style={StyledCard.textBox}>
             <Text style={StyledCard.textTitle}>{item.name}</Text>
             <Text style={StyledCard.textSubtitle}>{item.name}</Text>
@@ -60,6 +66,16 @@ const GridItem = ({ item, onAdd, width }) => {
 export default GridItem;
 
 export const StyledCard = StyleSheet.create({
+  removeButton: {
+    position: "absolute",
+    right: 5,
+    top: 5,
+    borderRadius: 50,
+    padding: 5,
+    width: 30,
+
+    backgroundColor: "#FF948D",
+  },
   container: {
     height: 122,
     overflow: "hidden",

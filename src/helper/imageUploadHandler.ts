@@ -38,6 +38,7 @@ const useFileUpload = () => {
     const filetoBlob = await fetch(newFile[0]?.uri ?? file).then((res) =>
       res.blob(),
     );
+
     const filename = newFile[0]?.uri?.split("ImagePicker/")[1] ?? name;
 
     const newMetadata = {

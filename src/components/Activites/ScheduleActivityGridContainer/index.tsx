@@ -26,10 +26,10 @@ const ScheduleActivityGridContainer: React.FC<
   const activitiesArr = initialData;
 
   const activitiesToHandle = [];
-  activitiesArr?.forEach((activity, index) => {
-    activity.activitiesList.forEach((activity: any) => {
-      activity.key = index + 1;
-      activitiesToHandle.push(activity);
+  activitiesArr?.forEach((item: any, index) => {
+    item.key = index + 1;
+    activitiesToHandle.push({
+      ...item,
     });
   });
 
@@ -67,14 +67,19 @@ const ScheduleActivityGridContainer: React.FC<
     setState({ data: newData });
     setDrawer(!drawer);
   };
+  const handleRemove = (id: string) => {
+    const newData = state.data.filter((item) => item.id !== id);
+    setState({ data: newData });
+  };
   return (
     <SafeAreaView>
       <StudentScheduleGrid
         data={state.data}
+        onRemove={handleRemove}
         onDragRelease={(data) => setState({ data })}
         onCancel={() => router.back()}
         onConfirm={onConfirm}
-        title="Turno da Manhã"
+        title="Tabela de atividades"
         onAdd={() => setDrawer(!drawer)}
       />
       <Drawer

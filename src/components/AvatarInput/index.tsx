@@ -51,6 +51,7 @@ export default function AvatarInput({
           <View
             style={{
               minHeight: 130,
+              opacity: disabled || loading ? 0.5 : 1,
             }}
           >
             {hasFile ? (
